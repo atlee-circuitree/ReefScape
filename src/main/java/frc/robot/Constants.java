@@ -9,6 +9,7 @@ public class Constants {
 
 
     public class CAN_IDs{
-        public static final int IntakeMotorID = 26;
+        public static final int IntakeMotorID = -1;
+        public static final int AngleID = 26;
     }
 }
