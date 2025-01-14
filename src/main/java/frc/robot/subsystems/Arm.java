@@ -26,9 +26,6 @@ public class Arm extends SubsystemBase {
     
     AngleEncoder = new DutyCycleEncoder(6);
 
-
-    
-
   }
 
   @Override
