@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -32,6 +33,13 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+   CurrentAngle = -CurrentTicks / (.072 / 28) + 60;
+  
+   SmartDashboard.putNumber("Angle Encoder Degrees", CurrentAngle);
     
+   SmartDashboard.putNumber("Angle Encoder Raw", CurrentTicks);
+
+    
+
   } 
 }
