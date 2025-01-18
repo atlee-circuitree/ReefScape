@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.TestAuto;
 import frc.robot.commands.IntakeLights;
+import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
 
 public class RobotContainer {
@@ -36,6 +38,7 @@ public class RobotContainer {
     private final wrist Wrist = new wrist();
     private final Lights lights = new Lights();
     private final Pivot pivot = new Pivot();
+    private final armExtension extension = new armExtension();
 
     
 
@@ -68,6 +71,7 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualPivot(pivot, 0.1));
         Player1.a().whileTrue(new IntakeLights(lights, Constants.Colors.Green));
         Player1.b().whileTrue(new IntakeLights(lights, Constants.Colors.Red));
+        Player1.leftTrigger().whileTrue(new ManualExtension(extension, 0.1));
         
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically

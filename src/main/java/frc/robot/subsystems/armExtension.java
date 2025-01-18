@@ -4,13 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.measure.AngularAcceleration;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -30,6 +26,11 @@ public class armExtension extends SubsystemBase {
     extension_right.setNeutralMode(NeutralModeValue.Brake);
     extension_left.setNeutralMode(NeutralModeValue.Brake);
 
+  }
+
+  public void RunExtension(double Velocity){
+    extension_left.set(Velocity);
+    extension_right.set(Velocity);
   }
 
   @Override
