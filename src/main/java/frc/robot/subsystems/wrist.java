@@ -31,6 +31,11 @@ public class wrist extends SubsystemBase {
 
   }
 
+
+  public void RunWrist(double Velocity){
+    wrist.set(Velocity);
+  }
+
   @Override
   public void periodic() {
     

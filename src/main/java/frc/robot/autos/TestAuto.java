@@ -4,7 +4,6 @@
 
 package frc.robot.autos;
 
-import frc.robot.Constants;
 
 
 import java.io.IOException;
