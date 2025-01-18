@@ -27,7 +27,6 @@ public class Constants {
         public static final int canivore_b = 16;
         public static final int pigeon = 17;
         public static final int climb = 18;
-        public static final int AngleID = 26;
     }
 
 
