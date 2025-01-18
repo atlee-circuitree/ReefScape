@@ -9,7 +9,24 @@ public class Constants {
 
 
     public class CAN_IDs{
-        public static final int IntakeMotorID = -1;
+        public static final int IntakeMotorID = 1;
+        public static final int fl_drive = 2;
+        public static final int fl_turn = 3;
+        public static final int fr_drive = 4;
+        public static final int fr_turn = 5;
+        public static final int bl_drive = 6;
+        public static final int bl_turn = 7;
+        public static final int br_drive = 8;
+        public static final int br_turn = 9;
+        public static final int pivot_left = 10;
+        public static final int pivot_right = 11;
+        public static final int extension_left = 12;
+        public static final int extension_right = 13;
+        public static final int wrist = 14;
+        public static final int canivore_a = 15;
+        public static final int canivore_b = 16;
+        public static final int pigeon = 17;
+        public static final int climb = 18;
         public static final int AngleID = 26;
     }
 
