@@ -23,7 +23,7 @@ public class armExtension extends SubsystemBase {
 
   DutyCycleEncoder pivotEncoder;
 
-  public double CurrentAngle;
+  public double CurrentPivotAngle;
   double CurrentTicks;
 
   public armExtension() {
@@ -56,9 +56,9 @@ public class armExtension extends SubsystemBase {
 
     }
 
-    CurrentAngle = -CurrentTicks / (0.072 / 28) + 60;
+    CurrentPivotAngle =- CurrentTicks / (0.072 / 28) + 60;
 
-    SmartDashboard.putNumber("Pivot Encoder Degrees", CurrentAngle);
+    SmartDashboard.putNumber("Pivot Encoder Degrees", CurrentPivotAngle);
     SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
 
   }
