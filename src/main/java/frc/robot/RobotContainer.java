@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.autos.TestAuto;
 import frc.robot.commands.IntakeLights;
 import frc.robot.commands.ManualIntake;
 import frc.robot.generated.TunerConstants;
@@ -90,6 +91,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return new TestAuto(drivetrain);
     }
 }

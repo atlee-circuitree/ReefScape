@@ -3,62 +3,71 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.autos;
- 
-import choreo.Choreo;
-import choreo.auto.*;
-import choreo.trajectory.*;
-import choreo.util.*;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.commands.ManualIntake;
+
+
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.util.FileVersionException;
+
+import choreo.Choreo;
+import choreo.Choreo.TrajectoryLogger;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
+import choreo.trajectory.TrajectorySample;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Intake;
 
-public class TestAuto extends SequentialCommandGroup {
-   
-  CommandSwerveDrivetrain m_drivetrain;
-  RobotContainer m_RobotContainer;
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class TestAuto extends Command {
+  AutoFactory autoFactory;
+  CommandSwerveDrivetrain drivetrain;
+  AutoTrajectory traj;
+  /** Creates a new Autos. */
+  public TestAuto(CommandSwerveDrivetrain drivetrain) {
+     // The drive subsystem
+     this.drivetrain = drivetrain;
+    autoFactory = this.drivetrain.createAutoFactory();
 
-  public TestAuto(CommandSwerveDrivetrain Drivetrain, RobotContainer RobotContainer) {
-  
-    m_drivetrain = Drivetrain;
-    m_RobotContainer = RobotContainer;
-
-    addCommands(
-
-      InitialPose("TestAuto", false), // Seed your inital position
-      ChoreoPathing("TestAuto", false)
-      )
-     
-    );
-
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
+ public Command testpath() {
+  return Commands.sequence(
+    new InstantCommand(
+      () -> drivetrain.resetPose(new Pose2d(0,0, new Rotation2d(0.)))
+    ),
+    autoFactory.trajectoryCmd("TestRun"));
+ }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
   
-  private Command ChoreoPathing(String Trajectory, boolean IsRed) {
 
-    return Choreo.choreoSwerveCommand(
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {}
 
-      Choreo.loadTrajectory(Trajectory), 
-      () -> (m_drivetrain.getState().Pose), 
-      Constants.AutoDrivePID, Constants.AutoDrivePID, Constants.AutoTurnPID, 
-      (ChassisSpeeds speeds) -> m_drivetrain.setControl(new SwerveRequest.ApplyChassisSpeeds().withSpeeds(speeds)),
-      () -> IsRed, 
-      m_drivetrain
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
 
-    );
-
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
- 
-  private Command InitialPose(String Trajectory, boolean IsRed) {
-
-    return m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative(Choreo.loadTrajectory(Trajectory).getInitialPose()));
-
-  } 
-
 }
