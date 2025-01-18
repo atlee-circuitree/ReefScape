@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+
 /** Add your docs here. */
 public class Constants {
 
+    public static PIDController AutoDrivePID = new PIDController(4, 0.01, 0);
+    public static PIDController AutoTurnPID = new PIDController(5, 0, 0);
 
     public class CAN_IDs{
         public static final int fl_drive = 1;
