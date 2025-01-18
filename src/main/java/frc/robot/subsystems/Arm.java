@@ -22,7 +22,7 @@ public class Arm extends SubsystemBase {
 
   public Arm() {
 
-    AngleMotor = new TalonFX(Constants.CAN_IDs.AngleID, "1599-B");
+    //AngleMotor = new TalonFX(Constants.CAN_IDs.AngleID, "1599-B");
     AngleMotor.setNeutralMode(NeutralModeValue.Brake);
     
     AngleEncoder = new DutyCycleEncoder(6);
