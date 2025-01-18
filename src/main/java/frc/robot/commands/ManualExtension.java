@@ -2,23 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package ManualIntake;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.armExtension;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualIntake extends Command {
-
-  Intake m_intake;
+public class ManualExtension extends Command {
+  armExtension m_extension;
   double m_velocity;
 
-  public ManualIntake(Intake Intake, double Velocity) {
-
-    m_intake = Intake;
+  public ManualExtension(armExtension extension, double Velocity) {
+    m_extension = extension;
     m_velocity = Velocity;
-   
-    addRequirements(Intake);
 
+    addRequirements(extension);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +27,7 @@ public class ManualIntake extends Command {
   @Override
   public void execute() {
 
-    m_intake.RunIntake(m_velocity);
+    m_extension.RunExtension(m_velocity);
 
   }
 
@@ -37,8 +35,8 @@ public class ManualIntake extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_intake.RunIntake(0);
-    
+    m_extension.RunExtension(.5);
+
   }
 
   // Returns true when the command should end.
