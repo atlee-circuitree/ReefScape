@@ -25,5 +25,3 @@ replay_pid*
 *.pdb
 *.dll
 *.html
-/.gradle
-/build
