@@ -13,18 +13,18 @@ public class Constants {
     public static PIDController AutoTurnPID = new PIDController(5, 0, 0);
 
     public class CAN_IDs{
-        public static final int fl_drive = 1;
-        public static final int fl_turn = 2;
-        public static final int fr_drive = 3;
-        public static final int fr_turn = 4;
-        public static final int bl_drive = 5;
-        public static final int bl_turn = 6;
-        public static final int br_drive = 7;
-        public static final int br_turn = 8;
-        public static final int pivot_left = 9;
-        public static final int pivot_right = 10;
-        public static final int extension_left = 11;
-        public static final int extension_right = 12;
+        public static final int FLDrive = 1;
+        public static final int FLTurn = 2;
+        public static final int FRDrive = 3;
+        public static final int FRTurn = 4;
+        public static final int BLDrive = 5;
+        public static final int BLTurn = 6;
+        public static final int BRDrive = 7;
+        public static final int BRTurn = 8;
+        public static final int pivotLeft = 9;
+        public static final int pivotRight = 10;
+        public static final int extensionLeft = 11;
+        public static final int extensionRight = 12;
         public static final int IntakeMotorID = 13;
         public static final int wrist = 14;
         public static final int canivore_a = 15;
