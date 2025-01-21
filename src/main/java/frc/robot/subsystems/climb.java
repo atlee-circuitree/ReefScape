@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,7 +18,7 @@ public class climb extends SubsystemBase {
 
   DutyCycleEncoder climbEncoder;
 
-  public double CurrentclimbAngle;
+  public double CurrentClimbAngle;
   double CurrentTicks;
 
   public climb() {
@@ -43,8 +44,11 @@ public class climb extends SubsystemBase {
 
     }
 
-    CurrentclimbAngle =- CurrentTicks / (0.072 / 28) + 60;
+    CurrentClimbAngle =- CurrentTicks / (0.072 / 28) + 60;
 
+
+    SmartDashboard.putNumber("Climb Encoder Degrees", CurrentClimbAngle);
+    SmartDashboard.putNumber("Climb Encoder Raw", CurrentTicks);
   }
 }
 
