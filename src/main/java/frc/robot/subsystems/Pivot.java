@@ -24,8 +24,8 @@ public class Pivot extends SubsystemBase {
 
   public Pivot() {
 
-    pivot_left = new TalonFX(Constants.CAN_IDs.pivot_left, "1599-B");
-    pivot_right = new TalonFX(Constants.CAN_IDs.pivot_right, "1599-B");
+    pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-B");
+    pivot_right = new TalonFX(Constants.CAN_IDs.pivotRight, "1599-B");
 
     pivot_left.setNeutralMode(NeutralModeValue.Brake);
     pivot_right.setNeutralMode(NeutralModeValue.Brake);
