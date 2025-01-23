@@ -37,6 +37,8 @@ public class Constants {
         public static final int WristChannel = 1;
         public static final int PivotChannel = 2;
         public static final int EncoderChannel = 3;
+        
+        
     }
 
 
