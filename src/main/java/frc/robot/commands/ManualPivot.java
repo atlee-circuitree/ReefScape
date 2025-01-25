@@ -28,7 +28,7 @@ public class ManualPivot extends Command {
   @Override
   public void execute() {
 
-    m_Pivot.RunPivot(m_velocity);
+    m_Pivot.runPivot(m_velocity);
 
   }
 
@@ -36,7 +36,7 @@ public class ManualPivot extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_Pivot.RunPivot(.5);
+    m_Pivot.runPivot(.5);
 
   }
 

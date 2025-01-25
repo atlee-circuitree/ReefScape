@@ -74,4 +74,9 @@ public class Constants {
 
 
     }
+
+    public class Arm {
+        public static final double maxExtend = 900;
+        public static final double minExtend = 0;
+    }
 }

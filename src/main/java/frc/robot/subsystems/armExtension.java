@@ -14,12 +14,9 @@ public class armExtension extends SubsystemBase {
 
   private final TalonFX extension_left;
   private final TalonFX extension_right;
-
+  
   private final DigitalInput upperLimitSwitch;
   private final DigitalInput lowerLimitSwitch;
-  
-
-  
 
   public armExtension(int lowerLimitChannel, int upperLimitChannel) {
     
@@ -40,19 +37,25 @@ public class armExtension extends SubsystemBase {
     if (Velocity > 0 && upperLimitSwitch.get()) {
       //If extending and the upper limit is reached, stop the motors
       stopExtension();
-  } else if (Velocity < 0 && lowerLimitSwitch.get()) {
-      //If retracting and the lower limit is reached, stop the motors
-      stopExtension();
-  } else {
-      //Otherwise, run the motors at the specified velocity
-      extension_left.set(Velocity);
-      extension_right.set(Velocity);
+    } else if (Velocity < 0 && lowerLimitSwitch.get()) {
+        //If retracting and the lower limit is reached, stop the motors
+        stopExtension();
+    } else {
+        //Otherwise, run the motors at the specified velocity
+        extension_left.set(Velocity);
+        extension_right.set(Velocity);
+    }
   }
+
+  public void extendToPosition()
+  {
+
   }
+
   public void stopExtension() {
     extension_left.set(0);
     extension_right.set(0);
-}
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
