@@ -6,33 +6,64 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
+import edu.wpi.first.wpilibj.DigitalInput; //for limit switches
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class armExtension extends SubsystemBase {
 
-  TalonFX extension_left;
-  TalonFX extension_right;
+  private final TalonFX extension_left;
+  private final TalonFX extension_right;
   
+  private final DutyCycleEncoder extensionEncoder;
+  private final DutyCycleEncoder upperMaxExtension;
+  private final DutyCycleEncoder lowerMaxExtension;
 
-  
+
 
   public armExtension() {
+    
+        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
+        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
+       
+        extension_right.setNeutralMode(NeutralModeValue.Brake);
+        extension_left.setNeutralMode(NeutralModeValue.Brake);
 
-    extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
-    extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
-   
-    extension_right.setNeutralMode(NeutralModeValue.Brake);
-    extension_left.setNeutralMode(NeutralModeValue.Brake);
+        extensionEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+
+        upperMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        
+
 
   }
 
   public void RunExtension(double Velocity){
-    extension_left.set(Velocity);
-    extension_right.set(Velocity);
+
+    //Check the limit switches before running the motors
+    if (Velocity > 0 && upperMaxExtension.get() == 100) {
+      //If extending and the upper limit is reached, stop the motors
+      stopExtension();
+    } else if (Velocity < 0 && upperMaxExtension.get() == 0) {
+        //If retracting and the lower limit is reached, stop the motors
+        stopExtension();
+    } else {
+        //Otherwise, run the motors at the specified velocity
+        extension_left.set(Velocity);
+        extension_right.set(Velocity);
+    }
   }
 
+  public void extendToPosition()
+  {
+
+  }
+
+  public void stopExtension() {
+    extension_left.set(0);
+    extension_right.set(0);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

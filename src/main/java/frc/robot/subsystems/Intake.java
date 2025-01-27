@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  TalonFX IntakeMotor;
+  private TalonFX IntakeMotor;
 
   public Intake() {
     IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-B");
@@ -19,6 +19,11 @@ public class Intake extends SubsystemBase {
 
   public void RunIntake(double Velocity){
     IntakeMotor.set(Velocity);
+  }
+
+  public void stop()
+  {
+    RunIntake(0);
   }
 
   @Override

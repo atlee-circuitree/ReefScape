@@ -37,6 +37,8 @@ public class Constants {
         public static final int WristChannel = 1;
         public static final int PivotChannel = 2;
         public static final int EncoderChannel = 3;
+        
+        
     }
 
 
@@ -71,5 +73,10 @@ public class Constants {
         
 
 
+    }
+
+    public class Arm {
+        public static final double maxExtend = 900;
+        public static final double minExtend = 0;
     }
 }

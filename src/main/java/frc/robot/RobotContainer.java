@@ -38,7 +38,7 @@ public class RobotContainer {
     private final wrist Wrist = new wrist();
     private final Lights lights = new Lights();
     private final Pivot pivot = new Pivot();
-    private final armExtension extension = new armExtension();
+    private final armExtension extension = new armExtension(4, 5);
 
     
 

@@ -15,12 +15,11 @@ import frc.robot.Constants;
 
 public class wrist extends SubsystemBase {
   
-  TalonFX wrist;
+  private TalonFX wrist;
+  private DutyCycleEncoder wristEncoder;
 
-  DutyCycleEncoder wristEncoder;
-
-  public double CurrentWristAngle;
-  double CurrentTicks;
+  //public double CurrentWristAngle;
+  //double CurrentTicks;
 
   public wrist() {
 
@@ -37,10 +36,25 @@ public class wrist extends SubsystemBase {
     wrist.set(Velocity);
   }
 
+  public void runToPosition()
+  {
+    
+  }
+
+  public void stop()
+  {
+    RunWrist(0);
+  }
+
+  public double getAngle() {
+    double CurrentTicks = wristEncoder.get();
+    return CurrentTicks / (0.072 / 28) + 60;
+  }
+
   @Override
   public void periodic() {
     
-    if (wristEncoder.get() > 0.8) {
+    /*if (wristEncoder.get() > 0.8) {
 
       CurrentTicks = wristEncoder.get() -1;
 
@@ -50,9 +64,8 @@ public class wrist extends SubsystemBase {
 
     }
 
-    CurrentWristAngle =- CurrentTicks / (0.072 / 28) + 60;
+    CurrentWristAngle =- CurrentTicks / (0.072 / 28) + 60;*/
     
-    SmartDashboard.putNumber("Wrist Encoder Degrees", CurrentWristAngle);
-    SmartDashboard.putNumber("Wrist Encoder Raw", CurrentTicks);
+    SmartDashboard.putNumber("Wrist Encoder Degrees", getAngle());
   }
 }
