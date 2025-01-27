@@ -36,7 +36,10 @@ public class Constants {
     public class Channels {
         public static final int WristChannel = 1;
         public static final int PivotChannel = 2;
-        public static final int EncoderChannel = 3;
+        public static final int EncoderChannel = 5;
+        public static final int pivotEncoderChannel = 4;
+        public static final int armExtensionEncoderChannel = 6;
+        public static final int climbEncoderChannel = 7;
         
         
     }
@@ -80,3 +83,4 @@ public class Constants {
         public static final double minExtend = 0;
     }
 }
+

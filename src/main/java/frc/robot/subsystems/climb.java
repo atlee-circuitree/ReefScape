@@ -27,7 +27,7 @@ public class climb extends SubsystemBase {
 
     climb.setNeutralMode(NeutralModeValue.Brake);
 
-    climbEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+    climbEncoder = new DutyCycleEncoder(Constants.Channels.climbEncoderChannel);
 
   }
 

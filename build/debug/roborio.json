@@ -3,7 +3,7 @@
     "type": "java",
     "name": "frcJava",
     "port": 8349,
-    "target": "10.15.99.2",
+    "target": "169.254.217.38",
     "project": "ReefScape"
   }
 ]

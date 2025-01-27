@@ -30,10 +30,10 @@ public class armExtension extends SubsystemBase {
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);
 
-        extensionEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        extensionEncoder = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
 
-        upperMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
-        lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        upperMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
+        lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
         
 
 
