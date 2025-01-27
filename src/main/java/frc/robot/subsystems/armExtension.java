@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput; //for limit switches
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -15,29 +16,36 @@ public class armExtension extends SubsystemBase {
   private final TalonFX extension_left;
   private final TalonFX extension_right;
   
-  private final DigitalInput upperLimitSwitch;
-  private final DigitalInput lowerLimitSwitch;
+  private final DutyCycleEncoder extensionEncoder;
+  private final DutyCycleEncoder upperMaxExtension;
+  private final DutyCycleEncoder lowerMaxExtension;
 
-  public armExtension(int lowerLimitChannel, int upperLimitChannel) {
+
+
+  public armExtension() {
     
         extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
         extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
        
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);
-    
-        upperLimitSwitch = new DigitalInput(upperLimitChannel);
-        lowerLimitSwitch = new DigitalInput(lowerLimitChannel);
+
+        extensionEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+
+        upperMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+        
 
 
   }
 
   public void RunExtension(double Velocity){
+
     //Check the limit switches before running the motors
-    if (Velocity > 0 && upperLimitSwitch.get()) {
+    if (Velocity > 0 && upperMaxExtension.get() == 100) {
       //If extending and the upper limit is reached, stop the motors
       stopExtension();
-    } else if (Velocity < 0 && lowerLimitSwitch.get()) {
+    } else if (Velocity < 0 && upperMaxExtension.get() == 0) {
         //If retracting and the lower limit is reached, stop the motors
         stopExtension();
     } else {
