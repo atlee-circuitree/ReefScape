@@ -59,22 +59,16 @@ public class armExtension extends SubsystemBase {
     }
   }
 
-  
-
-  public void extendToPosition()
-  {
-
-
-  }
-
   public void stopExtension() {
     extension_left.set(0);
     extension_right.set(0);
   }
+
   public double getExtension(){
     CurrentTicks = extensionEncoder.get();
     return CurrentTicks / (0.072 / 28) + 60;
   }
+
   @Override
   public void periodic() {
 
@@ -85,9 +79,11 @@ public class armExtension extends SubsystemBase {
 
     
   }
+
   public double ReturnCurrentExtension() {
     return CurrentExtension;
   }
+  
   public void RunExtensionWithLimits(double Speed){
     extension_left.set(-Speed);
     extension_right.set(-Speed);

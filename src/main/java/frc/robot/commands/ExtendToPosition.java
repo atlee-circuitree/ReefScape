@@ -32,6 +32,7 @@ public class ExtendToPosition extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     m_currentExtension = m_armExtension.ReturnCurrentExtension();
 
     m_armExtension.RunExtensionWithLimits(Constants.ExtensionPID.calculate(m_currentExtension,m_targetExtension));
@@ -42,15 +43,20 @@ public class ExtendToPosition extends Command {
   public void end(boolean interrupted) {
 
     m_armExtension.RunExtensionWithLimits(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (Math.abs(Constants.ExtensionPID.calculate(m_currentExtension,m_targetExtension)) <= 0.05) {
+
       return true;
-    }else{
+
+    }else {
+
       return false;
+
     }
     
   }
