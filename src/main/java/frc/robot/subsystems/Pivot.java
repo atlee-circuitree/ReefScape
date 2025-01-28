@@ -25,6 +25,8 @@ public class Pivot extends SubsystemBase {
     pivot_right.setNeutralMode(NeutralModeValue.Brake);
     pivot_left.setInverted(false);
     pivot_right.setInverted(false);
+
+    pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
   }
 
   public void runPivot(double Velocity){

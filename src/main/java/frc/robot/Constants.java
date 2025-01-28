@@ -11,6 +11,7 @@ public class Constants {
 
     public static PIDController AutoDrivePID = new PIDController(4, 0.01, 0);
     public static PIDController AutoTurnPID = new PIDController(5, 0, 0);
+    public static PIDController ExtensionPID = new PIDController(.01, 0, 0);
 
     public class CAN_IDs{
         public static final int FLDrive = 1;
@@ -40,6 +41,7 @@ public class Constants {
         public static final int pivotEncoderChannel = 4;
         public static final int armExtensionEncoderChannel = 6;
         public static final int climbEncoderChannel = 7;
+
         
         
     }
