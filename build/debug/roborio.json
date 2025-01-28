@@ -1,9 +1,0 @@
-[
-  {
-    "type": "java",
-    "name": "frcJava",
-    "port": 8349,
-    "target": "169.254.217.38",
-    "project": "ReefScape"
-  }
-]
