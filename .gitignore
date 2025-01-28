@@ -24,4 +24,5 @@ replay_pid*
 *.pdb
 *.dll
 *.html
+build/
 
