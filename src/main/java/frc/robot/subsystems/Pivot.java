@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +19,7 @@ public class Pivot extends SubsystemBase {
   private TalonFX pivot_left;
   private TalonFX pivot_right;
   private DutyCycleEncoder pivotEncoder;
+  private PIDController pid;
 
   public Pivot() {
     pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-B");
@@ -25,6 +29,8 @@ public class Pivot extends SubsystemBase {
     pivot_right.setNeutralMode(NeutralModeValue.Brake);
     pivot_left.setInverted(false);
     pivot_right.setInverted(false);
+    pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
+    
 
     pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
   }
@@ -34,9 +40,16 @@ public class Pivot extends SubsystemBase {
     pivot_right.set(Velocity);
   }
 
-  public void runToPosition()
+  public void clearPID()
   {
-    
+    pid.reset();
+  }
+
+  public void runToPosition(double deg)
+  {
+    pid.setSetpoint(deg);
+    double out = pid.calculate(getAngle());
+    runPivot(out);
   }
 
   public void stop()
@@ -45,15 +58,13 @@ public class Pivot extends SubsystemBase {
   }
 
   public double getAngle() {
-    double CurrentTicks = pivotEncoder.get();
-    return CurrentTicks / (0.072 / 28) + 60;
+    return pivotEncoder.get() * 360;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double ang = getAngle();
-    SmartDashboard.putNumber("Pivot Encoder Degrees", ang);
+    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

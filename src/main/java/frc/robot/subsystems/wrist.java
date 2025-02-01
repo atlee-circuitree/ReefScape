@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.PIDController;
 
 public class wrist extends SubsystemBase {
   
   private TalonFX wrist;
   private DutyCycleEncoder wristEncoder;
+  private PIDController pid;
 
   //public double CurrentWristAngle;
   //double CurrentTicks;
@@ -27,8 +29,12 @@ public class wrist extends SubsystemBase {
 
     wrist.setNeutralMode(NeutralModeValue.Brake);
 
+
+
     wristEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
 
+    SmartDashboard.putNumber("WristP", 0.0);
+    pid = new PIDController(Constants.Arm.wristP, Constants.Arm.wristI, Constants.Arm.wristD);
   }
 
 
@@ -36,9 +42,18 @@ public class wrist extends SubsystemBase {
     wrist.set(Velocity);
   }
 
-  public void runToPosition()
+  public void clearPID()
   {
-    
+    double p = SmartDashboard.getNumber("WristP", 0.0);
+    pid = new PIDController(p, Constants.Arm.wristI, Constants.Arm.wristD);
+    pid.reset();
+  }
+
+  public void runToPosition(double deg)
+  {
+    pid.setSetpoint(deg);
+    double out = pid.calculate(getAngle());
+    RunWrist(out);
   }
 
   public void stop()
@@ -48,7 +63,7 @@ public class wrist extends SubsystemBase {
 
   public double getAngle() {
     double CurrentTicks = wristEncoder.get();
-    return CurrentTicks / (0.072 / 28) + 60;
+    return (CurrentTicks / Constants.Arm.wristRatio) * 360;
   }
 
   @Override
