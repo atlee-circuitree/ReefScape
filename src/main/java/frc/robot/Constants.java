@@ -95,14 +95,13 @@ public class Constants {
         public static final double wristI = 0.0;
         public static final double wristD = 0.0;
 
-<<<<<<< Updated upstream
+
         public static final double wristRatio = 3;
-=======
         public static final double armP = 0.0;
         public static final double armI = 0.0;
         public static final double armD = 0.0;
 
-        public static final double wristRatio = 3;
+    
         public static final double extensionRatio = 1;
         public static final double pivotZeroDegree = 0;
 
@@ -114,7 +113,6 @@ public class Constants {
         public static final double intakeVelocity = 1;
 
         public static final double outtakeTime = 1;
->>>>>>> Stashed changes
     }
 
 }

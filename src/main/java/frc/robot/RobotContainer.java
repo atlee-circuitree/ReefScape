@@ -16,19 +16,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.Arm;
 import frc.robot.autos.TestAuto;
-<<<<<<< Updated upstream
+
 import frc.robot.commands.IntakeLights;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
-=======
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.PivotCommand;
 import frc.robot.commands.WristCommand;
->>>>>>> Stashed changes
+
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -75,15 +74,7 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
 
-<<<<<<< Updated upstream
-        Player1.rightTrigger().whileTrue(new ManualIntake(intake,.1));
-        Player1.y().whileTrue(new ManualWrist(Wrist, .1));
-        Player1.x().whileTrue(new ManualPivot(pivot, 0.1));
-        Player1.a().whileTrue(new IntakeLights(lights, Constants.Colors.Green));
-        Player1.b().whileTrue(new IntakeLights(lights, Constants.Colors.Red));
-        Player1.leftTrigger().whileTrue(new ManualExtension(extension, 0.1));
-        
-=======
+
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.y().toggleOnTrue(new WristCommand(Wrist, 0));
@@ -94,7 +85,7 @@ public class RobotContainer {
         Player1.povDown().toggleOnTrue(new ElevatorCommand(extension, 20));
         
 
->>>>>>> Stashed changes
+
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
