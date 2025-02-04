@@ -4,11 +4,16 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +32,7 @@ public class Pivot extends SubsystemBase {
 
     pivot_left.setNeutralMode(NeutralModeValue.Brake);
     pivot_right.setNeutralMode(NeutralModeValue.Brake);
+
     pivot_left.setInverted(false);
     pivot_right.setInverted(false);
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
@@ -64,6 +70,7 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
     SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }

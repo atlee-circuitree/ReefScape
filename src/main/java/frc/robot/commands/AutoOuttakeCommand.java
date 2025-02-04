@@ -4,60 +4,48 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.armExtension;
 import frc.robot.Constants;
+import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ExtendToPosition extends Command {
-  double m_currentExtension;
-  double m_targetExtension;
-  armExtension m_armExtension;
+public class AutoOuttakeCommand extends Command {
+  Intake m_outtake;
+  Timer m_timer;
 
-  public ExtendToPosition(armExtension armExtension, double Extension) {
-    
-    m_armExtension = armExtension;
-    m_targetExtension = Extension;
-
-    addRequirements(armExtension);
-  }
+  public AutoOuttakeCommand(Intake outtake) 
+    {
+        m_timer = new Timer();
+        m_outtake = outtake;
+        addRequirements(outtake);
+    }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    m_currentExtension = m_armExtension.ReturnCurrentExtension();
+    m_timer.reset();
+    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    m_currentExtension = m_armExtension.ReturnCurrentExtension();
+    m_outtake.RunIntake(Constants.Arm.outtakeVelocity);
 
-    m_armExtension.RunExtension(Constants.ExtensionPID.calculate(m_currentExtension,m_targetExtension));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_armExtension.RunExtension(0);
+    m_outtake.stop();
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(Constants.ExtensionPID.calculate(m_currentExtension,m_targetExtension)) <= 0.05) {
-
-      return true;
-
-    }else {
-
-      return false;
-
-    }
-    
+    return m_timer.hasElapsed(Constants.Arm.outtakeTime);
   }
 }

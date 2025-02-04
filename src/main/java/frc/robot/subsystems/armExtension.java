@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Distance;
 
 public class armExtension extends SubsystemBase {
 
@@ -28,6 +30,8 @@ public class armExtension extends SubsystemBase {
 
   double CurrentTicks;
   public double CurrentExtension;
+  private PIDController pid;
+
 
 
   public armExtension() {
@@ -43,28 +47,15 @@ public class armExtension extends SubsystemBase {
         upperMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
         lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
         
-        
 
 
+        SmartDashboard.putNumber("ArmP", 0.0);
+        SmartDashboard.putNumber("ArmI", 0.0);
+        SmartDashboard.putNumber("ArmD", 0.0);
+        pid = new PIDController(Constants.Arm.armP, Constants.Arm.armI, Constants.Arm.armD);
   }
 
-  public void RunExtension(double Velocity){
-
-    //Check the limit switches before running the motors
-    if (Velocity > 0 && upperMaxExtension.get() == 100) {
-      //If extending and the upper limit is reached, stop the motors
-      stopExtension();
-    } else if (Velocity < 0 && lowerMaxExtension.get() == 0) {
-        //If retracting and the lower limit is reached, stop the motors
-        stopExtension();
-    } else {
-        //Otherwise, run the motors at the specified velocity
-        extension_left.set(Velocity);
-        extension_right.set(Velocity);
-    }
-  }
-
-  public void stopExtension() {
+  public void stop() {
     extension_left.set(0);
     extension_right.set(0);
   }
@@ -77,10 +68,12 @@ public class armExtension extends SubsystemBase {
   @Override
   public void periodic() {
 
-    CurrentExtension = -CurrentTicks / (0.072 / 28) + 60;
+    
 
-    double ang = getExtension();
-    SmartDashboard.putNumber("Extension Encoder degree", ang);
+    SmartDashboard.putNumber("Extension Encoder get", extensionEncoder.get());
+    SmartDashboard.putNumber("Extension Encoder degree", getDistance());
+    
+
 
     
   }
@@ -89,7 +82,7 @@ public class armExtension extends SubsystemBase {
     return CurrentExtension;
   }
   
-  public void RunExtensionWithLimits(double Speed){
+  public void RunExtension(double Speed){
     extension_left.set(-Speed);
     extension_right.set(-Speed);
   }
@@ -143,5 +136,27 @@ public class armExtension extends SubsystemBase {
     double distanceFromLimelighttoGoalMeters = distanceFromLimelightToGoalInches / 39.37;
  
     return distanceFromLimelighttoGoalMeters;
+  }
+
+  public void clearPID()
+  {
+    double p = SmartDashboard.getNumber("armP", 0.0);
+    double i = SmartDashboard.getNumber("armI", 0.0);
+    double d = SmartDashboard.getNumber("armD", 0.0);
+    pid = new PIDController(p, i, d);
+    pid.reset();
+  }
+
+  public double getDistance()
+  {
+    double CurrentTicks = extensionEncoder.get() - Constants.Arm.armEncoderOffset;
+    return (CurrentTicks / Constants.Arm.extensionRatio) * 360;
+  }
+
+  public void runToPosition(double Distance)
+  {
+    pid.setSetpoint(Distance);
+    double out = pid.calculate(getDistance());
+    RunExtension(out);
   }
 }

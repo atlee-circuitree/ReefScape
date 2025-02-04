@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Velocity;
 
 /** Add your docs here. */
 public class Constants {
@@ -83,7 +84,8 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double threshold = 0.5;
+        public static final double wristThreshold = 0.5;
+        public static final double armThreshold = 0.5;
 
         public static final double pivotP = 0.0;
         public static final double pivotI = 0.0;
@@ -93,7 +95,26 @@ public class Constants {
         public static final double wristI = 0.0;
         public static final double wristD = 0.0;
 
+<<<<<<< Updated upstream
         public static final double wristRatio = 3;
+=======
+        public static final double armP = 0.0;
+        public static final double armI = 0.0;
+        public static final double armD = 0.0;
+
+        public static final double wristRatio = 3;
+        public static final double extensionRatio = 1;
+        public static final double pivotZeroDegree = 0;
+
+        public static final double wristEncoderOffset = 0; // in rotations
+        public static final double pivotEncoderOffset = 0; // in rotations'
+        public static final double armEncoderOffset = 0; // in rotations
+
+        public static final double outtakeVelocity = -1;
+        public static final double intakeVelocity = 1;
+
+        public static final double outtakeTime = 1;
+>>>>>>> Stashed changes
     }
 
 }

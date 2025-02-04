@@ -62,25 +62,13 @@ public class wrist extends SubsystemBase {
   }
 
   public double getAngle() {
-    double CurrentTicks = wristEncoder.get();
+    double CurrentTicks = wristEncoder.get() - Constants.Arm.wristEncoderOffset;
     return (CurrentTicks / Constants.Arm.wristRatio) * 360;
   }
 
   @Override
   public void periodic() {
-    
-    /*if (wristEncoder.get() > 0.8) {
-
-      CurrentTicks = wristEncoder.get() -1;
-
-    } else {
-      
-      CurrentTicks = wristEncoder.get();
-
-    }
-
-    CurrentWristAngle =- CurrentTicks / (0.072 / 28) + 60;*/
-    
+    SmartDashboard.putNumber("Wrist Encoder Get", wristEncoder.get());
     SmartDashboard.putNumber("Wrist Encoder Degrees", getAngle());
   }
 }

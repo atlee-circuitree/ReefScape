@@ -24,15 +24,12 @@ public class PivotCommand extends Command
   public void initialize() 
   {
     m_pivot.clearPID();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     m_pivot.runToPosition(m_position);
-
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +42,6 @@ public class PivotCommand extends Command
   @Override
   public boolean isFinished() {
     double err = Math.abs(m_pivot.getAngle() - m_position);
-    return err <= Constants.Arm.threshold;
+    return err <= Constants.Arm.wristThreshold;
   }
 }

@@ -6,15 +6,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.Lidar;
 
 public class Intake extends SubsystemBase {
   private TalonFX IntakeMotor;
+  private Lidar lidar;
 
   public Intake() {
     IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-B");
-
+    lidar = new Lidar(null);
   }
 
   public void RunIntake(double Velocity){
@@ -24,6 +27,10 @@ public class Intake extends SubsystemBase {
   public void stop()
   {
     RunIntake(0);
+  }
+
+  public double getDistance(){
+    return lidar.getDistanceIn();
   }
 
   @Override
