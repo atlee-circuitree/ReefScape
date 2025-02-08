@@ -15,6 +15,7 @@ public class Constants {
     public static PIDController ExtensionPID = new PIDController(.01, 0, 0);
 
     public class CAN_IDs{
+        /* 
         public static final int FLDrive = 1;
         public static final int FLTurn = 2;
         public static final int FLEncoder = 11;
@@ -37,6 +38,29 @@ public class Constants {
         public static final int Canivore_B = 21;
         public static final int pigeon = 0;
         public static final int climb = 20;
+        */
+
+        public static final int pigeon = 0;
+        public static final int FLEncoder = 2;
+        public static final int BLEncoder = 3;
+        public static final int FREncoder = 4;
+        public static final int BREncoder = 5;
+        public static final int FLDrive = 10;
+        public static final int FLTurn = 11;
+        public static final int FRDrive = 13;
+        public static final int FRTurn = 14;
+        public static final int BLTurn = 16;
+        public static final int BLDrive = 17;
+        public static final int BRDrive = 19;
+        public static final int BRTurn = 20;
+
+        public static final int IntakeMotorID = 30;
+        public static final int wrist = 31;
+        public static final int pivotLeft = 32;
+        public static final int pivotRight = 33;
+        public static final int extensionLeft = 35;
+        public static final int extensionRight = 34;
+
 
 
         public final String CANBUS_Name = "1599-B";
