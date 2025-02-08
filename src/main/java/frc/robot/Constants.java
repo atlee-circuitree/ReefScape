@@ -27,10 +27,10 @@ public class Constants {
         public static final int BRDrive = 7;
         public static final int BRTurn = 8;
         public static final int BREncoder = 17;
-        public static final int pivotLeft = 9;//Pivot one
-        public static final int pivotRight = 10;//pivot two
-        public static final int extensionLeft = 12;//Extension one
-        public static final int extensionRight = 14;//Extension two
+        public static final int pivotLeft = 9; //Pivot one
+        public static final int pivotRight = 10; //pivot two
+        public static final int extensionLeft = 12; //Extension one
+        public static final int extensionRight = 14; //Extension two
         public static final int IntakeMotorID = 16;
         public static final int wrist = 18;
         public static final int Canivore_C = 22;
@@ -110,7 +110,7 @@ public class Constants {
         public static final double armD = 0.0;
 
         public static final double wristRatio = 3;
-        public static final double pivotRatio = 14.4;
+        public static final double pivotRatio = 4.8;
         public static final double extensionRatio = 1;
         public static final double pivotZeroDegree = 0;
 
