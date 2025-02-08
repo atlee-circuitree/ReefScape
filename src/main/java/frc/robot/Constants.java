@@ -17,22 +17,30 @@ public class Constants {
     public class CAN_IDs{
         public static final int FLDrive = 1;
         public static final int FLTurn = 2;
+        public static final int FLEncoder = 11;
         public static final int FRDrive = 3;
         public static final int FRTurn = 4;
+        public static final int FREncoder = 13;
         public static final int BLDrive = 5;
         public static final int BLTurn = 6;
+        public static final int BLEncoder = 15;
         public static final int BRDrive = 7;
         public static final int BRTurn = 8;
-        public static final int pivotLeft = 9;
-        public static final int pivotRight = 10;
-        public static final int extensionLeft = 11;
-        public static final int extensionRight = 12;
-        public static final int IntakeMotorID = 13;
-        public static final int wrist = 14;
-        public static final int canivore_a = 15;
-        public static final int canivore_b = 16;
-        public static final int pigeon = 17;
-        public static final int climb = 18;
+        public static final int BREncoder = 17;
+        public static final int pivotLeft = 9;//Pivot one
+        public static final int pivotRight = 10;//pivot two
+        public static final int extensionLeft = 12;//Extension one
+        public static final int extensionRight = 14;//Extension two
+        public static final int IntakeMotorID = 16;
+        public static final int wrist = 18;
+        public static final int Canivore_C = 22;
+        public static final int Canivore_B = 21;
+        public static final int pigeon = 0;
+        public static final int climb = 20;
+
+
+        public final String CANBUS_Name = "1599-B";
+        public final String CANBUS_Name2 = "1599-C";
     }
 
     public class Channels {
@@ -86,6 +94,7 @@ public class Constants {
         public static final double minExtend = 0;
         public static final double wristThreshold = 0.5;
         public static final double armThreshold = 0.5;
+        public static final double pivotThreshold = 0.5;
 
         public static final double pivotP = 0.0;
         public static final double pivotI = 0.0;
@@ -96,12 +105,12 @@ public class Constants {
         public static final double wristD = 0.0;
 
 
-        public static final double wristRatio = 3;
         public static final double armP = 0.0;
         public static final double armI = 0.0;
         public static final double armD = 0.0;
 
-    
+        public static final double wristRatio = 3;
+        public static final double pivotRatio = 14.4;
         public static final double extensionRatio = 1;
         public static final double pivotZeroDegree = 0;
 

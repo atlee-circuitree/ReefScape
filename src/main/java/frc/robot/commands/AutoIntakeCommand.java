@@ -10,6 +10,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.generated.Lidar;
 
 
+
 public class AutoIntakeCommand extends Command {
   Intake m_intake;
   Lidar m_lidar;
@@ -28,6 +29,12 @@ public class AutoIntakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.RunIntake(Constants.Arm.intakeVelocity);
+    if (m_lidar.getDistanceIn() <= 2){
+      m_intake.stop();
+    }else{
+      m_intake.RunIntake(Constants.Arm.intakeVelocity);
+    }
+
 
   }
 

@@ -24,8 +24,8 @@ public class Pivot extends SubsystemBase {
   private PIDController pid;
 
   public Pivot() {
-    pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-B");
-    pivot_right = new TalonFX(Constants.CAN_IDs.pivotRight, "1599-B");
+    pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-C");
+    pivot_right = new TalonFX(Constants.CAN_IDs.pivotRight, "1599-C");
 
     pivot_left.setNeutralMode(NeutralModeValue.Brake);
     pivot_right.setNeutralMode(NeutralModeValue.Brake);
@@ -61,7 +61,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public double getAngle() {
-    return pivotEncoder.get() * 360;
+    double CurrentTicks = pivotEncoder.get() - Constants.Arm.wristEncoderOffset;
+    return (CurrentTicks / Constants.Arm.pivotRatio) * 360;
   }
 
   @Override

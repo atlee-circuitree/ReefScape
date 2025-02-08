@@ -3,28 +3,71 @@
  "version":1,
  "type":"Swerve",
  "variables":{
-  "expressions":{},
+  "expressions":{
+   "Descend":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "Delay":{
+    "dimension":"Number",
+    "var":{
+     "exp":"1",
+     "val":1.0
+    }
+   },
+   "Feed":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "FeedPosition":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "Extend":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "L4Position":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   }
+  },
   "poses":{}
  },
  "config":{
   "frontLeft":{
    "x":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"11.25 in",
+    "val":0.28575
    },
    "y":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"11.25 in",
+    "val":0.28575
    }
   },
   "backLeft":{
    "x":{
-    "exp":"-11 in",
-    "val":-0.2794
+    "exp":"-11.25 in",
+    "val":-0.28575
    },
    "y":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"11.25 in",
+    "val":0.28575
    }
   },
   "mass":{
@@ -57,16 +100,16 @@
   },
   "bumper":{
    "front":{
-    "exp":"16 in",
-    "val":0.4064
+    "exp":"17.5 in",
+    "val":0.4445
    },
    "side":{
-    "exp":"16 in",
-    "val":0.4064
+    "exp":"17.5 in",
+    "val":0.4445
    },
    "back":{
-    "exp":"16 in",
-    "val":0.4064
+    "exp":"17.5 in",
+    "val":0.4445
    }
   },
   "differentialTrackWidth":{

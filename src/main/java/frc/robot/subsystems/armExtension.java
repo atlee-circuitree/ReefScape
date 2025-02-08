@@ -25,8 +25,6 @@ public class armExtension extends SubsystemBase {
   private final TalonFX extension_right;
   
   private final DutyCycleEncoder extensionEncoder;
-  private final DutyCycleEncoder upperMaxExtension;
-  private final DutyCycleEncoder lowerMaxExtension;
 
   double CurrentTicks;
   public double CurrentExtension;
@@ -36,18 +34,13 @@ public class armExtension extends SubsystemBase {
 
   public armExtension() {
     
-        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
-        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
+        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-C");
+        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-C");
        
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);
 
-        extensionEncoder = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
-
-        upperMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
-        lowerMaxExtension = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);
-        
-
+        extensionEncoder = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);     
 
         SmartDashboard.putNumber("ArmP", 0.0);
         SmartDashboard.putNumber("ArmI", 0.0);

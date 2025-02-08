@@ -42,6 +42,6 @@ public class PivotCommand extends Command
   @Override
   public boolean isFinished() {
     double err = Math.abs(m_pivot.getAngle() - m_position);
-    return err <= Constants.Arm.wristThreshold;
+    return err <= Constants.Arm.pivotThreshold;
   }
 }
