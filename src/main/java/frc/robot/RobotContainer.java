@@ -80,10 +80,14 @@ public class RobotContainer {
 
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,.5));
-        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.5));
-        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.5));
-        Player1.y().toggleOnTrue(new AutoOuttakeCommand(intake));
-        Player1.x().toggleOnTrue(new AutoIntakeCommand(intake));
+        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
+        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.05)); //down
+        Player1.y().whileTrue(new ManualWrist(Wrist, -0.5));
+        Player1.x().whileTrue(new ManualWrist(Wrist,0.5));
+        Player1.a().whileTrue(new ManualPivot(pivot,0.8));
+        Player1.b().whileTrue(new ManualPivot(pivot, -0.8));
+        
+        
         //Player1.povUp().toggleOnTrue(new ElevatorCommand(extension, 0));
         //Player1.povDown().toggleOnTrue(new ElevatorCommand(extension, 20)); 
         

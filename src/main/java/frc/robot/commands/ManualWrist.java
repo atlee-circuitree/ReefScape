@@ -36,7 +36,7 @@ public class ManualWrist extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_wrist.RunWrist(.5);
+    m_wrist.RunWrist(0);
 
   }
 

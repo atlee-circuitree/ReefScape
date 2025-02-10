@@ -71,9 +71,8 @@ public class Constants {
         public static final int WristChannel = 1;
         public static final int PivotChannel = 2;
         public static final int EncoderChannel = 5;
-        public static final int pivotEncoderChannel = 4;
+        public static final int pivotEncoderChannel = 7;
         public static final int armExtensionEncoderChannel = 6;
-        public static final int climbEncoderChannel = 7;
 
         
         
@@ -124,9 +123,9 @@ public class Constants {
         public static final double pivotI = 0.0;
         public static final double pivotD = 0.0;
 
-        public static final double wristP = 0.0;
-        public static final double wristI = 0.0;
-        public static final double wristD = 0.0;
+        public static final double wristP = .4;
+        public static final double wristI = .75;
+        public static final double wristD = 0.01;
 
 
         public static final double armP = 0.0;

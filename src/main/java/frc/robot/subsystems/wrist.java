@@ -27,7 +27,7 @@ public class wrist extends SubsystemBase {
 
     wrist = new TalonFX(Constants.CAN_IDs.wrist, "1599-B");
 
-    wrist.setNeutralMode(NeutralModeValue.Coast);
+    wrist.setNeutralMode(NeutralModeValue.Brake);
 
 
 

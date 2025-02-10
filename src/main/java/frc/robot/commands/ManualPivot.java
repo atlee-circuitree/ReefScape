@@ -36,7 +36,7 @@ public class ManualPivot extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_Pivot.runPivot(.5);
+    m_Pivot.runPivot(0);
 
   }
 

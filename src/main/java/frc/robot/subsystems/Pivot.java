@@ -62,14 +62,14 @@ public class Pivot extends SubsystemBase {
 
   public double getAngle() {
     double CurrentTicks = pivotEncoder.get() - Constants.Arm.wristEncoderOffset;
-    return (CurrentTicks / Constants.Arm.pivotRatio) * 360;
+    return ((CurrentTicks / Constants.Arm.pivotRatio) * 360)+33.45; // band-aid fix for offset ()
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
-    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle());
+    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle()); 
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

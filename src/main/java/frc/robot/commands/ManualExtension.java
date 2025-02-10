@@ -35,7 +35,7 @@ public class ManualExtension extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_extension.RunExtension(.5);
+    m_extension.RunExtension(.00);
 
   }
 
