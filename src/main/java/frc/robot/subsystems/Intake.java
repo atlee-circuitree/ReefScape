@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
   private Lidar lidar;
 
   public Intake() {
-    IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-C");
+    IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-B");
     lidar = new Lidar(new DigitalInput(0));
   }
 

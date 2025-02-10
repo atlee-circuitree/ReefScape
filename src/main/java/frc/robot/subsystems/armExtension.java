@@ -34,8 +34,8 @@ public class armExtension extends SubsystemBase {
 
   public armExtension() {
     
-        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-C");
-        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-C");
+        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
+        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
        
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);

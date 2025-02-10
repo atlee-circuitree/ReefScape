@@ -80,17 +80,15 @@ public class RobotContainer {
 
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,.5));
-        //Player1.y().toggleOnTrue(new WristCommand(Wrist, 0));
-        //Player1.y().toggleOnTrue(new AutoOuttakeCommand(intake));
-        //Player1.x().toggleOnTrue(new AutoIntakeCommand(intake));
-        //Player1.x().toggleOnTrue(new WristCommand(Wrist, 20));
-        //Player1.a().toggleOnTrue(new PivotCommand(pivot, 0));
-        //Player1.b().toggleOnTrue(new PivotCommand(pivot, 20));
+        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.5));
+        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.5));
+        Player1.y().toggleOnTrue(new AutoOuttakeCommand(intake));
+        Player1.x().toggleOnTrue(new AutoIntakeCommand(intake));
         //Player1.povUp().toggleOnTrue(new ElevatorCommand(extension, 0));
         //Player1.povDown().toggleOnTrue(new ElevatorCommand(extension, 20)); 
         
 
-
+/* 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
@@ -119,7 +117,7 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
+*/
 
     }
 
