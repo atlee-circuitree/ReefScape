@@ -49,8 +49,8 @@ public class Constants {
         public static final int FLTurn = 11;
         public static final int FRDrive = 13;
         public static final int FRTurn = 14;
-        public static final int BLTurn = 16;
-        public static final int BLDrive = 17;
+        public static final int BLTurn = 17;
+        public static final int BLDrive = 16;
         public static final int BRDrive = 19;
         public static final int BRTurn = 20;
 
@@ -142,8 +142,8 @@ public class Constants {
         public static final double pivotEncoderOffset = 0; // in rotations'
         public static final double armEncoderOffset = 0; // in rotations
 
-        public static final double outtakeVelocity = -1;
-        public static final double intakeVelocity = 1;
+        public static final double outtakeVelocity = 1;
+        public static final double intakeVelocity = -1;
 
         public static final double outtakeTime = 1;
     }

@@ -22,12 +22,14 @@ import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
+import frc.robot.commands.AutoIntakeCommand;
+import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.PivotCommand;
 import frc.robot.commands.WristCommand;
-
+import frc.robot.generated.Lidar;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -47,6 +49,7 @@ public class RobotContainer {
     private final Lights lights = new Lights();
     private final Pivot pivot = new Pivot();
     private final armExtension extension = new armExtension();
+
 
     
 
@@ -75,23 +78,28 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
 
 
-        Player1.rightTrigger().whileTrue(new ManualIntake(intake,.5));
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,-.5));
-        Player1.y().toggleOnTrue(new WristCommand(Wrist, 0));
-        Player1.x().toggleOnTrue(new WristCommand(Wrist, 20));
-        Player1.a().toggleOnTrue(new PivotCommand(pivot, 0));
-        Player1.b().toggleOnTrue(new PivotCommand(pivot, 20));
-        Player1.povUp().toggleOnTrue(new ElevatorCommand(extension, 0));
-        Player1.povDown().toggleOnTrue(new ElevatorCommand(extension, 20));
+        Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,.5));
+        //Player1.y().toggleOnTrue(new WristCommand(Wrist, 0));
+        //Player1.y().toggleOnTrue(new AutoOuttakeCommand(intake));
+        //Player1.x().toggleOnTrue(new AutoIntakeCommand(intake));
+        //Player1.x().toggleOnTrue(new WristCommand(Wrist, 20));
+        //Player1.a().toggleOnTrue(new PivotCommand(pivot, 0));
+        //Player1.b().toggleOnTrue(new PivotCommand(pivot, 20));
+        //Player1.povUp().toggleOnTrue(new ElevatorCommand(extension, 0));
+        //Player1.povDown().toggleOnTrue(new ElevatorCommand(extension, 20)); 
         
 
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            drivetrain.applyRequest(() -> 
+                drive.withVelocityX(0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0) // Drive left with negative X (left)
+                    .withRotationalRate(0) // Drive counterclockwise with negative X (left)
+                //drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                //    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                //    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 

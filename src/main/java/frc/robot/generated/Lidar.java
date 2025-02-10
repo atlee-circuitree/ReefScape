@@ -15,11 +15,10 @@ public class Lidar {
      * @param port DigitalInput Object
      */
     public Lidar(DigitalSource port) {
-        return;
-        /*mCounter = new Counter(port);
+        mCounter = new Counter(port);
         mCounter.setMaxPeriod(1.0);
         mCounter.setSemiPeriodMode(true);
-        mCounter.reset();*/
+        mCounter.reset();
     }
 
     /**

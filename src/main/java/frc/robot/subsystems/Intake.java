@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalSource;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.generated.Lidar;
@@ -17,7 +19,7 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
     IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-C");
-    lidar = new Lidar(null);
+    lidar = new Lidar(new DigitalInput(0));
   }
 
   public void RunIntake(double Velocity){
@@ -35,6 +37,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once sper scheduler run
+    SmartDashboard.putNumber("Lidar", getDistance());
   }
 }
