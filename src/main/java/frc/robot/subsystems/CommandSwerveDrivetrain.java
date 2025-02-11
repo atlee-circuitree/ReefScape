@@ -10,11 +10,19 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import choreo.Choreo.TrajectoryLogger;
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -32,6 +40,18 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
+    NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
+
+    NetworkTable m_limelightRear = NetworkTableInstance.getDefault().getTable("limelight-back");
+    NetworkTable m_limelightFront = NetworkTableInstance.getDefault().getTable("limelight-front");
+    NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
+    NetworkTable table = ntInstance.getTable("Pose");
+    NetworkTable poseTable = ntInstance.getTable("MyPose");
+    private final SwerveRequest.ApplyRobotSpeeds m_ApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+    private final PIDController m_pathXController = new PIDController(10, 0, 0);
+    private final PIDController m_pathYController = new PIDController(10, 0, 0);
+    private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
+    private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
     private double m_lastSimTime;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -184,6 +204,41 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+/**
+     * Creates a new auto factory for this drivetrain.
+     *
+     * @return AutoFactory for this drivetrain
+     */
+    
+    /* private void configureAutoBuilder() {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                () -> getState().Pose,   // Supplier of current robot pose
+                this::resetPose,         // Consumer for seeding pose against auto
+                () -> getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> setControl(
+                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(10, 0, 0),
+                    // PID constants for rotation
+                    new PIDConstants(7, 0, 0)
+                ),
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+    } */
+
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
@@ -215,6 +270,43 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+    public AutoFactory createAutoFactory(TrajectoryLogger<SwerveSample> trajLogger) {
+        return new AutoFactory(
+            () -> this.getState().Pose,
+            this::resetPose,
+            this::followPath,
+            false,
+            this,
+            trajLogger
+        );
+    }
+    public AutoFactory createAutoFactory() {
+        return createAutoFactory((sample, isStart) -> {});
+    }
+
+    public void followPath(SwerveSample sample) {
+        m_pathThetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        var pose = getFrontLLPose();
+
+        var targetSpeeds = sample.getChassisSpeeds();
+        targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
+            pose.getX(), sample.x
+        );
+        targetSpeeds.vyMetersPerSecond += m_pathYController.calculate(
+            pose.getY(), sample.y
+        );
+        targetSpeeds.omegaRadiansPerSecond += m_pathThetaController.calculate(
+            pose.getRotation().getRadians(), sample.heading
+        );
+
+        setControl(
+            m_pathApplyFieldSpeeds.withSpeeds(targetSpeeds)
+                .withWheelForceFeedforwardsX(sample.moduleForcesX())
+                .withWheelForceFeedforwardsY(sample.moduleForcesY())
+        );
+    }
+
 
     @Override
     public void periodic() {
@@ -263,6 +355,58 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
+
+    public double getTX() {
+        return m_limelight.getEntry("tx").getDouble(0.0);
+      }
+      public Pose2d getPoseNT() {
+        return (Pose2d) NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).getEntry(getFrontLLPose(), (PubSubOption)null);
+      }
+      public double getTY() {
+        return m_limelight.getEntry("ty").getDouble(0.0);
+      }
+      public double getTXFront() {
+        return m_limelightFront.getEntry("tx").getDouble(0.);
+      }
+      public double getTYFront() {
+        return m_limelightFront.getEntry("ty").getDouble(0.);
+      }
+      public boolean getTVFront() {
+        return m_limelightFront.getEntry("tv").getDouble(0.0) == 1.0;
+      }
+      public boolean getTV() {
+        return m_limelight.getEntry("tv").getDouble(0.0) == 1.0;
+      }
+      public boolean getTVRear() {
+        return m_limelightRear.getEntry("tv").getDouble(0.0) == 1.0;
+      }
+      public double getTZ() {
+        return m_limelight.getEntry("ty").getDouble(0.0);
+      }
+      public Pose2d getPoseLL() {
+        var array = m_limelight.getEntry("botpose_wpired").getDoubleArray(new double[]{});
+        double[] result = {array[0], array[1], array[5]};
+        Pose2d pose = new Pose2d(result[0], result[1], new Rotation2d(result[2]));
+        return pose;
+        // double[] poseArray = {pose.getX(), pose.getY(), ((pose.getRotation().getDegrees())/360)+(pose.getRotation().getDegrees()%360)};
+        // table.getEntry("RobotPose").setDoubleArray(poseArray);
+        // SmartDashboard.putNumberArray("Raw Pose", result);
+      }
+      public Pose2d getRearLLPose() {
+        var array = m_limelightRear.getEntry("botpose_wpired").getDoubleArray(new double[]{});
+        double[] result = {array[0], array[1], array[5]};
+        Pose2d pose = new Pose2d(result[0], result[1], new Rotation2d(result[2]));
+        return pose;
+      }
+      public Pose2d getFrontLLPose() {
+        var array = m_limelightFront.getEntry("botpose_wpired").getDoubleArray(new double[]{});
+        double[] result = {array[0], array[1], array[5]};
+        Pose2d pose = new Pose2d(result[0], result[1], new Rotation2d(result[2]*(Math.PI/180)));
+        return pose;
+      }
+      public SwerveModulePosition[] getModulePositions() {
+        return getState().ModulePositions;
+      }
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
