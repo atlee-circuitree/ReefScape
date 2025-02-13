@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.units.measure.Velocity;
 
 /** Add your docs here. */
 public class Constants {
@@ -15,30 +14,6 @@ public class Constants {
     public static PIDController ExtensionPID = new PIDController(.01, 0, 0);
 
     public class CAN_IDs{
-        /* 
-        public static final int FLDrive = 1;
-        public static final int FLTurn = 2;
-        public static final int FLEncoder = 11;
-        public static final int FRDrive = 3;
-        public static final int FRTurn = 4;
-        public static final int FREncoder = 13;
-        public static final int BLDrive = 5;
-        public static final int BLTurn = 6;
-        public static final int BLEncoder = 15;
-        public static final int BRDrive = 7;
-        public static final int BRTurn = 8;
-        public static final int BREncoder = 17;
-        public static final int pivotLeft = 9; //Pivot one
-        public static final int pivotRight = 10; //pivot two
-        public static final int extensionLeft = 12; //Extension one
-        public static final int extensionRight = 14; //Extension two
-        public static final int IntakeMotorID = 16;
-        public static final int wrist = 18;
-        public static final int Canivore_C = 22;
-        public static final int Canivore_B = 21;
-        public static final int pigeon = 0;
-        public static final int climb = 20;
-        */
 
         public static final int pigeon = 0;
         public static final int FLEncoder = 2;
@@ -60,6 +35,7 @@ public class Constants {
         public static final int pivotRight = 33;
         public static final int extensionLeft = 35;
         public static final int extensionRight = 34;
+        public static final int CANRange = 40;
 
 
 

@@ -6,20 +6,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.Lidar;
+import frc.robot.generated.CanRange;
 
 public class Intake extends SubsystemBase {
   private TalonFX IntakeMotor;
-  private Lidar lidar;
+  private CanRange m_CanRange;
 
   public Intake() {
     IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-B");
-    lidar = new Lidar(new DigitalInput(0));
+    m_CanRange = new CanRange(Constants.CAN_IDs.CANRange);
   }
 
   public void RunIntake(double Velocity){
@@ -32,12 +30,12 @@ public class Intake extends SubsystemBase {
   }
 
   public double getDistance(){
-    return lidar.getDistanceIn();
+    return m_CanRange.getDistance();
   }
 
   @Override
   public void periodic() {
     // This method will be called once sper scheduler run
-    SmartDashboard.putNumber("Lidar", getDistance());
+    SmartDashboard.putNumber("CanRange", getDistance());
   }
 }

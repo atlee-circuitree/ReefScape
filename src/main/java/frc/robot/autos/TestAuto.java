@@ -6,28 +6,13 @@ package frc.robot.autos;
 
 
 
-import java.io.IOException;
-
-import org.json.simple.parser.ParseException;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
-import com.pathplanner.lib.util.FileVersionException;
-
-import choreo.Choreo;
-import choreo.Choreo.TrajectoryLogger;
 import choreo.auto.AutoFactory;
-import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import choreo.trajectory.TrajectorySample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
