@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,7 +32,7 @@ public class Intake extends SubsystemBase {
   }
 
   public double getDistance(){
-    return m_CanRange.getDistance();
+    return m_CanRange.getDistance(Inches);
   }
 
   @Override
