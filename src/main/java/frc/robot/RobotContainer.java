@@ -14,6 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.AutoIntakeCommand;
+import frc.robot.commands.AutoOuttakeCommand;
+import frc.robot.commands.ManualExtension;
+import frc.robot.commands.ManualIntake;
+import frc.robot.commands.ManualPivot;
+import frc.robot.commands.ManualWrist;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -54,16 +60,18 @@ public class RobotContainer {
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        /* 
+        
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,.5));
         Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
         Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.05)); //down
-        Player1.y().whileTrue(new ManualWrist(Wrist, -0.5));
-        Player1.x().whileTrue(new ManualWrist(Wrist,0.5));
-        Player1.a().whileTrue(new ManualPivot(pivot,0.8));
-        Player1.b().whileTrue(new ManualPivot(pivot, -0.8)); */
-
+        Player1.y().whileTrue(new ManualWrist(Wrist, -0.35));
+        Player1.x().whileTrue(new ManualWrist(Wrist,0.35));
+        Player1.a().whileTrue(new ManualPivot(pivot,0.3));
+        Player1.b().whileTrue(new ManualPivot(pivot, -0.3)); 
+        Player1.povUp().toggleOnTrue(new AutoIntakeCommand(intake));
+        Player1.povDown().toggleOnTrue(new AutoOuttakeCommand(intake));
+        /* 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
@@ -88,7 +96,7 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
+        drivetrain.registerTelemetry(logger::telemeterize);*/
     }
 
     public Command getAutonomousCommand() {

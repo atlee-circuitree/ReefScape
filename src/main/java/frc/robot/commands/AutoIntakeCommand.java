@@ -4,17 +4,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
-import frc.robot.generated.Lidar;
-
 
 
 public class AutoIntakeCommand extends Command {
   Intake m_intake;
 
   public AutoIntakeCommand(Intake intake) {
+    SmartDashboard.putNumber("threshold autointake", 2);
     m_intake = intake;
     addRequirements(intake);
   }
@@ -27,7 +27,7 @@ public class AutoIntakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.RunIntake(Constants.Arm.intakeVelocity);
-    if (m_intake.getDistance() <= 2){
+    if (m_intake.getDistance() <= SmartDashboard.getNumber("threshold autointake", 2)){
       m_intake.stop();
     }else{
       m_intake.RunIntake(Constants.Arm.intakeVelocity);

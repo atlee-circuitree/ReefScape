@@ -114,7 +114,7 @@ public class Constants {
         public static final double pivotZeroDegree = 0;
 
         public static final double wristEncoderOffset = 0; // in rotations
-        public static final double pivotEncoderOffset = 0; // in rotations'
+        public static final double pivotEncoderOffset = -0.746; // in rotations'
         public static final double armEncoderOffset = 0; // in rotations
 
         public static final double outtakeVelocity = 1;

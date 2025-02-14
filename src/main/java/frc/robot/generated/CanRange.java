@@ -1,7 +1,5 @@
 package frc.robot.generated;
 
-import static edu.wpi.first.units.Units.Inches;
-
 import com.ctre.phoenix6.hardware.CANrange;
 
 import edu.wpi.first.units.DistanceUnit;

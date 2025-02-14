@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,7 +59,10 @@ public class Pivot extends SubsystemBase {
 
   public double getAngle() {
     double CurrentTicks = pivotEncoder.get() - Constants.Arm.wristEncoderOffset;
-    return ((CurrentTicks / Constants.Arm.pivotRatio) * 360)+33.45; // band-aid fix for offset ()
+    if (CurrentTicks < 0) {
+      CurrentTicks += 1;
+    }
+    return ((CurrentTicks / Constants.Arm.pivotRatio) * 360);
   }
 
   @Override
