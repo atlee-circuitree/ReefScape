@@ -14,7 +14,8 @@ public class AutoIntakeCommand extends Command {
   Intake m_intake;
 
   public AutoIntakeCommand(Intake intake) {
-    SmartDashboard.putNumber("threshold autointake", 2);
+    SmartDashboard.putNumber("Coral threshold autointake", 2);
+    SmartDashboard.putNumber("Algee threshold autointake", 5);
     m_intake = intake;
     addRequirements(intake);
   }
@@ -27,27 +28,17 @@ public class AutoIntakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.RunIntake(Constants.Arm.intakeVelocity);
-    if (m_intake.getDistance() <= SmartDashboard.getNumber("threshold autointake", 2)){
-      m_intake.stop();
-    }else{
-      m_intake.RunIntake(Constants.Arm.intakeVelocity);
-    }
-
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
     m_intake.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-
-
+    return m_intake.getCoralDistance() <= SmartDashboard.getNumber("Coral threshold autointake", 2);
   }
 }

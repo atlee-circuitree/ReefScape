@@ -35,7 +35,8 @@ public class Constants {
         public static final int pivotRight = 33;
         public static final int extensionLeft = 35;
         public static final int extensionRight = 34;
-        public static final int CANRange = 40;
+        public static final int CoralCANRange = 40;
+        public static final int AlgeeCanRange = 41;
 
 
 
@@ -99,22 +100,22 @@ public class Constants {
         public static final double pivotI = 0.0;
         public static final double pivotD = 0.0;
 
-        public static final double wristP = .4;
-        public static final double wristI = .75;
-        public static final double wristD = 0.01;
+        public static final double wristP = .5;
+        public static final double wristI = .0;
+        public static final double wristD = 0.0;
 
 
         public static final double armP = 0.0;
         public static final double armI = 0.0;
         public static final double armD = 0.0;
 
-        public static final double wristRatio = 3;
+        public static final double wristRatio = 1;
         public static final double pivotRatio = 4.8;
         public static final double extensionRatio = 1;
         public static final double pivotZeroDegree = 0;
 
-        public static final double wristEncoderOffset = 0; // in rotations
-        public static final double pivotEncoderOffset = -0.746; // in rotations'
+        public static final double wristEncoderOffset = 0.606; // in rotations
+        public static final double pivotEncoderOffset = -0.03; // in rotations'
         public static final double armEncoderOffset = 0; // in rotations
 
         public static final double outtakeVelocity = 1;
