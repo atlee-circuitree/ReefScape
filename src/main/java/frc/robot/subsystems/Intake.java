@@ -15,11 +15,12 @@ import frc.robot.generated.CanRange;
 
 public class Intake extends SubsystemBase {
   private TalonFX IntakeMotor;
-  private CanRange m_CanRange;
+  private CanRange m_CoralCanRange;
+  //private CanRange m_AlgeeCanRange;
 
   public Intake() {
     IntakeMotor = new TalonFX(Constants.CAN_IDs.IntakeMotorID,"1599-B");
-    m_CanRange = new CanRange(Constants.CAN_IDs.CANRange);
+    m_CoralCanRange = new CanRange(Constants.CAN_IDs.CoralCANRange);
   }
 
   public void RunIntake(double Velocity){
@@ -31,13 +32,18 @@ public class Intake extends SubsystemBase {
     RunIntake(0);
   }
 
-  public double getDistance(){
-    return m_CanRange.getDistance(Inches);
+  public double getCoralDistance(){
+    return m_CoralCanRange.getDistance(Inches);
   }
+
+  /*public double getAlgeeDistance(){
+    return m_AlgeeCanRange.getDistance(Inches);
+  }*/
 
   @Override
   public void periodic() {
     // This method will be called once sper scheduler run
-    SmartDashboard.putNumber("CanRange", getDistance());
+    SmartDashboard.putNumber("Coral CanRange", getCoralDistance());
+    //SmartDashboard.putNumber("Algee CanRange", getAlgeeDistance());
   }
 }
