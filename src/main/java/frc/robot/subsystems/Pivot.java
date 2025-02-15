@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -13,12 +16,15 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.CanRange;
+import frc.robot.generated.Pigeon;
 
 public class Pivot extends SubsystemBase {
   private TalonFX pivot_left;
   private TalonFX pivot_right;
   private DutyCycleEncoder pivotEncoder;
   private PIDController pid;
+  private Pigeon pivotPigeon;
 
   public Pivot() {
     pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-B");
@@ -30,9 +36,12 @@ public class Pivot extends SubsystemBase {
     pivot_left.setInverted(false);
     pivot_right.setInverted(false);
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
-    
+    pivotPigeon = new Pigeon(41);
 
     pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
+
+    SmartDashboard.putNumber("PivotP", 0.0);
+    pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
   }
 
   public void runPivot(double Velocity){
@@ -42,6 +51,8 @@ public class Pivot extends SubsystemBase {
 
   public void clearPID()
   {
+    double p = SmartDashboard.getNumber("PivotP", 0.0);
+    pid = new PIDController(p, Constants.Arm.pivotI, Constants.Arm.pivotD);
     pid.reset();
   }
 
@@ -58,18 +69,16 @@ public class Pivot extends SubsystemBase {
   }
 
   public double getAngle() {
-    double CurrentTicks = pivotEncoder.get() - Constants.Arm.wristEncoderOffset;
-    if (CurrentTicks < 0) {
-      CurrentTicks += 1;
-    }
-    return ((CurrentTicks / Constants.Arm.pivotRatio) * 360);
+    double CurrentTicks = pivotEncoder.get() - Constants.Arm.pivotEncoderOffset;
+    return (CurrentTicks * (180/Math.PI)) + 44.8;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
-    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle()); 
+    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle());
+    SmartDashboard.putNumber("Pivot Encoder Degrees (Pigoen)", pivotPigeon.getAngle());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

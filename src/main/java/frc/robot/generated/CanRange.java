@@ -2,6 +2,7 @@ package frc.robot.generated;
 
 import com.ctre.phoenix6.hardware.CANrange;
 
+import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.DistanceUnit;
 
 public class CanRange {
@@ -15,5 +16,9 @@ public class CanRange {
     public double getDistance(DistanceUnit unit) {
         return m_CANRange.getDistance().getValue().in(unit);
     }
-    
+
+    public double getAngle() {
+        return m_CANRange.getDistance().getValueAsDouble();
+    }
+
 }
