@@ -36,6 +36,18 @@ public class wrist extends SubsystemBase {
     pid = new PIDController(Constants.Arm.wristP, Constants.Arm.wristI, Constants.Arm.wristD);
   }
 
+  public double calcFeed()
+  {
+    double ang = getAngle();
+    // do math
+    double out = 0;
+    return out;
+  }
+
+  public void feedforward()
+  {
+    RunWrist(calcFeed());
+  }
 
   public void RunWrist(double Velocity){
     wrist.set(Velocity);
@@ -51,8 +63,8 @@ public class wrist extends SubsystemBase {
   public void runToPosition(double deg)
   {
     pid.setSetpoint(deg);
-    double out = pid.calculate(getAngle());
-    RunWrist(out);
+    double out = pid.calculate(getAngle()) - calcFeed();
+    RunWrist(-out);
   }
 
   public void stop()
@@ -62,7 +74,7 @@ public class wrist extends SubsystemBase {
 
   public double getAngle() {
     double CurrentTicks = wristEncoder.get() - Constants.Arm.wristEncoderOffset;
-    return (CurrentTicks / Constants.Arm.wristRatio) * 360;
+    return (CurrentTicks / Constants.Arm.wristRatio) * -360;
   }
 
   @Override
