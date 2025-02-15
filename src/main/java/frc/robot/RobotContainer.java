@@ -10,16 +10,20 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
+import frc.robot.commands.PivotCommand;
+import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -55,6 +59,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+
+        
     }
 
     private void configureBindings() {
@@ -62,15 +68,19 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,.5));
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.5));
         Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
         Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.05)); //down
         Player1.y().whileTrue(new ManualWrist(Wrist, -0.35));
-        Player1.x().whileTrue(new ManualWrist(Wrist,0.35));
-        Player1.a().whileTrue(new ManualPivot(pivot,0.3));
-        Player1.b().whileTrue(new ManualPivot(pivot, -0.3)); 
-        Player1.povUp().toggleOnTrue(new AutoIntakeCommand(intake));
+        Player1.x().whileTrue(new ManualWrist(Wrist,0.35)); // goes fowards
+        Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
+        Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
+        Player1.povUp().toggleOnTrue(new AutoIntakeCommand(intake)); //still need to test
         Player1.povDown().toggleOnTrue(new AutoOuttakeCommand(intake));
+        Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));
+        Player1.povRight().toggleOnTrue(new PivotCommand(pivot, 90));
+
+        Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
         /* 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
@@ -102,4 +112,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }
+    
 }
