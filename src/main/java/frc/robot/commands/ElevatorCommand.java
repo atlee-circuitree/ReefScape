@@ -37,7 +37,7 @@ public class ElevatorCommand extends Command
     @Override
     public boolean isFinished() 
     {
-        double err = Math.abs(m_arm.getDistance() - m_position);
+        double err = Math.abs(m_arm.getExtension() - m_position);
         return err <= Constants.Arm.armThreshold;
     }
     

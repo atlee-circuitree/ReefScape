@@ -36,8 +36,8 @@ public class Constants {
         public static final int extensionLeft = 35;
         public static final int extensionRight = 34;
         public static final int CoralCANRange = 40;
-        public static final int AlgeeCanRange = 41;
-
+        public static final int PivotPigeon = 41;
+        public static final int ExtensionCANCoder = 42;
 
 
         public final String CANBUS_Name = "1599-B";
@@ -115,7 +115,7 @@ public class Constants {
         public static final double pivotZeroDegree = 0;
 
         public static final double wristEncoderOffset = 0.606; // in rotations
-        public static final double pivotEncoderOffset = -0.03; // in rotations'
+        public static final double pivotEncoderOffset = 45.43;
         public static final double armEncoderOffset = 0; // in rotations
 
         public static final double outtakeVelocity = 1;

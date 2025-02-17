@@ -4,19 +4,14 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
-
-import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.CanRange;
 import frc.robot.generated.Pigeon;
 
 public class Pivot extends SubsystemBase {
@@ -36,7 +31,7 @@ public class Pivot extends SubsystemBase {
     pivot_left.setInverted(false);
     pivot_right.setInverted(false);
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
-    pivotPigeon = new Pigeon(41);
+    pivotPigeon = new Pigeon(Constants.CAN_IDs.PivotPigeon);
 
     pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
 
@@ -69,16 +64,14 @@ public class Pivot extends SubsystemBase {
   }
 
   public double getAngle() {
-    double CurrentTicks = pivotEncoder.get() - Constants.Arm.pivotEncoderOffset;
-    return (CurrentTicks * (180/Math.PI)) + 44.8;
+    return pivotPigeon.getAngle() + Constants.Arm.pivotEncoderOffset;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
-    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngle());
-    SmartDashboard.putNumber("Pivot Encoder Degrees (Pigoen)", pivotPigeon.getAngle());
+    SmartDashboard.putNumber("Pivot pigeon get", pivotPigeon.getAngle());
+    SmartDashboard.putNumber("Pivot Degrees", getAngle());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

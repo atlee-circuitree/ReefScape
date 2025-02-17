@@ -1,0 +1,19 @@
+package frc.robot.generated;
+
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
+
+public class CanCoder {
+    
+    private CANcoder m_CanCoder;
+
+    public CanCoder(int id) {
+        m_CanCoder = new CANcoder(id, "1599-B");
+
+    }
+
+    public double getDistance() {
+        return m_CanCoder.getPosition().getValueAsDouble();
+    }
+
+}

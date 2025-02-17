@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.CanCoder;
 import edu.wpi.first.math.controller.PIDController;
 
 public class armExtension extends SubsystemBase {
@@ -18,7 +19,7 @@ public class armExtension extends SubsystemBase {
   private final TalonFX extension_left;
   private final TalonFX extension_right;
   
-  private final DutyCycleEncoder extensionEncoder;
+  private final CanCoder extensionCanCoder;
 
   double CurrentTicks;
   public double CurrentExtension;
@@ -33,8 +34,7 @@ public class armExtension extends SubsystemBase {
        
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);
-
-        extensionEncoder = new DutyCycleEncoder(Constants.Channels.armExtensionEncoderChannel);     
+        extensionCanCoder = new CanCoder(42);   
 
         SmartDashboard.putNumber("ArmP", 0.0);
         SmartDashboard.putNumber("ArmI", 0.0);
@@ -48,8 +48,7 @@ public class armExtension extends SubsystemBase {
   }
 
   public double getExtension(){
-    CurrentTicks = extensionEncoder.get();
-    return CurrentTicks / (0.072 / 28) + 60;
+    return extensionCanCoder.getDistance() + Constants.Arm.armEncoderOffset;
   }
 
   @Override
@@ -57,8 +56,8 @@ public class armExtension extends SubsystemBase {
 
     
 
-    SmartDashboard.putNumber("Extension Encoder get", extensionEncoder.get());
-    SmartDashboard.putNumber("Extension Encoder degree", getDistance());
+    SmartDashboard.putNumber("Extension get", extensionCanCoder.getDistance());
+    SmartDashboard.putNumber("Extension degree", getExtension());
     
 
 
@@ -134,16 +133,10 @@ public class armExtension extends SubsystemBase {
     pid.reset();
   }
 
-  public double getDistance()
-  {
-    double CurrentTicks = extensionEncoder.get() - Constants.Arm.armEncoderOffset;
-    return (CurrentTicks / Constants.Arm.extensionRatio) * 360;
-  }
-
   public void runToPosition(double Distance)
   {
     pid.setSetpoint(Distance);
-    double out = pid.calculate(getDistance());
+    double out = pid.calculate(getExtension());
     RunExtension(out);
   }
 }

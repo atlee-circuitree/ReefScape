@@ -36,13 +36,13 @@ public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-    private final CommandXboxController Player1 = new CommandXboxController(0);
+    public final CommandXboxController Player1 = new CommandXboxController(0);
 
     private final Intake intake = new Intake();
     private final wrist Wrist = new wrist();
     private final Lights lights = new Lights();
     private final Pivot pivot = new Pivot();
-    private final armExtension extension = new armExtension();
+    public final armExtension extension = new armExtension();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -75,9 +75,9 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist,0.35)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
-        Player1.povUp().toggleOnTrue(new AutoIntakeCommand(intake)); //still need to test
-        Player1.povDown().toggleOnTrue(new AutoOuttakeCommand(intake));
-        Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));
+        Player1.povUp().toggleOnTrue(new WristCommand(Wrist, 45));
+        Player1.povDown().toggleOnTrue(new WristCommand(Wrist, 90));
+        Player1.povLeft().toggleOnTrue(new PivotCommand(pivot, 45));//87.3
         Player1.povRight().toggleOnTrue(new PivotCommand(pivot, 90));
 
         Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));

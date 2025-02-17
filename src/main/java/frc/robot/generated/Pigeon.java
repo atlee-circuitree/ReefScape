@@ -10,6 +10,6 @@ public class Pigeon {
     }
 
     public double getAngle() {
-        return m_pigeon.getAngle();
+        return -m_pigeon.getAccumGyroZ().getValueAsDouble(); //91.1 43.37
     }
 }
