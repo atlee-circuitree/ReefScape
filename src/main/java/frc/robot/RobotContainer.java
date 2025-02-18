@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
+import frc.robot.commands.ExtendToPosition;
+import frc.robot.commands.ExtensionCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
@@ -75,8 +77,8 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist,0.35)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
-        Player1.povUp().toggleOnTrue(new WristCommand(Wrist, 45));
-        Player1.povDown().toggleOnTrue(new WristCommand(Wrist, 90));
+        Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 1));
+        Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, 0.5));
         Player1.povLeft().toggleOnTrue(new PivotCommand(pivot, 45));//87.3
         Player1.povRight().toggleOnTrue(new PivotCommand(pivot, 90));
 

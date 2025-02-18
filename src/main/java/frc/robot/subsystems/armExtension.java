@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,13 +33,13 @@ public class armExtension extends SubsystemBase {
        
         extension_right.setNeutralMode(NeutralModeValue.Brake);
         extension_left.setNeutralMode(NeutralModeValue.Brake);
-        extensionCanCoder = new CanCoder(42);   
+        extensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);   
 
-        SmartDashboard.putNumber("ArmP", 0.0);
+        SmartDashboard.putNumber("ArmP", 0.1);
         SmartDashboard.putNumber("ArmI", 0.0);
         SmartDashboard.putNumber("ArmD", 0.0);
-        pid = new PIDController(Constants.Arm.armP, Constants.Arm.armI, Constants.Arm.armD);
-  }
+        pid = new PIDController(SmartDashboard.getNumber("armP", 0), SmartDashboard.getNumber("armI", 0), SmartDashboard.getNumber("armD", 0));
+      }
 
   public void stop() {
     extension_left.set(0);
@@ -53,14 +52,8 @@ public class armExtension extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    
-
     SmartDashboard.putNumber("Extension get", extensionCanCoder.getDistance());
     SmartDashboard.putNumber("Extension degree", getExtension());
-    
-
-
     
   }
 
@@ -126,17 +119,17 @@ public class armExtension extends SubsystemBase {
 
   public void clearPID()
   {
-    double p = SmartDashboard.getNumber("armP", 0.0);
-    double i = SmartDashboard.getNumber("armI", 0.0);
-    double d = SmartDashboard.getNumber("armD", 0.0);
-    pid = new PIDController(p, i, d);
+    pid = new PIDController(SmartDashboard.getNumber("armP", 0), SmartDashboard.getNumber("armI", 0), SmartDashboard.getNumber("armD", 0));
     pid.reset();
   }
 
   public void runToPosition(double Distance)
   {
     pid.setSetpoint(Distance);
+    SmartDashboard.putNumber("data", pid.getSetpoint());
     double out = pid.calculate(getExtension());
+    SmartDashboard.putNumber("datat2", out);
+    SmartDashboard.putNumber("data3", getExtension());
     RunExtension(out);
   }
 }
