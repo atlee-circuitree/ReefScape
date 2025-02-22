@@ -72,6 +72,6 @@ public class Pivot extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pivot pigeon get", pivotPigeon.getAngle());
     SmartDashboard.putNumber("Pivot Degrees", getAngle());
-    SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
+    //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }
