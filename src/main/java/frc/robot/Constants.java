@@ -106,7 +106,7 @@ public class Constants {
         public static final double wristD = 0.0;
 
 
-        public static final double armP = 0.0;
+        public static final double armP = 0.1;
         public static final double armI = 0.0;
         public static final double armD = 0.0;
 

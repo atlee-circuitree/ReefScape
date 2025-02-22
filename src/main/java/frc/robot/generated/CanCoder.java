@@ -1,6 +1,5 @@
 package frc.robot.generated;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 public class CanCoder {
@@ -14,6 +13,10 @@ public class CanCoder {
 
     public double getDistance() {
         return m_CanCoder.getPosition().getValueAsDouble();
+    }
+
+    public int getDeviceID() {
+        return m_CanCoder.getDeviceID();
     }
 
 }

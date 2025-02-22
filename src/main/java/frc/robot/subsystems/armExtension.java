@@ -5,7 +5,12 @@
 package frc.robot.subsystems;
 
 import java.util.HashMap;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,10 +40,23 @@ public class armExtension extends SubsystemBase {
         extension_left.setNeutralMode(NeutralModeValue.Brake);
         extensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);   
 
-        SmartDashboard.putNumber("ArmP", 0.1);
-        SmartDashboard.putNumber("ArmI", 0.0);
-        SmartDashboard.putNumber("ArmD", 0.0);
-        pid = new PIDController(SmartDashboard.getNumber("ArmP", 0.1), SmartDashboard.getNumber("ArmI", 0), SmartDashboard.getNumber("ArmD", 0));
+        var talonFXConfigs = new TalonFXConfiguration();
+        talonFXConfigs.Feedback.FeedbackRemoteSensorID = extensionCanCoder.getDeviceID();
+        talonFXConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
+        // Regular PIDs
+        var slot0Configs = talonFXConfigs.Slot0;
+        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+        slot0Configs.kV = 0.25; 
+        slot0Configs.kP = 0.12;
+        slot0Configs.kI = 0; 
+        slot0Configs.kD = 0; 
+        slot0Configs.kS = 0; 
+
+        var motionMagicConfigs = talonFXConfigs.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 4.5; // 3 // 4.5
+        motionMagicConfigs.MotionMagicAcceleration = 4; // 3 // 4
+        motionMagicConfigs.MotionMagicJerk = 0; // 0
       }
 
   public void stop() {
@@ -56,10 +74,6 @@ public class armExtension extends SubsystemBase {
     SmartDashboard.putNumber("Extension degree", getExtension());
     
   }
-
-  public double ReturnCurrentExtension() {
-    return CurrentExtension;
-  }
   
   public void RunExtension(double Speed){
     extension_left.set(-Speed);
@@ -74,8 +88,8 @@ public class armExtension extends SubsystemBase {
 
   public void runToPosition(double Distance)
   {
-    pid.setSetpoint(Distance);
-    double out = pid.calculate(getExtension());
-    RunExtension(out);
+    MotionMagicVoltage request = new MotionMagicVoltage(Distance);
+    extension_left.setControl(request.withPosition(extensionCanCoder.getDistance()));
+    extension_right.setControl(request.withPosition(extensionCanCoder.getDistance()));
   }
 }

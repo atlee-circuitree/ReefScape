@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
-import frc.robot.commands.ExtendToPosition;
 import frc.robot.commands.ExtensionCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
