@@ -70,10 +70,10 @@ public class RobotContainer {
         
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.5));
-        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
-        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.05)); //down
-        Player1.y().whileTrue(new ManualWrist(Wrist, -0.35));
-        Player1.x().whileTrue(new ManualWrist(Wrist,0.35)); // goes fowards
+        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.4)); //up
+        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.4)); //down
+        Player1.y().whileTrue(new ManualWrist(Wrist, -1));
+        Player1.x().whileTrue(new ManualWrist(Wrist,1)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
         Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 1));
@@ -83,7 +83,7 @@ public class RobotContainer {
 
         //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
         
-        /*drivetrain.setDefaultCommand(
+        drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
@@ -107,7 +107,7 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        drivetrain.registerTelemetry(logger::telemeterize);*/
+        drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {

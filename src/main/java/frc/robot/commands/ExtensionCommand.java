@@ -7,13 +7,13 @@ import frc.robot.subsystems.armExtension;
 
 public class ExtensionCommand extends Command
 {
-    double m_extension;
+    double m_position;
     armExtension m_armExtension;
 
-    public ExtensionCommand(armExtension armExtension, double extension) 
+    public ExtensionCommand(armExtension armExtension, double position) 
     {
+        m_position = position;
         m_armExtension = armExtension;
-        m_extension = extension;
         addRequirements(armExtension);
     }
 
@@ -27,8 +27,8 @@ public class ExtensionCommand extends Command
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armExtension.runToPosition(m_extension);
-    System.out.println("executing" + m_extension);
+    m_armExtension.runToPosition(m_position);
+    System.out.println("executing" + m_position);
   }
 
   // Called once the command ends or is interrupted.
@@ -41,7 +41,7 @@ public class ExtensionCommand extends Command
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double err = Math.abs(m_armExtension.getExtension() - m_extension);
+    double err = Math.abs(m_armExtension.getExtension() - m_position);
     return err <= Constants.Arm.extensionThreshold;
   }
 }

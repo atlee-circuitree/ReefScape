@@ -46,8 +46,8 @@ public class armExtension extends SubsystemBase {
         // Regular PIDs
         var slot0Configs = talonFXConfigs.Slot0;
         slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
-        slot0Configs.kV = 0.25; 
-        slot0Configs.kP = 0.12;
+        slot0Configs.kV = 7; 
+        slot0Configs.kP = 45;
         slot0Configs.kI = 0; 
         slot0Configs.kD = 0; 
         slot0Configs.kS = 0;
@@ -65,8 +65,7 @@ public class armExtension extends SubsystemBase {
       }
 
   public void stop() {
-    extension_left.set(0);
-    extension_right.set(0);
+    RunExtension(0.0);
   }
 
   public double getExtension(){
