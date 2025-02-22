@@ -17,7 +17,6 @@ import frc.robot.generated.Pigeon;
 public class Pivot extends SubsystemBase {
   private TalonFX pivot_left;
   private TalonFX pivot_right;
-  private DutyCycleEncoder pivotEncoder;
   private PIDController pid;
   private Pigeon pivotPigeon;
 
@@ -32,10 +31,7 @@ public class Pivot extends SubsystemBase {
     pivot_right.setInverted(false);
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
     pivotPigeon = new Pigeon(Constants.CAN_IDs.PivotPigeon);
-
-    pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
-
-    SmartDashboard.putNumber("PivotP", 0.0);
+ 
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
   }
 
@@ -46,8 +42,8 @@ public class Pivot extends SubsystemBase {
 
   public void clearPID()
   {
-    double p = SmartDashboard.getNumber("PivotP", 0.0);
-    pid = new PIDController(p, Constants.Arm.pivotI, Constants.Arm.pivotD);
+  
+    pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
     pid.reset();
   }
 

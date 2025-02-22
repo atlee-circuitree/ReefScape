@@ -97,7 +97,7 @@ public class Constants {
         public static final double pivotThreshold = 0.5;
         public static final double extensionThreshold = 3;
 
-        public static final double pivotP = 0.0;
+        public static final double pivotP = 0.1;
         public static final double pivotI = 0.0;
         public static final double pivotD = 0.0;
 
@@ -106,9 +106,9 @@ public class Constants {
         public static final double wristD = 0.0;
 
 
-        public static final double armP = 0.1;
+        /*public static final double armP = 0.1;
         public static final double armI = 0.0;
-        public static final double armD = 0.0;
+        public static final double armD = 0.0;*/
 
         public static final double wristRatio = 1;
         public static final double pivotRatio = 4.8;

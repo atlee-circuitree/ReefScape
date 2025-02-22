@@ -32,7 +32,6 @@ public class wrist extends SubsystemBase {
 
     wristEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
 
-    SmartDashboard.putNumber("WristP", 0.0);
     pid = new PIDController(Constants.Arm.wristP, Constants.Arm.wristI, Constants.Arm.wristD);
   }
 
@@ -55,8 +54,7 @@ public class wrist extends SubsystemBase {
 
   public void clearPID()
   {
-    double p = SmartDashboard.getNumber("WristP", 0.0);
-    pid = new PIDController(p, Constants.Arm.wristI, Constants.Arm.wristD);
+    pid = new PIDController(Constants.Arm.wristP, Constants.Arm.wristI, Constants.Arm.wristD);
     pid.reset();
   }
 
@@ -80,6 +78,6 @@ public class wrist extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Wrist Encoder Get", wristEncoder.get());
-    SmartDashboard.putNumber("Wrist Encoder Degrees", getAngle());
+    SmartDashboard.putNumber("Wrist Degrees", getAngle());
   }
 }

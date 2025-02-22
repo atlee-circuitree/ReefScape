@@ -36,8 +36,7 @@ public class armExtension extends SubsystemBase {
         extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
         extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
        
-        extension_right.setNeutralMode(NeutralModeValue.Brake);
-        extension_left.setNeutralMode(NeutralModeValue.Brake);
+        
         extensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);   
 
         var talonFXConfigs = new TalonFXConfiguration();
@@ -51,12 +50,18 @@ public class armExtension extends SubsystemBase {
         slot0Configs.kP = 0.12;
         slot0Configs.kI = 0; 
         slot0Configs.kD = 0; 
-        slot0Configs.kS = 0; 
+        slot0Configs.kS = 0;
 
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = 4.5; // 3 // 4.5
         motionMagicConfigs.MotionMagicAcceleration = 4; // 3 // 4
         motionMagicConfigs.MotionMagicJerk = 0; // 0
+
+
+        extension_left.getConfigurator().apply(talonFXConfigs, 0.050);
+        extension_right.getConfigurator().apply(talonFXConfigs, 0.050);
+        extension_right.setNeutralMode(NeutralModeValue.Brake);
+        extension_left.setNeutralMode(NeutralModeValue.Brake);
       }
 
   public void stop() {
@@ -80,11 +85,7 @@ public class armExtension extends SubsystemBase {
     extension_right.set(-Speed);
   }
 
-  public void clearPID()
-  {
-    pid = new PIDController(SmartDashboard.getNumber("ArmP", 0.1), SmartDashboard.getNumber("ArmI", 0), SmartDashboard.getNumber("ArmD", 0));
-    pid.reset();
-  }
+
 
   public void runToPosition(double Distance)
   {
