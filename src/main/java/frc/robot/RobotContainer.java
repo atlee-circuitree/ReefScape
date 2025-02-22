@@ -44,7 +44,7 @@ public class RobotContainer {
     private final wrist Wrist = new wrist();
     private final Lights lights = new Lights();
     private final Pivot pivot = new Pivot();
-    public final armExtension extension = new armExtension();
+    private final armExtension extension = new armExtension();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
