@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.armExtension;
 
 public class ExtensionCommand extends Command
@@ -28,13 +27,11 @@ public class ExtensionCommand extends Command
   @Override
   public void execute() {
     m_armExtension.runToPosition(m_position);
-    System.out.println("executing" + m_position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("stopping");
     m_armExtension.stop();
   }
 
@@ -42,6 +39,6 @@ public class ExtensionCommand extends Command
   @Override
   public boolean isFinished() {
     double err = Math.abs(m_armExtension.getExtension() - m_position);
-    return err <= Constants.Arm.extensionThreshold;
+    return err >= Constants.Arm.extensionThreshold;
   }
 }

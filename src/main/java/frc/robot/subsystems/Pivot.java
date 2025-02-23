@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.CanCoder;
 import frc.robot.generated.Pigeon;
 
 public class Pivot extends SubsystemBase {
@@ -19,6 +20,7 @@ public class Pivot extends SubsystemBase {
   private TalonFX pivot_right;
   private PIDController pid;
   private Pigeon pivotPigeon;
+  private DutyCycleEncoder pivotEncoder;
 
   public Pivot() {
     pivot_left = new TalonFX(Constants.CAN_IDs.pivotLeft, "1599-B");
@@ -33,6 +35,8 @@ public class Pivot extends SubsystemBase {
     pivotPigeon = new Pigeon(Constants.CAN_IDs.PivotPigeon);
  
     pid = new PIDController(Constants.Arm.pivotP, Constants.Arm.pivotI, Constants.Arm.pivotD);
+
+    pivotEncoder = new DutyCycleEncoder(Constants.Channels.pivotEncoderChannel);
   }
 
   public void runPivot(double Velocity){
@@ -61,6 +65,10 @@ public class Pivot extends SubsystemBase {
 
   public double getAngle() {
     return pivotPigeon.getAngle() + Constants.Arm.pivotEncoderOffset;
+  } 
+  
+  public double getAngleEncoder() {
+    return (pivotEncoder.get() - Constants.Arm.pivotEncoderOffsetRev) * 360;
   }
 
   @Override
@@ -68,6 +76,8 @@ public class Pivot extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pivot pigeon get", pivotPigeon.getAngle());
     SmartDashboard.putNumber("Pivot Degrees", getAngle());
+    SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
+    SmartDashboard.putNumber("Pivot Encoder Degrees", getAngleEncoder());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

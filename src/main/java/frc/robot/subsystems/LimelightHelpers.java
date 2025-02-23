@@ -541,6 +541,9 @@ public class LimelightHelpers {
     public static double[] getTargetColor(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "tc");
     }
+    public static double [] getTargetCount(String limelightName){
+        return getLimelightNTDoubleArray(limelightName, "t2d");
+    }
 
     public static double getFiducialID(String limelightName) {
         return getLimelightNTDouble(limelightName, "tid");

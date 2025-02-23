@@ -25,6 +25,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -284,13 +285,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
     }
     public AutoFactory createAutoFactory() {
-        return createAutoFactory((sample, isStart) -> {});
+        //return createAutoFactory((sample, isStart) -> {});
+        return new AutoFactory(
+            () -> this.getState().Pose,
+            this::resetPose,
+            this::followPath,
+            false,
+            this
+        );
     }
 
-    public void followPath(SwerveSample sample) {
+    public SwerveSample followPath(SwerveSample sample) {
         m_pathThetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        var pose = getFrontLLPose();
+        //var pose = getFrontLLPose();
+        Pose2d pose = this.getState().Pose;
 
         var targetSpeeds = sample.getChassisSpeeds();
         targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
@@ -308,6 +317,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .withWheelForceFeedforwardsX(sample.moduleForcesX())
                 .withWheelForceFeedforwardsY(sample.moduleForcesY())
         );
+        return null;
     }
 
 
@@ -320,6 +330,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
+        SmartDashboard.putNumber("TX", LimelightHelpers.getTX("limelight-cg"));
+         Pose2d pose = this.getState().Pose;
+         SmartDashboard.putString("Pose", pose.toString());
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(

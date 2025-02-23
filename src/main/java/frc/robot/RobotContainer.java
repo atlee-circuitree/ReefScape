@@ -9,12 +9,19 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.autos.TestAuto;
 import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
@@ -32,11 +39,10 @@ import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
+import frc.robot.commands.AprliDrive;
 
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
+  
     public final CommandXboxController Player1 = new CommandXboxController(0);
 
     private final Intake intake = new Intake();
@@ -47,36 +53,46 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(Constants.Drive.MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    
+
+    private final AutoFactory autoFactory;
+  
+   
+
+    AutoTrajectory traj;
 
     public RobotContainer() {
         configureBindings();
-
+            autoFactory = drivetrain.createAutoFactory();
         
     }
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+        drivetrain.seedFieldCentric();
+        Player1.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));//James changed from Leftbumper 2/24/2024
         
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.5));
-        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.4)); //up
-        Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.4)); //down
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));
+        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
+        //Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.2)); //down
+        Player1.rightBumper().whileTrue(new AprliDrive(drivetrain));
         Player1.y().whileTrue(new ManualWrist(Wrist, -1));
         Player1.x().whileTrue(new ManualWrist(Wrist,1)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
-        Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 1));
+        Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
         Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, 0.5));
         Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));//87.3
         Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));
@@ -86,9 +102,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-joystick.getLeftY() * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -111,7 +127,28 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        //autoFactory = this.drivetrain.createAutoFactory();
+
+        //return Commands.sequence(
+        //autoFactory.resetOdometry("TestRun"), // 
+        //autoFactory.trajectoryCmd("TestRun") 
+        //);
+        AutoRoutine routine = autoFactory.newRoutine("taxi");
+
+        // Load the routine's trajectories
+        AutoTrajectory driveToMiddle = routine.trajectory("far on score");
+
+        // When the routine begins, reset odometry and start the first trajectory (1)
+        routine.active().onTrue(
+            Commands.sequence(
+                driveToMiddle.resetOdometry(),
+                driveToMiddle.cmd()
+            )
+        );
+        //driveToMiddle.atTime("Marker").onTrue(new WristCommand(Wrist, 45));
+        return routine.cmd();
+
+        //return Commands.print("No autonomous command configured");
     }
     
 }

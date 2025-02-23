@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
+import frc.robot.generated.TunerConstants;
+
+import static edu.wpi.first.units.Units.*;
 
 /** Add your docs here. */
 public class Constants {
@@ -47,6 +50,7 @@ public class Constants {
     public class Channels {
         public static final int WristChannel = 1;
         public static final int PivotChannel = 2;
+
         public static final int EncoderChannel = 5;
         public static final int pivotEncoderChannel = 7;
         public static final int armExtensionEncoderChannel = 6;
@@ -95,7 +99,7 @@ public class Constants {
         public static final double wristThreshold = 0.5;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 0.5;
-        public static final double extensionThreshold = 3;
+        public static final double extensionThreshold = 3.5;
 
         public static final double pivotP = 0.1;
         public static final double pivotI = 0.0;
@@ -106,23 +110,29 @@ public class Constants {
         public static final double wristD = 0.0;
 
 
-        /*public static final double armP = 0.1;
-        public static final double armI = 0.0;
-        public static final double armD = 0.0;*/
+        public static final double ArmP = 0.35;
+        public static final double ArmI = 0.07;
+        public static final double ArmD = 0.0;
 
         public static final double wristRatio = 1;
         public static final double pivotRatio = 4.8;
         public static final double extensionRatio = 1;
         public static final double pivotZeroDegree = 0;
 
-        public static final double wristEncoderOffset = 0.606; // in rotations
+        public static final double wristEncoderOffset = 0.597; // in rotations
         public static final double pivotEncoderOffset = 45.43;
-        public static final double armEncoderOffset = 0.279297; // in rotations
+        public static final double pivotEncoderOffsetRev = 0.619;
+        public static double armEncoderOffset = 0.083496; // in rotations
 
         public static final double outtakeVelocity = 1;
         public static final double intakeVelocity = -1;
 
         public static final double outtakeTime = 1;
+    }
+
+    public class Drive {
+        public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     }
 
 }

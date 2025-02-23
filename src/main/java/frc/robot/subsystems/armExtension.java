@@ -4,14 +4,12 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
+import java.security.cert.Extension;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,77 +17,59 @@ import frc.robot.generated.CanCoder;
 import edu.wpi.first.math.controller.PIDController;
 
 public class armExtension extends SubsystemBase {
-
-  private final TalonFX extension_left;
-  private final TalonFX extension_right;
   
-  private final CanCoder extensionCanCoder;
-
-  double CurrentTicks;
-  public double CurrentExtension;
+  private TalonFX extension_left;
+  private TalonFX extension_right;
   private PIDController pid;
+  private CanCoder ExtensionCanCoder;
 
-
+  //public double CurrentWristAngle;
+  //double CurrentTicks;
 
   public armExtension() {
-    
-        extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
-        extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
-       
-        
-        extensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);   
 
-        var talonFXConfigs = new TalonFXConfiguration();
-        talonFXConfigs.Feedback.FeedbackRemoteSensorID = extensionCanCoder.getDeviceID();
-        talonFXConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    extension_left = new TalonFX(Constants.CAN_IDs.extensionLeft, "1599-B");
+    extension_right = new TalonFX(Constants.CAN_IDs.extensionRight, "1599-B");
 
-        // Regular PIDs
-        var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
-        slot0Configs.kV = 7; 
-        slot0Configs.kP = 45;
-        slot0Configs.kI = 0; 
-        slot0Configs.kD = 0; 
-        slot0Configs.kS = 0;
+    extension_left.setNeutralMode(NeutralModeValue.Brake);
+    extension_right.setNeutralMode(NeutralModeValue.Brake);
 
-        var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 4.5; // 3 // 4.5
-        motionMagicConfigs.MotionMagicAcceleration = 4; // 3 // 4
-        motionMagicConfigs.MotionMagicJerk = 0; // 0
-
-
-        extension_left.getConfigurator().apply(talonFXConfigs, 0.050);
-        extension_right.getConfigurator().apply(talonFXConfigs, 0.050);
-        extension_right.setNeutralMode(NeutralModeValue.Brake);
-        extension_left.setNeutralMode(NeutralModeValue.Brake);
-      }
-
-  public void stop() {
-    RunExtension(0.0);
+    ExtensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);
+    pid = new PIDController(Constants.Arm.ArmP, Constants.Arm.ArmI, Constants.Arm.ArmD);
   }
 
-  public double getExtension(){
-    return extensionCanCoder.getDistance() + Constants.Arm.armEncoderOffset;
+  public void RunExtension(double Velocity){
+    extension_left.set(-Velocity);
+    extension_right.set(-Velocity);
+  }
+
+  public void clearPID()
+  {
+    pid = new PIDController(Constants.Arm.ArmP, Constants.Arm.ArmI, Constants.Arm.ArmD);
+    pid.reset();
+  }
+
+  public void runToPosition(double deg)
+  {
+    pid.setSetpoint(deg);
+    double out = pid.calculate(getExtension ());
+    RunExtension(-out);
+  }
+
+  public void stop()
+  {
+    RunExtension(0);
+  }
+
+  public double getExtension() {
+    double CurrentTicks = ExtensionCanCoder.getDistance() - Constants.Arm.armEncoderOffset;
+    //return (CurrentTicks / Constants.Arm.extensionRatio) * -360;
+    return CurrentTicks;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Extension get", extensionCanCoder.getDistance());
-    SmartDashboard.putNumber("Extension degree", getExtension());
-    
-  }
-  
-  public void RunExtension(double Speed){
-    extension_left.set(-Speed);
-    extension_right.set(-Speed);
-  }
-
-
-
-  public void runToPosition(double Distance)
-  {
-    MotionMagicVoltage request = new MotionMagicVoltage(Distance);
-    extension_left.setControl(request.withPosition(extensionCanCoder.getDistance()));
-    extension_right.setControl(request.withPosition(extensionCanCoder.getDistance()));
+    SmartDashboard.putNumber("extension Encoder Get", ExtensionCanCoder.getDistance());
+    SmartDashboard.putNumber("extensions Degrees", getExtension());
   }
 }
