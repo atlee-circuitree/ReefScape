@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
@@ -16,10 +17,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.TestAuto;
 import frc.robot.commands.ApplyWristFeedforward;
@@ -41,9 +45,11 @@ import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
 import frc.robot.commands.AprliDrive;
 
+
 public class RobotContainer {
   
     public final CommandXboxController Player1 = new CommandXboxController(0);
+    public final CommandXboxController Player2 = new CommandXboxController(1);
 
     private final Intake intake = new Intake();
     private final wrist Wrist = new wrist();
@@ -66,7 +72,7 @@ public class RobotContainer {
     
 
     private final AutoFactory autoFactory;
-  
+    private final AutoChooser autoChooser;
    
 
     AutoTrajectory traj;
@@ -74,7 +80,11 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
             autoFactory = drivetrain.createAutoFactory();
-        
+        autoChooser = new AutoChooser();
+        autoChooser.addRoutine("Example Routine", this::FirstAuto);
+        SmartDashboard.putData(autoChooser);
+        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    
     }
 
     private void configureBindings() {
@@ -88,14 +98,33 @@ public class RobotContainer {
         Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.2)); //down
         Player1.rightBumper().whileTrue(new AprliDrive(drivetrain));
-        Player1.y().whileTrue(new ManualWrist(Wrist, -1));
-        Player1.x().whileTrue(new ManualWrist(Wrist,1)); // goes fowards
+        Player1.y().whileTrue(new ManualWrist(Wrist, -.5));
+        Player1.x().whileTrue(new ManualWrist(Wrist,.5)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
         Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
-        Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, 0.5));
+        Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, .5));
         Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));//87.3
         Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));
+        
+        
+
+        //coral human player station
+        Player2.a().toggleOnTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, 12),
+            new PivotCommand(pivot, 36)
+        
+        ));
+        //reef lvl 3
+        Player2.b().toggleOnTrue(new SequentialCommandGroup(
+        new WristCommand(Wrist, 166),
+        new PivotCommand(pivot, 40)
+        ));
+        //reef lvl 2
+        Player2.x().toggleOnTrue(new SequentialCommandGroup(
+        new WristCommand(Wrist, 4),
+        new PivotCommand(pivot, 26)
+        ));
 
         //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
         
@@ -108,10 +137,11 @@ public class RobotContainer {
             )
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        //joystick.b().whileTrue(drivetrain.applyRequest(() ->
+          //  point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+
+        //));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -127,13 +157,14 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        return null;
         //autoFactory = this.drivetrain.createAutoFactory();
 
         //return Commands.sequence(
         //autoFactory.resetOdometry("TestRun"), // 
         //autoFactory.trajectoryCmd("TestRun") 
         //);
-        AutoRoutine routine = autoFactory.newRoutine("taxi");
+        /*AutoRoutine routine = autoFactory.newRoutine("taxi");
 
         // Load the routine's trajectories
         AutoTrajectory driveToMiddle = routine.trajectory("far on score");
@@ -148,7 +179,24 @@ public class RobotContainer {
         //driveToMiddle.atTime("Marker").onTrue(new WristCommand(Wrist, 45));
         return routine.cmd();
 
-        //return Commands.print("No autonomous command configured");
+        //return Commands.print("No autonomous command configured");*/ 
+    }
+
+    private AutoRoutine FirstAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("taxi");
+
+        // Load the routine's trajectories
+        AutoTrajectory driveToMiddle = routine.trajectory("far on score");
+
+        // When the routine begins, reset odometry and start the first trajectory (1)
+        routine.active().onTrue(
+            Commands.sequence(
+                driveToMiddle.resetOdometry(),
+                driveToMiddle.cmd()
+            )
+        );
+        //driveToMiddle.atTime("Marker").onTrue(new WristCommand(Wrist, 45));
+        return routine;
     }
     
 }

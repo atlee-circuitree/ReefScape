@@ -54,7 +54,7 @@ public class Pivot extends SubsystemBase {
   public void runToPosition(double deg)
   {
     pid.setSetpoint(deg);
-    double out = pid.calculate(getAngle());
+    double out = pid.calculate(getAngleEncoder());
     runPivot(out);
   }
 
@@ -74,8 +74,8 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Pivot pigeon get", pivotPigeon.getAngle());
-    SmartDashboard.putNumber("Pivot Degrees", getAngle());
+    //SmartDashboard.putNumber("Pivot pigeon get", pivotPigeon.getAngle());
+    //SmartDashboard.putNumber("Pivot Degrees", getAngle());
     SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
     SmartDashboard.putNumber("Pivot Encoder Degrees", getAngleEncoder());
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);

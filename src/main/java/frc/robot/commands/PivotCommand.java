@@ -38,7 +38,7 @@ public class PivotCommand extends Command
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double err = Math.abs(m_pivot.getAngle() - m_position);
+    double err = Math.abs(m_pivot.getAngleEncoder() - m_position);
     return err <= Constants.Arm.pivotThreshold;
   }
 }
