@@ -6,6 +6,9 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -98,8 +102,8 @@ public class RobotContainer {
         Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.2)); //down
         Player1.rightBumper().whileTrue(new AprliDrive(drivetrain));
-        Player1.y().whileTrue(new ManualWrist(Wrist, -.5));
-        Player1.x().whileTrue(new ManualWrist(Wrist,.5)); // goes fowards
+        Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
+        Player1.x().whileTrue(new ManualWrist(Wrist,.8)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
         Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
@@ -117,14 +121,29 @@ public class RobotContainer {
         ));
         //reef lvl 3
         Player2.b().toggleOnTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, 166),
-        new PivotCommand(pivot, 40)
+            new PivotCommand(pivot, 40),
+            new WristCommand(Wrist, 176)
+            
         ));
         //reef lvl 2
         Player2.x().toggleOnTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, 4),
-        new PivotCommand(pivot, 26)
+            new WristCommand(Wrist, 6),
+            new PivotCommand(pivot, 23)
         ));
+        
+        Player2.y().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, 45),
+            new ExtensionCommand(extension, 2.95)
+        ));
+        Player2.povUp().toggleOnTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, 205)
+        ));
+        Player2.leftBumper().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, 32),
+            new WristCommand(Wrist, 52),
+            new ExtensionCommand(extension, .5)
+        ));
+        
 
         //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
         
