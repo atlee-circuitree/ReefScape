@@ -51,6 +51,7 @@ import frc.robot.subsystems.wrist;
 import frc.robot.commands.AprliDrive;
 
 
+
 public class RobotContainer {
   
     public final CommandXboxController Player1 = new CommandXboxController(0);
@@ -236,16 +237,20 @@ public class RobotContainer {
         AutoRoutine routine = autoFactory.newRoutine("taxi");
 
         // Load the routine's trajectories
-        AutoTrajectory driveToMiddle = routine.trajectory("far on score");
+        AutoTrajectory RedTopScore2 = routine.trajectory("far on score");
 
         // When the routine begins, reset odometry and start the first trajectory (1)
         routine.active().onTrue(
             Commands.sequence(
-                driveToMiddle.resetOdometry(),
-                driveToMiddle.cmd()
+                RedTopScore2.resetOdometry(),
+                RedTopScore2.cmd()
             )
         );
-        //driveToMiddle.atTime("Marker").onTrue(new WristCommand(Wrist, 45));
+        RedTopScore2.atTime("L1").onTrue(new SequentialCommandGroup(
+        new WristCommand(Wrist, 6),
+        new PivotCommand(pivot, 23)
+        )),
+        RedTopScore2.atTime("OUTTAKE").onTrue(new AutoOuttakeCommand(outtake));
         return routine;
     }
     

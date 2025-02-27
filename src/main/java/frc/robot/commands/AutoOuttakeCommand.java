@@ -4,7 +4,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
@@ -12,11 +13,11 @@ import frc.robot.subsystems.Intake;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoOuttakeCommand extends Command {
   Intake m_outtake;
-  Timer m_timer;
+  
 
   public AutoOuttakeCommand(Intake outtake) 
     {
-        m_timer = new Timer();
+        
         m_outtake = outtake;
         addRequirements(outtake);
     }
@@ -24,8 +25,6 @@ public class AutoOuttakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_timer.reset();
-    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,6 +45,6 @@ public class AutoOuttakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.hasElapsed(Constants.Arm.outtakeTime);
+    return m_outtake.getCoralDistance() >= SmartDashboard.getNumber("Coral threshold autointake", 2);
   }
 }
