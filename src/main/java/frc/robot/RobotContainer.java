@@ -167,8 +167,7 @@ public class RobotContainer {
         ));
         //low ball
         Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 32),
-            new ExtensionCommand(extension, .5)
+            new ExtensionCommand(extension, 1.37)
         ));
         //climb
         Player1.povUp().toggleOnTrue(new SequentialCommandGroup(

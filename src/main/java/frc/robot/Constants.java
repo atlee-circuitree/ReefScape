@@ -106,7 +106,7 @@ public class Constants {
         public static final double pivotI = 0.0;
         public static final double pivotD = 0.0;
 
-        public static final double wristP = .18;
+        public static final double wristP = .21;
         public static final double wristI = 0.0;
         public static final double wristD = 0.0;
 
