@@ -34,6 +34,7 @@ import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.ExtensionCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
@@ -86,7 +87,7 @@ public class RobotContainer {
             autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
         autoChooser.addRoutine("Example Routine", this::FirstAuto);
-        SmartDashboard.putData(autoChooser);
+        SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
     }
@@ -97,7 +98,7 @@ public class RobotContainer {
         drivetrain.seedFieldCentric();
         Player1.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));//James changed from Leftbumper 2/24/2024
         
-        Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
+        /*player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));
         Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.2)); //down
@@ -106,42 +107,73 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist,.8)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
+
+
+
         Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
         Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, .5));
         Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));//87.3
-        Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));
+        Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));*/
         
+        //reef lvl 4
+        Player2.leftBumper().toggleOnTrue(new WristCommand(Wrist, 205));
+        //bring it back to front
+        Player2.rightBumper().toggleOnTrue(new WristCommand(Wrist,12));
+        //Manual stuff
+        Player2.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
+        Player2.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
+
+        //low ball
+        Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
+
+
+        Player2.start().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, 19),
+            new WristCommand(Wrist, 262)
+        ));
+
+
+
         
+        //manual stuff
+        Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outake
+        Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
+        Player1.povRight().whileTrue(new ManualPivot(pivot, 1));
+        Player1.povLeft().whileTrue(new ManualPivot(pivot, -1));
+
 
         //coral human player station
-        Player2.a().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 12),
+        Player1.x().toggleOnTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, 24),
             new PivotCommand(pivot, 36)
         
         ));
         //reef lvl 3
-        Player2.b().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 40),
-            new WristCommand(Wrist, 176)
+        Player1.b().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, 42),
+            new WristCommand(Wrist, 171)
             
         ));
         //reef lvl 2
-        Player2.x().toggleOnTrue(new SequentialCommandGroup(
+        Player1.a().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, 6),
             new PivotCommand(pivot, 23)
         ));
-        
-        Player2.y().toggleOnTrue(new SequentialCommandGroup(
+        //reef lvl 4
+        Player1.y().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 45),
             new ExtensionCommand(extension, 2.95)
         ));
-        Player2.povUp().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 205)
-        ));
-        Player2.leftBumper().toggleOnTrue(new SequentialCommandGroup(
+        //low ball
+        Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 32),
-            new WristCommand(Wrist, 52),
             new ExtensionCommand(extension, .5)
+        ));
+        //climb
+        Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, 1),
+            new PivotCommand(pivot, 45)
         ));
         
 
