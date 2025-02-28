@@ -90,6 +90,7 @@ public class RobotContainer {
             autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
         autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
+        autoChooser.addRoutine("RedTopScore2Part1", this::SecondAuto);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
@@ -246,7 +247,7 @@ public class RobotContainer {
         AutoRoutine routine = autoFactory.newRoutine("taxi");
 
         // Load the routine's trajectories
-        AutoTrajectory RedTopScore2 = routine.trajectory("far on score");
+        AutoTrajectory RedTopScore2 = routine.trajectory("RedTopScore2L2");
 
         // When the routine begins, reset odometry and start the first trajectory (1)
         routine.active().onTrue(
@@ -262,7 +263,7 @@ public class RobotContainer {
         
         RedTopScore2.atTime("OUTTAKE").onTrue(new ParallelCommandGroup(
         new AutoOuttakeCommand(intake),
-        new WaitCommand(1.5)
+        new WaitCommand(3)
         ));
 
         RedTopScore2.atTime("CoralStation").onTrue(new SequentialCommandGroup( 
@@ -272,7 +273,7 @@ public class RobotContainer {
     
         RedTopScore2.atTime("Intake").onTrue(new ParallelCommandGroup(
         new AutoIntakeCommand(intake),
-        new WaitCommand(1.5)
+        new WaitCommand(3)
         ));
         RedTopScore2.atTime("Lvl1-2").onTrue(new SequentialCommandGroup(
         new WristCommand(Wrist, 6),
@@ -280,9 +281,44 @@ public class RobotContainer {
         ));
         RedTopScore2.atTime("Outtake2").onTrue(new ParallelCommandGroup(
         new AutoOuttakeCommand(intake),
-        new WaitCommand(1.5)
+        new WaitCommand(3)
         ));
+        
         return routine;
     }
-    
+    private AutoRoutine SecondAuto(){
+        AutoRoutine routine = autoFactory.newRoutine("RedTopScore2");
+        AutoTrajectory RedTopScore2Part1 = routine.trajectory("RedTopScore2Part1");
+        AutoTrajectory RedTopScore2Part2 = routine.trajectory("RedTopScore2Part2");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                RedTopScore2Part1.resetOdometry(),
+                RedTopScore2Part1.cmd()
+            )
+        );
+
+        RedTopScore2Part1.atTime("L2").onTrue(new SequentialCommandGroup(
+        new WristCommand(Wrist, 6),
+        new PivotCommand(pivot, 23)
+        ));
+        RedTopScore2Part1.atTime("Outake").onTrue(new AutoOuttakeCommand(intake));
+
+        RedTopScore2Part1.done().onTrue(Commands.sequence(
+            Commands.waitSeconds(1.5),
+            RedTopScore2Part2.cmd()
+        ));
+
+        RedTopScore2Part2.atTime("CoralPos").onTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, 24),
+            new PivotCommand(pivot, 36)
+        ));
+        RedTopScore2Part2.atTime("Intake").onTrue(Commands.sequence(
+            new AutoIntakeCommand(intake),
+            Commands.waitSeconds(2.5)
+
+        ));
+
+        return routine;
+    }
 }
