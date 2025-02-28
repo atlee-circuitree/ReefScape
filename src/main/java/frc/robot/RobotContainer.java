@@ -16,6 +16,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import choreo.util.ChoreoAllianceFlipUtil.Flipper;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -87,7 +89,7 @@ public class RobotContainer {
         configureBindings();
             autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
-        autoChooser.addRoutine("Example Routine", this::FirstAuto);
+        autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
@@ -108,6 +110,7 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist,.8)); // goes fowards
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
+        
 
 
 
@@ -127,7 +130,7 @@ public class RobotContainer {
         //low ball
         Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
 
-
+        //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 19),
             new WristCommand(Wrist, 262)
@@ -166,6 +169,12 @@ public class RobotContainer {
             new PivotCommand(pivot, 45),
             new ExtensionCommand(extension, 2.95)
         ));
+        /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, 35),
+            new WristCommand(Wrist, 210),
+            new ExtensionCommand(extension, 2.95),
+            new PivotCommand(pivot, 45)
+        ));*/
         //low ball
         Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
             new ExtensionCommand(extension, 1.37)
@@ -173,7 +182,7 @@ public class RobotContainer {
         //climb
         Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, 1),
-            new PivotCommand(pivot, 45)
+            new PivotCommand(pivot, 61.5)
         ));
         
 
@@ -249,8 +258,30 @@ public class RobotContainer {
         RedTopScore2.atTime("L1").onTrue(new SequentialCommandGroup(
         new WristCommand(Wrist, 6),
         new PivotCommand(pivot, 23)
-        )),
-        RedTopScore2.atTime("OUTTAKE").onTrue(new AutoOuttakeCommand(outtake));
+        ));
+        
+        RedTopScore2.atTime("OUTTAKE").onTrue(new ParallelCommandGroup(
+        new AutoOuttakeCommand(intake),
+        new WaitCommand(1.5)
+        ));
+
+        RedTopScore2.atTime("CoralStation").onTrue(new SequentialCommandGroup( 
+        new WristCommand(Wrist, 24),
+        new PivotCommand(pivot, 36)
+        ));
+    
+        RedTopScore2.atTime("Intake").onTrue(new ParallelCommandGroup(
+        new AutoIntakeCommand(intake),
+        new WaitCommand(1.5)
+        ));
+        RedTopScore2.atTime("Lvl1-2").onTrue(new SequentialCommandGroup(
+        new WristCommand(Wrist, 6),
+        new PivotCommand(pivot, 23)
+        ));
+        RedTopScore2.atTime("Outtake2").onTrue(new ParallelCommandGroup(
+        new AutoOuttakeCommand(intake),
+        new WaitCommand(1.5)
+        ));
         return routine;
     }
     

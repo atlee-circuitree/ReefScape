@@ -4,28 +4,21 @@
  "type":"Swerve",
  "variables":{
   "expressions":{
-   "Extend":{
+   "FeedPosition":{
     "dimension":"Number",
     "var":{
      "exp":"0",
      "val":0.0
+    }
+   },
+   "Delay":{
+    "dimension":"Number",
+    "var":{
+     "exp":"1",
+     "val":1.0
     }
    },
    "Descend":{
-    "dimension":"Number",
-    "var":{
-     "exp":"0",
-     "val":0.0
-    }
-   },
-   "L4Position":{
-    "dimension":"Number",
-    "var":{
-     "exp":"0",
-     "val":0.0
-    }
-   },
-   "FeedPosition":{
     "dimension":"Number",
     "var":{
      "exp":"0",
@@ -39,11 +32,18 @@
      "val":0.0
     }
    },
-   "Delay":{
+   "Extend":{
     "dimension":"Number",
     "var":{
-     "exp":"1",
-     "val":1.0
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "L4Position":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
     }
    }
   },
@@ -71,8 +71,8 @@
    }
   },
   "mass":{
-   "exp":"135 lbs",
-   "val":61.23496995
+   "exp":"127 lbs",
+   "val":57.60623099
   },
   "inertia":{
    "exp":"6 kg m ^ 2",
