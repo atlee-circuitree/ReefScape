@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Inches;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -45,5 +46,6 @@ public class Intake extends SubsystemBase {
     // This method will be called once sper scheduler run
     SmartDashboard.putNumber("Coral CanRange", getCoralDistance());
     //SmartDashboard.putNumber("Algee CanRange", getAlgeeDistance());
+    SmartDashboard.putBoolean("All", DriverStation.getAlliance().get() == DriverStation.Alliance.Blue);
   }
 }

@@ -135,7 +135,7 @@ public class RobotContainer {
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 19),
+            new PivotCommand(pivot, 23),
             new WristCommand(Wrist, 262)
         ));
 
