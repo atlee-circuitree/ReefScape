@@ -55,7 +55,12 @@ public class Pivot extends SubsystemBase {
   {
     pid.setSetpoint(deg);
     double out = pid.calculate(getAngleEncoder());
+    SmartDashboard.putNumber("PivotAngleInput",getAngleEncoder());
+    SmartDashboard.putNumber("PivotAngleOutput",out);
+    SmartDashboard.putNumber("PivotAngleSetPoint",deg);
+
     runPivot(out);
+
   }
 
   public void stop()
