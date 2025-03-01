@@ -447,6 +447,11 @@ public class RobotContainer {
             traj.cmd()
         ));
 
+        traj.atTime("L1").onTrue(Commands.sequence(
+            new WristCommand(Wrist, 6),
+            new PivotCommand(pivot, 23)
+        ));
+
         traj.atTime("Outtake").onTrue(Commands.sequence(
            new AutoOuttakeCommand(intake)
         ));

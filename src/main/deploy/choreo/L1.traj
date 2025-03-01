@@ -51,5 +51,6 @@
   "splits":[0]
  },
  "events":[
-   {"name":"Outtake", "from":{"target":1, "targetTimestamp":0.94434, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Outtake", "from":{"target":1, "targetTimestamp":0.94434, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"L1", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
