@@ -151,7 +151,7 @@ public class RobotContainer {
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 19),
+            new PivotCommand(pivot, 23),
             new WristCommand(Wrist, 262)
         ));
 
@@ -162,8 +162,8 @@ public class RobotContainer {
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outake
         Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
-        Player1.povRight().whileTrue(new ManualPivot(pivot, 1));
-        Player1.povLeft().whileTrue(new ManualPivot(pivot, -1));
+        Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
+        Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
 
 
         //coral human player station
