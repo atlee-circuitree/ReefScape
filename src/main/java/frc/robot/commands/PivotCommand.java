@@ -8,11 +8,13 @@ public class PivotCommand extends Command
 {
     double m_position;
     Pivot m_pivot;
+    int heartbeat;
 
     public PivotCommand(Pivot pivot, double position) 
     {
         m_pivot = pivot;
         m_position = position;
+        heartbeat = 0;
         addRequirements(pivot);
     }
 
@@ -27,6 +29,7 @@ public class PivotCommand extends Command
   @Override
   public void execute() {
     m_pivot.runToPosition(m_position);
+    heartbeat++;
   }
 
   // Called once the command ends or is interrupted.

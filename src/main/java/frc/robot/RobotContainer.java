@@ -168,8 +168,9 @@ public class RobotContainer {
         //reef lvl 4
         Player1.y().toggleOnTrue(Commands.sequence(
             new PivotCommand(pivot, 45),
-            new WristCommand(Wrist, 205),
-            new ExtensionCommand(extension, 2.95)
+            new ExtensionCommand(extension, 2.95),
+            new WristCommand(Wrist, 205)
+          
         ));
         /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 35),

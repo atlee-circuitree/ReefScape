@@ -8,10 +8,12 @@ public class WristCommand extends Command {
     
     double m_position;
     wrist m_wrist;
+    int heartbeat;
 
     public WristCommand(wrist wrist, double position) {
         m_position = position;
         m_wrist = wrist;
+        heartbeat = 0;
         addRequirements(wrist);
     }
 
@@ -25,6 +27,7 @@ public class WristCommand extends Command {
   @Override
   public void execute() {
     m_wrist.runToPosition(m_position);
+    heartbeat++;
   }
 
   // Called once the command ends or is interrupted.
