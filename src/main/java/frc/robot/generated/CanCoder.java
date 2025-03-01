@@ -12,6 +12,7 @@ public class CanCoder {
     }
 
     public double getDistance() {
+        
         return m_CanCoder.getPosition().getValueAsDouble();
     }
 

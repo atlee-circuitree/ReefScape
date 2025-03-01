@@ -48,6 +48,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
@@ -70,6 +71,9 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    public SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+            .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Small deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I DON'T want field-centric
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
@@ -93,6 +97,10 @@ public class RobotContainer {
         autoChooser = new AutoChooser();
         autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
         autoChooser.addRoutine("RedTopScore2Part1", this::RedTopScore2);
+        autoChooser.addRoutine("DO NOT USE PIT TEST", this::pitTestAuto);
+        autoChooser.addRoutine("DoNothingAuto", this::DoNothingAuto);
+        autoChooser.addRoutine("MoveFowardAuto", this::MoveFowardAuto);
+        autoChooser.addRoutine("L1FromMiddle", this::L1Auto);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
@@ -132,6 +140,14 @@ public class RobotContainer {
 
         //low ball
         Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
+        // Limelight command in works (related lines: 74)
+        
+        /*Player2.povUp().whileTrue( 
+        new ParallelCommandGroup(
+        drivetrain.applyRequest(() -> driveRobotCentric
+        .withVelocityX(2)  
+        .withVelocityY(0) 
+        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));*/
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
@@ -312,7 +328,7 @@ public class RobotContainer {
             AutoRoutine routine = autoFactory.newRoutine("blank");
             return routine;
         }
-        
+
         AutoRoutine routine = autoFactory.newRoutine("RedTopScore2");
         AutoTrajectory RedTopScore2Part1 = routine.trajectory("RedTopScore2Part1");
         AutoTrajectory RedTopScore2Part2 = routine.trajectory("RedTopScore2Part2");
@@ -383,6 +399,60 @@ public class RobotContainer {
         );
 
         return routine;
+    }
+
+    private AutoRoutine pitTestAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("pit_test_auto");
+        AutoTrajectory traj = routine.trajectory("pit_test");
+
+        routine.active().onTrue(Commands.sequence(
+            traj.resetOdometry(),
+            traj.cmd()
+        ));
+        
+        traj.atTime("intake").onTrue(Commands.sequence(
+            new AutoIntakeCommand(intake) 
+        ));
+
+        return routine;
+    }
+
+    private AutoRoutine DoNothingAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("DoNothingAuto");
+        
+
+        return routine;
+
+    }
+
+    private AutoRoutine MoveFowardAuto() {
+        AutoRoutine routine = autoFactory.newRoutine("MoveFowardAuto");
+        AutoTrajectory traj = routine.trajectory("MoveFowawrd");
+
+        routine.active().onTrue(Commands.sequence(
+            traj.resetOdometry(),
+            traj.cmd()
+        ));
+
+        return routine;
+
+    }
+
+    private AutoRoutine L1Auto() {
+        AutoRoutine routine = autoFactory.newRoutine("L1Auto");
+        AutoTrajectory traj = routine.trajectory("L1");
+
+        routine.active().onTrue(Commands.sequence(
+            traj.resetOdometry(),
+            traj.cmd()
+        ));
+
+        traj.atTime("Outtake").onTrue(Commands.sequence(
+           new AutoOuttakeCommand(intake)
+        ));
+
+        return routine;
+
     }
 
 }

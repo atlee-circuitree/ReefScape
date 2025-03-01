@@ -36,6 +36,7 @@ public class armExtension extends SubsystemBase {
 
     ExtensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);
     pid = new PIDController(Constants.Arm.ArmP, Constants.Arm.ArmI, Constants.Arm.ArmD);
+    pid.setIZone(Constants.Arm.ArmIZone);
   }
 
   public void RunExtension(double Velocity){

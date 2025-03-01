@@ -112,7 +112,8 @@ public class Constants {
 
 
         public static final double ArmP = 0.50;
-        public static final double ArmI = 0.0;
+        public static final double ArmI = 0.01;
+        public static final double ArmIZone = 0.0;
         public static final double ArmD = 0.0;
 
         public static final double wristRatio = 1;
@@ -123,7 +124,7 @@ public class Constants {
         public static final double wristEncoderOffset = 0.8065; // in rotations
         public static final double pivotEncoderOffset = 45.43;
         public static final double pivotEncoderOffsetRev = 0.619;
-        public static double armEncoderOffset = 0.083496; // in rotations
+        public static final double armEncoderOffset = 0.083496; // in rotations
 
         public static final double outtakeVelocity = 1;
         public static final double intakeVelocity = -1;
