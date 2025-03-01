@@ -90,7 +90,7 @@ public class RobotContainer {
             autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
         autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
-        autoChooser.addRoutine("RedTopScore2Part1", this::SecondAuto);
+        autoChooser.addRoutine("RedTopScore2Part1", this::RedTopScore2);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
@@ -166,8 +166,9 @@ public class RobotContainer {
             new PivotCommand(pivot, 23)
         ));
         //reef lvl 4
-        Player1.y().toggleOnTrue(new SequentialCommandGroup(
+        Player1.y().toggleOnTrue(Commands.sequence(
             new PivotCommand(pivot, 45),
+            new WristCommand(Wrist, 205),
             new ExtensionCommand(extension, 2.95)
         ));
         /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
@@ -286,10 +287,11 @@ public class RobotContainer {
         
         return routine;
     }
-    private AutoRoutine SecondAuto(){
+    private AutoRoutine RedTopScore2(){
         AutoRoutine routine = autoFactory.newRoutine("RedTopScore2");
         AutoTrajectory RedTopScore2Part1 = routine.trajectory("RedTopScore2Part1");
         AutoTrajectory RedTopScore2Part2 = routine.trajectory("RedTopScore2Part2");
+        AutoTrajectory RedTopScore2Part3 = routine.trajectory("RedTopScore2Part3");
 
         routine.active().onTrue(
             Commands.sequence(
@@ -319,6 +321,43 @@ public class RobotContainer {
 
         ));
 
+        RedTopScore2Part2.done().onTrue(RedTopScore2Part3.cmd());
+
+        RedTopScore2Part3.atTime("CoralPos").onTrue(Commands.sequence(
+            new WristCommand(Wrist, 24),
+            new PivotCommand(pivot, 36)
+        ));
+
         return routine;
     }
+
+    private AutoRoutine RedTopScore3() {
+        AutoRoutine routine = autoFactory.newRoutine("RedTopScore3");
+        AutoTrajectory RedTopScore3Part1 = routine.trajectory("RedTopScore3Part1");
+        AutoTrajectory RedTopScore3Part2 = routine.trajectory("RedTopScore3Part2");
+        AutoTrajectory RedTopScore3Part3 = routine.trajectory("RedTopScore3Part3");
+        AutoTrajectory RedTopScore3Part4 = routine.trajectory("RedTopScore3Part4");
+        AutoTrajectory RedTopScore3Part5 = routine.trajectory("RedTopScore3Part5");
+        AutoTrajectory RedTopScore3Part6 = routine.trajectory("RedTopScore3Part6");
+
+        routine.active().onTrue(Commands.sequence(
+                RedTopScore3Part1.resetOdometry(),
+                RedTopScore3Part1.cmd()
+            ));
+        
+        RedTopScore3Part1.atTime("L1").onTrue(Commands.sequence(
+            new WristCommand(Wrist, 6),
+            new PivotCommand(pivot, 23) 
+        ));
+
+        RedTopScore3Part1.atTime("Outtake").onTrue(Commands.sequence(
+            new AutoOuttakeCommand(intake)
+        ));
+        RedTopScore3Part1.done().onTrue(
+            RedTopScore3Part2.cmd()
+        );
+
+        return routine;
+    }
+
 }
