@@ -20,6 +20,7 @@ import choreo.util.ChoreoAllianceFlipUtil.Flipper;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -79,7 +80,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
 
-    private final AutoFactory autoFactory;
+    private AutoFactory autoFactory;
     private final AutoChooser autoChooser;
    
 
@@ -87,7 +88,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
-            autoFactory = drivetrain.createAutoFactory();
+        autoFactory = null;
+        //autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
         autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
         autoChooser.addRoutine("RedTopScore2Part1", this::RedTopScore2);
@@ -245,6 +247,17 @@ public class RobotContainer {
     }
 
     private AutoRoutine FirstAuto() {
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+
         AutoRoutine routine = autoFactory.newRoutine("taxi");
 
         // Load the routine's trajectories
@@ -288,6 +301,17 @@ public class RobotContainer {
         return routine;
     }
     private AutoRoutine RedTopScore2(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+        
         AutoRoutine routine = autoFactory.newRoutine("RedTopScore2");
         AutoTrajectory RedTopScore2Part1 = routine.trajectory("RedTopScore2Part1");
         AutoTrajectory RedTopScore2Part2 = routine.trajectory("RedTopScore2Part2");

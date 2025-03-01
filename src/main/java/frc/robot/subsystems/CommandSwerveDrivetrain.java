@@ -295,6 +295,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
     }
 
+    public AutoFactory createAutoFactoryBlue() {
+        //return createAutoFactory((sample, isStart) -> {});
+        return new AutoFactory(
+            () -> this.getState().Pose,
+            this::resetPose,
+            this::followPath,
+            true,
+            this
+        );
+    }
+
     public SwerveSample followPath(SwerveSample sample) {
         m_pathThetaController.enableContinuousInput(-Math.PI, Math.PI);
 
