@@ -168,13 +168,8 @@ public class RobotContainer {
 
         //coral human player station
         Player1.x().toggleOnTrue(new SequentialCommandGroup(
-<<<<<<< Updated upstream
-            new WristCommand(Wrist, 21.5),
-            new PivotCommand(pivot, 33)
-=======
             new WristCommand(Wrist, 24 ),
             new PivotCommand(pivot, 36)
->>>>>>> Stashed changes
         
         ));
         //reef lvl 3
@@ -368,17 +363,12 @@ public class RobotContainer {
         ));
 
         RedTopScore2Part2.done().onTrue(Commands.sequence(
-<<<<<<< Updated upstream
-            Commands.waitSeconds(2),
-            new AutoIntakeCommand(intake),
-            RedTopScore2Part3.cmd()
-        ));
-=======
+
             new AutoIntakeCommand(intake),
             Commands.waitSeconds(2.5),
             RedTopScore2Part3.cmd()
             ));
->>>>>>> Stashed changes
+
 
         RedTopScore2Part3.atTime("L1-2").onTrue(Commands.sequence(
             new WristCommand(Wrist, 6),
