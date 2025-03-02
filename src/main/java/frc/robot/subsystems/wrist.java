@@ -81,7 +81,7 @@ public class wrist extends SubsystemBase {
     CurrentTicks = -(CurrentTicks - Constants.Arm.wristEncoderOffset);
     CurrentTicks = 360 - ((CurrentTicks / Constants.Arm.wristRatio) * -360);
     if (CurrentTicks > 330) {
-      return 0.15;      
+      return 0;      
     }
     return CurrentTicks;
   }

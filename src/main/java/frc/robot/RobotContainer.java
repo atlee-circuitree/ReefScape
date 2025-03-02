@@ -152,7 +152,7 @@ public class RobotContainer {
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 23), 
-            new WristCommand(Wrist, 272) 
+            new WristCommand(Wrist, 260) 
         ));
 
 
@@ -168,20 +168,20 @@ public class RobotContainer {
 
         //coral human player station
         Player1.x().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 24 ),
+            new WristCommand(Wrist, 26 ),
             new PivotCommand(pivot, 36)
         
         ));
         //reef lvl 3
         Player1.b().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 42- 7),
+            new PivotCommand(pivot, 42),
             new WristCommand(Wrist, 171)
             
         ));
         //reef lvl 2
         Player1.a().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23 - 7)
+            new PivotCommand(pivot, 23 )
         ));
         //reef lvl 4
         Player1.y().toggleOnTrue(Commands.sequence(
@@ -353,7 +353,7 @@ public class RobotContainer {
         ));
 
         RedTopScore2Part2.atTime("CoralPos").onTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 24),
+            new WristCommand(Wrist, 28),
             new PivotCommand(pivot, 36)
         ));
         RedTopScore2Part2.atTime("Intake").onTrue(Commands.sequence(
@@ -365,7 +365,7 @@ public class RobotContainer {
         RedTopScore2Part2.done().onTrue(Commands.sequence(
 
             new AutoIntakeCommand(intake),
-            Commands.waitSeconds(2.5),
+            Commands.waitSeconds(.5),
             RedTopScore2Part3.cmd()
             ));
 
@@ -374,6 +374,7 @@ public class RobotContainer {
             new WristCommand(Wrist, 6),
             new PivotCommand(pivot, 23)
         ));
+        RedTopScore2Part3.atTime("Outake-2").onTrue(new AutoOuttakeCommand(intake));
 
         return routine;
     }
