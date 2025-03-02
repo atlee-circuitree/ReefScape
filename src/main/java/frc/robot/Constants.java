@@ -121,9 +121,9 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = 0.766; // in rotations
+        public static final double wristEncoderOffset = 0.5795; // in rotations
         public static final double pivotEncoderOffset = 45.43;
-        public static final double pivotEncoderOffsetRev = 0.615;
+        public static final double pivotEncoderOffsetRev = 0.589;
         public static final double armEncoderOffset = 0.083496; // in rotations
 
         public static final double outtakeVelocity = 1;

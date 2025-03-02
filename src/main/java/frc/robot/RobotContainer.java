@@ -151,8 +151,8 @@ public class RobotContainer {
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 23), //23 | 7
-            new WristCommand(Wrist, 262) //262 | 6
+            new PivotCommand(pivot, 23), 
+            new WristCommand(Wrist, 272) 
         ));
 
 
@@ -203,7 +203,7 @@ public class RobotContainer {
         //climb
         Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, 1),
-            new PivotCommand(pivot, 61.5)
+            new PivotCommand(pivot, 61)
         ));
         
 
@@ -444,7 +444,7 @@ public class RobotContainer {
             return routine;
         }
         AutoRoutine routine = autoFactory.newRoutine("MoveFowardAuto");
-        AutoTrajectory traj = routine.trajectory("MoveFowawrd");
+        AutoTrajectory traj = routine.trajectory("MoveFoward");
 
         routine.active().onTrue(Commands.sequence(
             traj.resetOdometry(),
@@ -476,5 +476,6 @@ public class RobotContainer {
         return routine;
 
     }
+    
 
 }

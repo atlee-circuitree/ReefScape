@@ -60,12 +60,12 @@ public class wrist extends SubsystemBase {
 
   public void runToPosition(double deg)
   {
-    /*pid.setSetpoint(deg);
+    pid.setSetpoint(deg);
     double out = pid.calculate(getAngle()) - calcFeed();
     RunWrist(-out);
-    SmartDashboard.putNumber("WristAngleInput",getAngle());
-    SmartDashboard.putNumber("WristAngleOutput",out);
-    SmartDashboard.putNumber("WristAngleSetPoint",deg);*/
+    //SmartDashboard.putNumber("WristAngleInput",getAngle());
+    //SmartDashboard.putNumber("WristAngleOutput",out);
+    //SmartDashboard.putNumber("WristAngleSetPoint",deg);*/
   }
 
   public void stop()
@@ -74,13 +74,22 @@ public class wrist extends SubsystemBase {
   }
 
   public double getAngle() {
-    double CurrentTicks = wristEncoder.get() - Constants.Arm.wristEncoderOffset;
-    return (CurrentTicks / Constants.Arm.wristRatio) * -360;
+    double CurrentTicks = wristEncoder.get();
+    if (wristEncoder.get() <= Constants.Arm.wristEncoderOffset) {
+      CurrentTicks +=1;
+  }
+    CurrentTicks = -(CurrentTicks - Constants.Arm.wristEncoderOffset);
+    CurrentTicks = 360 - ((CurrentTicks / Constants.Arm.wristRatio) * -360);
+    if (CurrentTicks > 330) {
+      return 0.15;      
+    }
+    return CurrentTicks;
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Wrist Encoder Get", wristEncoder.get());
+    SmartDashboard.putNumber("Wrist Encoder Get w off", wristEncoder.get() - Constants.Arm.wristEncoderOffset);
     SmartDashboard.putNumber("Wrist Degrees", getAngle());
   }
 }
