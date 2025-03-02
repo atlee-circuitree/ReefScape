@@ -433,6 +433,16 @@ public class RobotContainer {
     }
 
     private AutoRoutine MoveFowardAuto() {
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
         AutoRoutine routine = autoFactory.newRoutine("MoveFowardAuto");
         AutoTrajectory traj = routine.trajectory("MoveFowawrd");
 

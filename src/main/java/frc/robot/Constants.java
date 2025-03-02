@@ -96,7 +96,7 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double wristThreshold = 0;
+        public static final double wristThreshold = 0.1;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 0.5;
         public static final double extensionThreshold = 3.5;
