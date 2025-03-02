@@ -60,12 +60,12 @@ public class wrist extends SubsystemBase {
 
   public void runToPosition(double deg)
   {
-    pid.setSetpoint(deg);
+    /*pid.setSetpoint(deg);
     double out = pid.calculate(getAngle()) - calcFeed();
     RunWrist(-out);
     SmartDashboard.putNumber("WristAngleInput",getAngle());
     SmartDashboard.putNumber("WristAngleOutput",out);
-    SmartDashboard.putNumber("WristAngleSetPoint",deg);
+    SmartDashboard.putNumber("WristAngleSetPoint",deg);*/
   }
 
   public void stop()

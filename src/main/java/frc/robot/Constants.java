@@ -96,7 +96,7 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double wristThreshold = 0.5;
+        public static final double wristThreshold = 0;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 0.5;
         public static final double extensionThreshold = 3.5;
@@ -121,9 +121,9 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = 0.8065; // in rotations
+        public static final double wristEncoderOffset = 0.766; // in rotations
         public static final double pivotEncoderOffset = 45.43;
-        public static final double pivotEncoderOffsetRev = 0.619;
+        public static final double pivotEncoderOffsetRev = 0.615;
         public static final double armEncoderOffset = 0.083496; // in rotations
 
         public static final double outtakeVelocity = 1;

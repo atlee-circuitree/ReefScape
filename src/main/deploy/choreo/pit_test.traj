@@ -15,12 +15,13 @@
  "params":{
   "waypoints":[
     {"x":{"exp":"9.78641128540039 m", "val":9.78641128540039}, "y":{"exp":"7.162034034729004 m", "val":7.162034034729004}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"10.95372486114502 m", "val":10.95372486114502}, "y":{"exp":"7.127701282501221 m", "val":7.127701282501221}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":16, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"10.95372486114502 m", "val":10.95372486114502}, "y":{"exp":"7.127701282501221 m", "val":7.127701282501221}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":795, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"12.206869125366211 m", "val":12.206869125366213}, "y":{"exp":"6.681375503540039 m", "val":6.681375503540039}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
-    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"17.548 m", "val":17.548}, "h":{"exp":"8.052 m", "val":8.052}}}, "enabled":true}],
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"17.548 m", "val":17.548}, "h":{"exp":"8.052 m", "val":8.052}}}, "enabled":true},
+    {"from":1, "to":1, "data":{"type":"MaxVelocity", "props":{"max":{"exp":"0.01 m / s", "val":0.01}}}, "enabled":true}],
   "targetDt":{
    "exp":"0.05 s",
    "val":0.05
@@ -64,6 +65,5 @@
     {"t":1.09644, "x":12.20687, "y":6.68138, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
   "splits":[0]
  },
- "events":[
-   {"name":"intake", "from":{"target":1, "targetTimestamp":0.52927, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+ "events":[]
 }

@@ -151,8 +151,8 @@ public class RobotContainer {
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 23),
-            new WristCommand(Wrist, 262)
+            new PivotCommand(pivot, 23), //23 | 7
+            new WristCommand(Wrist, 262) //262 | 6
         ));
 
 
@@ -168,20 +168,25 @@ public class RobotContainer {
 
         //coral human player station
         Player1.x().toggleOnTrue(new SequentialCommandGroup(
+<<<<<<< Updated upstream
             new WristCommand(Wrist, 21.5),
             new PivotCommand(pivot, 33)
+=======
+            new WristCommand(Wrist, 24 ),
+            new PivotCommand(pivot, 36)
+>>>>>>> Stashed changes
         
         ));
         //reef lvl 3
         Player1.b().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 42),
+            new PivotCommand(pivot, 42- 7),
             new WristCommand(Wrist, 171)
             
         ));
         //reef lvl 2
         Player1.a().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23)
+            new PivotCommand(pivot, 23 - 7)
         ));
         //reef lvl 4
         Player1.y().toggleOnTrue(Commands.sequence(
@@ -363,10 +368,17 @@ public class RobotContainer {
         ));
 
         RedTopScore2Part2.done().onTrue(Commands.sequence(
+<<<<<<< Updated upstream
             Commands.waitSeconds(2),
             new AutoIntakeCommand(intake),
             RedTopScore2Part3.cmd()
         ));
+=======
+            new AutoIntakeCommand(intake),
+            Commands.waitSeconds(2.5),
+            RedTopScore2Part3.cmd()
+            ));
+>>>>>>> Stashed changes
 
         RedTopScore2Part3.atTime("L1-2").onTrue(Commands.sequence(
             new WristCommand(Wrist, 6),
@@ -406,18 +418,19 @@ public class RobotContainer {
     }
 
     private AutoRoutine pitTestAuto() {
+        autoFactory = drivetrain.createAutoFactory();
+
         AutoRoutine routine = autoFactory.newRoutine("pit_test_auto");
         AutoTrajectory traj = routine.trajectory("pit_test");
+        AutoTrajectory traj2 = routine.trajectory("pit_test2");
 
         routine.active().onTrue(Commands.sequence(
             traj.resetOdometry(),
-            traj.cmd()
+            traj.cmd(),
+            new AutoIntakeCommand(intake),
+            traj2.resetOdometry(),
+            traj2.cmd()
         ));
-        
-        traj.atTime("intake").onTrue(Commands.sequence(
-            new AutoIntakeCommand(intake) 
-        ));
-
         return routine;
     }
 
