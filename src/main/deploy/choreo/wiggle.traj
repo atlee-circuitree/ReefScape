@@ -17,10 +17,10 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"9.8 m", "val":9.8}, "y":{"exp":"7.6 m", "val":7.6}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":23, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"12.1 m", "val":12.1}, "y":{"exp":"7.35 m", "val":7.35}, "heading":{"exp":"-4.432005546923829 mrad", "val":-0.004432005546923829}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"9.8 m", "val":9.8}, "y":{"exp":"7.6 m", "val":7.6}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":22, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"12.1 m", "val":12.1}, "y":{"exp":"7.35 m", "val":7.35}, "heading":{"exp":"-4.432005546923829 mrad", "val":-0.004432005546923829}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"13.6 m", "val":13.6}, "y":{"exp":"5.2 m", "val":5.2}, "heading":{"exp":"-2.0954235907407517 rad", "val":-2.0954235907407517}, "intervals":7, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"13.7 m", "val":13.7}, "y":{"exp":"5.3 m", "val":5.3}, "heading":{"exp":"-2.083854285669897 rad", "val":-2.083854285669897}, "intervals":41, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"13.7 m", "val":13.7}, "y":{"exp":"5.3 m", "val":5.3}, "heading":{"exp":"-2.083854285669897 rad", "val":-2.083854285669897}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"15.9 m", "val":15.9}, "y":{"exp":"7.4 m", "val":7.4}, "heading":{"exp":"0.9289802514544434 rad", "val":0.9289802514544434}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
