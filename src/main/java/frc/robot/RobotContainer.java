@@ -142,13 +142,13 @@ public class RobotContainer {
         Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
         // Limelight command in works (related lines: 74)
         
-        /*Player2.povUp().whileTrue( 
+        Player2.povUp().whileTrue( 
         new ParallelCommandGroup(
         drivetrain.applyRequest(() -> driveRobotCentric
         .withVelocityX(2)  
         .withVelocityY(0) 
-        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));*/
-
+        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));
+        
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 23), 
