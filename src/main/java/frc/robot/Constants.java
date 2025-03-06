@@ -137,5 +137,26 @@ public class Constants {
         public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 1/2 of a rotation per second max angular velocity
     }
 
+    public class Positions {
+        public static double L1WristPosition = 0;
+        public static double L1PivotPosition = 0;
+
+        public static double L2WristPosition = 0;
+        public static double L2PivotPosition = 0;
+
+        public static double L3WristPosition = 0;
+        public static double L3PivotPosition = 0;
+        public static double L3ExtensionPosition = 0;
+
+        public static double L4WristPosition = 0;
+        public static double L4PivotPosition = 0;
+        public static double L4ExtensionPosition = 0;
+
+        public static double HumanPlayerWrist = 0;
+        public static double HumanPlayerPivot = 0;
+
+
+    }
+
 }
 
