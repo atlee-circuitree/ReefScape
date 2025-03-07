@@ -155,7 +155,11 @@ public class Constants {
         public static double HumanPlayerWrist = 0;
         public static double HumanPlayerPivot = 0;
 
-
+        public static double PivotClimb = 0;
+        public static double WristClimb = 0;
+        
+        public static double StartPivot = 0;
+        public static double StartWrist = 0;
     }
 
 }

@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -16,29 +11,18 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import choreo.util.ChoreoAllianceFlipUtil.Flipper;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.autos.TestAuto;
-import frc.robot.commands.ApplyWristFeedforward;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.ExtensionCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
@@ -52,7 +36,6 @@ import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
-import frc.robot.commands.AprliDrive;
 
 
 
@@ -74,8 +57,6 @@ public class RobotContainer {
     public SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
             .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Small deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I DON'T want field-centric
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(Constants.Drive.MaxSpeed);
 
@@ -95,7 +76,6 @@ public class RobotContainer {
         autoFactory = null;
         //autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
-        autoChooser.addRoutine("RedTopScore2", this::FirstAuto);
         autoChooser.addRoutine("RedTopScore2Part1", this::RedTopScore2);
         autoChooser.addRoutine("DO NOT USE PIT TEST", this::pitTestAuto);
         autoChooser.addRoutine("DoNothingAuto", this::DoNothingAuto);
@@ -148,11 +128,18 @@ public class RobotContainer {
         .withVelocityX(2)  
         .withVelocityY(0) 
         .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));
+        
+        Player2.povDown().whileTrue(
+        drivetrain.applyRequest(() -> driveRobotCentric
+        .withVelocityX(1.5)  
+        .withVelocityY(0) 
+        .withRotationalRate(-LimelightHelpers.getTX("limelight-ri") / 14))
+        );
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 23), 
-            new WristCommand(Wrist, 260) 
+            new PivotCommand(pivot, Constants.Positions.StartPivot), 
+            new WristCommand(Wrist, Constants.Positions.StartWrist) 
         ));
 
 
@@ -168,26 +155,27 @@ public class RobotContainer {
 
         //coral human player station
         Player1.x().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 26),
-            new PivotCommand(pivot, 36)
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
         
         ));
         //reef lvl 3
         Player1.b().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 42),
-            new WristCommand(Wrist, 171)
+            new PivotCommand(pivot,Constants.Positions.L3PivotPosition),
+            new WristCommand(Wrist, Constants.Positions.L3WristPosition),
+            new ExtensionCommand(extension, Constants.Positions.L3ExtensionPosition)
             
         ));
         //reef lvl 2
         Player1.a().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23)
+            new WristCommand(Wrist, Constants.Positions.L2WristPosition),
+            new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
         ));
         //reef lvl 4
         Player1.y().toggleOnTrue(Commands.sequence(
-            new PivotCommand(pivot, 45),
-            new ExtensionCommand(extension, 2.95),
-            new WristCommand(Wrist, 205)
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition), //2.95
+            new WristCommand(Wrist, Constants.Positions.L4WristPosition)
           
         ));
         /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
@@ -198,12 +186,12 @@ public class RobotContainer {
         ));*/
         //low ball
         Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
-            new ExtensionCommand(extension, 1.37)
+            new ExtensionCommand(extension, 1.37) // 1.37
         ));
         //climb
         Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 1),
-            new PivotCommand(pivot, 61)
+            new WristCommand(Wrist, Constants.Positions.WristClimb),
+            new PivotCommand(pivot, Constants.Positions.PivotClimb)
         ));
         
 
@@ -263,60 +251,6 @@ public class RobotContainer {
         //return Commands.print("No autonomous command configured");*/ 
     }
 
-    private AutoRoutine FirstAuto() {
-        try {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
-                autoFactory = drivetrain.createAutoFactoryBlue();
-            else    
-                autoFactory = drivetrain.createAutoFactory();
-        } catch (Exception e) {
-            autoFactory = drivetrain.createAutoFactory();
-            AutoRoutine routine = autoFactory.newRoutine("blank");
-            return routine;
-        }
-
-        AutoRoutine routine = autoFactory.newRoutine("taxi");
-
-        // Load the routine's trajectories
-        AutoTrajectory RedTopScore2 = routine.trajectory("RedTopScore2L2");
-
-        // When the routine begins, reset odometry and start the first trajectory (1)
-        routine.active().onTrue(
-            Commands.sequence(
-                RedTopScore2.resetOdometry(),
-                RedTopScore2.cmd()
-            )
-        );
-        RedTopScore2.atTime("L1").onTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, 6),
-        new PivotCommand(pivot, 23)
-        ));
-        
-        RedTopScore2.atTime("OUTTAKE").onTrue(new ParallelCommandGroup(
-        new AutoOuttakeCommand(intake),
-        new WaitCommand(3)
-        ));
-
-        RedTopScore2.atTime("CoralStation").onTrue(new SequentialCommandGroup( 
-        new WristCommand(Wrist, 24),
-        new PivotCommand(pivot, 36)
-        ));
-    
-        RedTopScore2.atTime("Intake").onTrue(new ParallelCommandGroup(
-        new AutoIntakeCommand(intake),
-        new WaitCommand(3)
-        ));
-        RedTopScore2.atTime("Lvl1-2").onTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, 6),
-        new PivotCommand(pivot, 23)
-        ));
-        RedTopScore2.atTime("Outtake2").onTrue(new ParallelCommandGroup(
-        new AutoOuttakeCommand(intake),
-        new WaitCommand(3)
-        ));
-        
-        return routine;
-    }
     private AutoRoutine RedTopScore2(){
         try {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
@@ -342,8 +276,8 @@ public class RobotContainer {
         );
 
         RedTopScore2Part1.atTime("L2").onTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, 6),
-        new PivotCommand(pivot, 23)
+        new WristCommand(Wrist, Constants.Positions.L2WristPosition),
+        new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
         ));
         RedTopScore2Part1.atTime("Outake").onTrue(new AutoOuttakeCommand(intake));
 
@@ -353,8 +287,8 @@ public class RobotContainer {
         ));
 
         RedTopScore2Part2.atTime("CoralPos").onTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, 28),
-            new PivotCommand(pivot, 36)
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
         ));
         RedTopScore2Part2.atTime("Intake").onTrue(Commands.sequence(
             Commands.waitSeconds(2),
@@ -371,39 +305,10 @@ public class RobotContainer {
 
 
         RedTopScore2Part3.atTime("L1-2").onTrue(Commands.sequence(
-            new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23)
+            new WristCommand(Wrist, Constants.Positions.L1WristPosition),
+            new PivotCommand(pivot, Constants.Positions.L1PivotPosition)
         ));
         RedTopScore2Part3.atTime("Outake-2").onTrue(new AutoOuttakeCommand(intake));
-
-        return routine;
-    }
-
-    private AutoRoutine RedTopScore3() {
-        AutoRoutine routine = autoFactory.newRoutine("RedTopScore3");
-        AutoTrajectory RedTopScore3Part1 = routine.trajectory("RedTopScore3Part1");
-        AutoTrajectory RedTopScore3Part2 = routine.trajectory("RedTopScore3Part2");
-        AutoTrajectory RedTopScore3Part3 = routine.trajectory("RedTopScore3Part3");
-        AutoTrajectory RedTopScore3Part4 = routine.trajectory("RedTopScore3Part4");
-        AutoTrajectory RedTopScore3Part5 = routine.trajectory("RedTopScore3Part5");
-        AutoTrajectory RedTopScore3Part6 = routine.trajectory("RedTopScore3Part6");
-
-        routine.active().onTrue(Commands.sequence(
-                RedTopScore3Part1.resetOdometry(),
-                RedTopScore3Part1.cmd()
-            ));
-        
-        RedTopScore3Part1.atTime("L1").onTrue(Commands.sequence(
-            new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23) 
-        ));
-
-        RedTopScore3Part1.atTime("Outtake").onTrue(Commands.sequence(
-            new AutoOuttakeCommand(intake)
-        ));
-        RedTopScore3Part1.done().onTrue(
-            RedTopScore3Part2.cmd()
-        );
 
         return routine;
     }
@@ -466,8 +371,8 @@ public class RobotContainer {
         ));
 
         traj.atTime("L1").onTrue(Commands.sequence(
-            new WristCommand(Wrist, 6),
-            new PivotCommand(pivot, 23)
+            new WristCommand(Wrist, Constants.Positions.L1WristPosition),
+            new PivotCommand(pivot, Constants.Positions.L1PivotPosition)
         ));
 
         traj.atTime("Outtake").onTrue(Commands.sequence(

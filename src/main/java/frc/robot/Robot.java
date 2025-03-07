@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run(); 
     Results lastResult;
 
+    SmartDashboard.putNumber("LimeLight", LimelightHelpers.getTX("limelight-cg"));
+
     /*try {
       lastResult = LimelightHelpers.getLatestResults("limelight-cg").targetingResults;
     } catch (Exception e) {
