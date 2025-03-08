@@ -5,6 +5,9 @@
 package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import choreo.auto.AutoChooser;
@@ -17,12 +20,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.ExtensionCommand;
+import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
@@ -125,16 +130,18 @@ public class RobotContainer {
         Player2.povUp().whileTrue( 
         new ParallelCommandGroup(
         drivetrain.applyRequest(() -> driveRobotCentric
-        .withVelocityX(2)  
-        .withVelocityY(0) 
-        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));
+        .withVelocityX(0)  
+        .withVelocityY(-LimelightHelpers.getTX("limelight-cg") / 14) 
+        .withRotationalRate(0)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));
         
         Player2.povDown().whileTrue(
+        new SequentialCommandGroup(
         drivetrain.applyRequest(() -> driveRobotCentric
-        .withVelocityX(1.5)  
-        .withVelocityY(0) 
-        .withRotationalRate(-LimelightHelpers.getTX("limelight-ri") / 14))
-        );
+        .withVelocityX(0)  
+        .withVelocityY(1.5) 
+        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> Math.abs(-LimelightHelpers.getTX("limelight-cg")) < 1)));
+        
+        
 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
@@ -151,6 +158,7 @@ public class RobotContainer {
         Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
+        Player1.rightBumper().whileTrue(new ManualExtension(extension, -.5));
 
 
         //coral human player station
@@ -168,15 +176,19 @@ public class RobotContainer {
         ));
         //reef lvl 2
         Player1.a().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.L2WristPosition),
-            new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
+            new WristCommand(Wrist, Constants.Positions.L2WristPosition)
+            //new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
         ));
         //reef lvl 4
-        Player1.y().toggleOnTrue(Commands.sequence(
+        Player1.y().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-            new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition), //2.95
-            new WristCommand(Wrist, Constants.Positions.L4WristPosition)
-          
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(1),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+                )
+            )
         ));
         /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 35),
@@ -184,9 +196,11 @@ public class RobotContainer {
             new ExtensionCommand(extension, 2.95),
             new PivotCommand(pivot, 45)
         ));*/
+
         //low ball
+        //1.52 = 6 inches
         Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
-            new ExtensionCommand(extension, 1.37) // 1.37
+            new PivotCommand(pivot, 70) // 1.37
         ));
         //climb
         Player1.povUp().toggleOnTrue(new SequentialCommandGroup(

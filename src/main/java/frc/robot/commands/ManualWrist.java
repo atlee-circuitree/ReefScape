@@ -28,9 +28,9 @@ public class ManualWrist extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_wrist.getAngle() <= Constants.Arm.wristThreshold && m_velocity > 0) {
+    /*if (m_wrist.getAngle() <= Constants.Arm.wristThreshold && m_velocity > 0) {
       return;
-    }
+    }*/
     m_wrist.RunWrist(m_velocity);
 
   }

@@ -22,6 +22,7 @@ public class armExtension extends SubsystemBase {
   private TalonFX extension_right;
   private PIDController pid;
   private CanCoder ExtensionCanCoder;
+  private double CurrentTicks;
 
   //public double CurrentWristAngle;
   //double CurrentTicks;
@@ -63,14 +64,14 @@ public class armExtension extends SubsystemBase {
   }
 
   public double getExtension() {
-    double CurrentTicks = ExtensionCanCoder.getDistance() - Constants.Arm.armEncoderOffset;
-    //return (CurrentTicks / Constants.Arm.extensionRatio) * -360;
+
+    CurrentTicks = ExtensionCanCoder.getDistance() - Constants.Arm.armEncoderOffset;
     return CurrentTicks;
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("extension Encoder Get", ExtensionCanCoder.getDistance());
-    SmartDashboard.putNumber("extensions Degrees", getExtension());
+    SmartDashboard.putNumber("Extension Encoder With Offset", getExtension());
   }
 }

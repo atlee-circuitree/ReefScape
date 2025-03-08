@@ -96,7 +96,7 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double wristThreshold = 0.1;
+        public static final double wristThreshold = 0;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 0.5;
         public static final double extensionThreshold = 3.5;
@@ -106,9 +106,9 @@ public class Constants {
         public static final double pivotI = 0.0;
         public static final double pivotD = 0.0;
 
-        public static final double wristP = .19;
+        public static final double wristP = .07;
         public static final double wristI = 0.0;
-        public static final double wristD = 0.003;
+        public static final double wristD = 0.0;
 
 
         public static final double ArmP = 0.50;
@@ -121,10 +121,10 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = 0.60; // in rotations
+        public static final double wristEncoderOffset = 0.396; // in rotations
         public static final double pivotEncoderOffset = 45.43;
-        public static final double pivotEncoderOffsetRev = 0.589;
-        public static final double armEncoderOffset = 0.083496; // in rotations
+        public static final double pivotEncoderOffsetRev = 0.50289;
+        public static final double armEncoderOffset = 0.49; // in rotations
 
         public static final double outtakeVelocity = 1;
         public static final double intakeVelocity = -1;
@@ -138,27 +138,27 @@ public class Constants {
     }
 
     public class Positions {
-        public static double L1WristPosition = 0;
-        public static double L1PivotPosition = 0;
+        public static double L1WristPosition = 182;
+        public static double L1PivotPosition = 65;
 
-        public static double L2WristPosition = 0;
-        public static double L2PivotPosition = 0;
+        public static double L2WristPosition = 100;
+        public static double L2PivotPosition = 65;
 
-        public static double L3WristPosition = 0;
-        public static double L3PivotPosition = 0;
+        public static double L3WristPosition = 185;
+        public static double L3PivotPosition = 85;
         public static double L3ExtensionPosition = 0;
 
-        public static double L4WristPosition = 0;
-        public static double L4PivotPosition = 0;
-        public static double L4ExtensionPosition = 0;
+        public static double L4WristPosition = 230;
+        public static double L4PivotPosition = 85;
+        public static double L4ExtensionPosition = 1;
 
         public static double HumanPlayerWrist = 0;
-        public static double HumanPlayerPivot = 0;
+        public static double HumanPlayerPivot = 80;
 
         public static double PivotClimb = 0;
         public static double WristClimb = 0;
         
-        public static double StartPivot = 0;
+        public static double StartPivot = 60;
         public static double StartWrist = 0;
     }
 

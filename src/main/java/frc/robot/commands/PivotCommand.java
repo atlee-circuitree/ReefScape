@@ -14,7 +14,7 @@ public class PivotCommand extends Command
     {
         m_pivot = pivot;
         m_position = position;
-        heartbeat = 0;
+        
         addRequirements(pivot);
     }
 
@@ -28,8 +28,9 @@ public class PivotCommand extends Command
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+ 
     m_pivot.runToPosition(m_position);
-    heartbeat++;
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -41,7 +42,10 @@ public class PivotCommand extends Command
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double err = Math.abs(m_pivot.getAngleEncoder() - m_position);
-    return err <= Constants.Arm.pivotThreshold;
+    if (m_pivot.getPID(m_position) < .1 && m_pivot.getPID(m_position) > -.1) {
+      return true;
+    }else{
+      return false;
+    } 
   }
 }

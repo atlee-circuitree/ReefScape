@@ -20,6 +20,7 @@ public class Pivot extends SubsystemBase {
   private TalonFX pivot_right;
   private PIDController pid;
   private Pigeon pivotPigeon;
+  private double out;
   private DutyCycleEncoder pivotEncoder;
 
   public Pivot() {
@@ -51,10 +52,18 @@ public class Pivot extends SubsystemBase {
     pid.reset();
   }
 
+  public double getPID(double deg) {
+
+    pid.setSetpoint(deg);
+    out = pid.calculate(getAngleEncoder());
+    return out;
+
+  }
+
   public void runToPosition(double deg)
   {
-    pid.setSetpoint(deg);
-    double out = pid.calculate(getAngleEncoder());
+     
+    out = getPID(deg);
     SmartDashboard.putNumber("PivotAngleInput",getAngleEncoder());
     SmartDashboard.putNumber("PivotAngleOutput",out);
     SmartDashboard.putNumber("PivotAngleSetPoint",deg);

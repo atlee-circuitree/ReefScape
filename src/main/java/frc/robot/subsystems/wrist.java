@@ -24,6 +24,7 @@ public class wrist extends SubsystemBase {
 
   public wrist() {
 
+
     wrist = new TalonFX(Constants.CAN_IDs.wrist, "1599-B");
 
     wrist.setNeutralMode(NeutralModeValue.Brake);
@@ -62,9 +63,9 @@ public class wrist extends SubsystemBase {
   {
     pid.setSetpoint(deg);
     double out = pid.calculate(getAngle()) - calcFeed();
-    RunWrist(-out);
+    RunWrist(out);
     //SmartDashboard.putNumber("WristAngleInput",getAngle());
-    //SmartDashboard.putNumber("WristAngleOutput",out);
+    SmartDashboard.putNumber("WristAngleOutput",out);
     //SmartDashboard.putNumber("WristAngleSetPoint",deg);*/
   }
 

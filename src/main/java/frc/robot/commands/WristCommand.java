@@ -13,7 +13,7 @@ public class WristCommand extends Command {
     public WristCommand(wrist wrist, double position) {
         m_position = position;
         m_wrist = wrist;
-        heartbeat = 0;
+        
         addRequirements(wrist);
     }
 
@@ -26,8 +26,11 @@ public class WristCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_wrist.getAngle() <= Constants.Arm.wristThreshold && m_position > 0) {
+      return;
+    }
     m_wrist.runToPosition(m_position);
-    heartbeat++;
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -40,7 +43,12 @@ public class WristCommand extends Command {
   @Override
   public boolean isFinished() {
     double err = Math.abs(m_wrist.getAngle() - m_position);
-    return err <= Constants.Arm.wristThreshold;
+    if ((m_position < .05 && m_position > -.05) || err <= Constants.Arm.wristThreshold) {
+      return true;
+    }else{
+      return false;
+    } 
+
   }
 }
 

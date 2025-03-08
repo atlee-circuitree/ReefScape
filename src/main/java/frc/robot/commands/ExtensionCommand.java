@@ -6,11 +6,14 @@ import frc.robot.subsystems.armExtension;
 
 public class ExtensionCommand extends Command
 {
+    double feet;
     double m_position;
     armExtension m_armExtension;
 
     public ExtensionCommand(armExtension armExtension, double position) 
     {
+        
+        //feet = position * (6/1.52)
         m_position = position;
         m_armExtension = armExtension;
         addRequirements(armExtension);
@@ -20,7 +23,7 @@ public class ExtensionCommand extends Command
   @Override
   public void initialize() 
   {
-    
+    m_armExtension.clearPID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
