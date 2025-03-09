@@ -10,6 +10,8 @@ import java.util.function.BooleanSupplier;
 
 import javax.sound.sampled.SourceDataLine;
 
+import com.ctre.phoenix.ButtonMonitor;
+import com.ctre.phoenix.ButtonMonitor.IButtonPressEventHandler;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import choreo.auto.AutoChooser;
@@ -17,6 +19,8 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoIntakeCommand;
@@ -49,7 +54,21 @@ import frc.robot.subsystems.wrist;
 public class RobotContainer {
   
     public final CommandXboxController Player1 = new CommandXboxController(0);
-    public final CommandXboxController Player2 = new CommandXboxController(1);
+    public final CommandXboxController Player3 = new CommandXboxController(2);
+    public final GenericHID Player2 = new GenericHID(1);
+
+    public int SelectArcade = 11;
+    public int HumanPlayerArcade = 4;
+    public int StartArcade = 3;
+    public int RedLeftTopArcade = 10;
+    public int RedLeftMiddleArcade = 9;
+    public int RedLeftBottomArcade = 8;
+    public int BlueTopArcade = 5;
+    public int BlueMiddleArcade = 6;
+    public int BlueBottomArcade = 7;
+    public int RedRightTopArcade = 2;
+    public int RedRightMiddleArcade = 1;
+    public int RedRightBottomArcade = 0;
 
     private final Intake intake = new Intake();
     private final wrist Wrist = new wrist();
@@ -75,7 +94,6 @@ public class RobotContainer {
     private AutoFactory autoFactory;
     private final AutoChooser autoChooser;
    
-
     AutoTrajectory traj;
 
     public RobotContainer() {
@@ -104,6 +122,19 @@ public class RobotContainer {
             )
         );
 
+        JoystickButton Select = new JoystickButton(Player2, SelectArcade);
+        JoystickButton HumanPlayer = new JoystickButton(Player2, HumanPlayerArcade);
+        JoystickButton Start = new JoystickButton(Player2, StartArcade);
+        JoystickButton RedTopLeft = new JoystickButton(Player2, RedLeftTopArcade);
+        JoystickButton RedMiddleLeft = new JoystickButton(Player2, RedLeftMiddleArcade);
+        JoystickButton RedBottomLeft = new JoystickButton(Player2, RedLeftBottomArcade);
+        JoystickButton BlueTop = new JoystickButton(Player2, BlueTopArcade);
+        JoystickButton BlueMiddle = new JoystickButton(Player2, BlueMiddleArcade);
+        JoystickButton BlueBottom = new JoystickButton(Player2, BlueBottomArcade);
+        JoystickButton RedTopRight = new JoystickButton(Player2, RedRightTopArcade);
+        JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade);
+        JoystickButton RedBottomRight = new JoystickButton(Player2, RedRightBottomArcade);
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.seedFieldCentric();
@@ -125,41 +156,39 @@ public class RobotContainer {
         Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));*/
         
         //reef lvl 4
-        Player2.leftBumper().toggleOnTrue(new WristCommand(Wrist, 205));
+ 
+        RedTopLeft.onTrue(new WristCommand(Wrist, 205));
         //bring it back to front
-        Player2.rightBumper().toggleOnTrue(new WristCommand(Wrist,12));
+        Select.onTrue(new WristCommand(Wrist,12));
         //Manual stuff
-        Player2.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
-        Player2.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
+        Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
+        Player3.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
 
         //low ball
-        Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
+        RedBottomLeft.onTrue(new WristCommand(Wrist, 28));
         // Limelight command in works (related lines: 74)
 
-        Player2.y().whileTrue( 
+        Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
         .withVelocityX(0) 
         .withVelocityY(.2 * (-LimelightHelpers.getTX("limelight-cg")/ Math.abs(LimelightHelpers.getTX("limelight-cg")))) 
         .withRotationalRate(0)));//.until(() -> Math.abs(LimelightHelpers.getTX("limelight-cg")) < 0.3)));
 
-        Player2.x().whileTrue(
+        Player3.x().whileTrue(
         drivetrain.applyRequest(() -> driveRobotCentric
         .withVelocityX(.5) 
         .withVelocityY(0) 
         .withRotationalRate(0)));//.until(() -> -LimelightHelpers.getTA("limelight-cg") == 0)));
  
         //start pos
-        Player2.start().toggleOnTrue(new SequentialCommandGroup(
+        Start.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.StartPivot), 
             new WristCommand(Wrist, Constants.Positions.StartWrist) 
         ));
 
-
-
-        
         //manual stuff
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outake
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outtake
         Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
