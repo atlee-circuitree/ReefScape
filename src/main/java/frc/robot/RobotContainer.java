@@ -8,6 +8,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import java.util.function.BooleanSupplier;
 
+import javax.sound.sampled.SourceDataLine;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import choreo.auto.AutoChooser;
@@ -92,6 +94,16 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() -> 
+                drive.withVelocityX(-joystick.getLeftY() * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.seedFieldCentric();
@@ -107,9 +119,6 @@ public class RobotContainer {
         Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
         Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
         
-
-
-
         Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
         Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, .5));
         Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));//87.3
@@ -126,23 +135,19 @@ public class RobotContainer {
         //low ball
         Player2.a().toggleOnTrue(new WristCommand(Wrist, 28));
         // Limelight command in works (related lines: 74)
-        
-        Player2.povUp().whileTrue( 
-        new ParallelCommandGroup(
-        drivetrain.applyRequest(() -> driveRobotCentric
-        .withVelocityX(0)  
-        .withVelocityY(-LimelightHelpers.getTX("limelight-cg") / 14) 
-        .withRotationalRate(0)).until(() -> -LimelightHelpers.getTX("limelight-cg") / 30 == 0)));
-        
-        Player2.povDown().whileTrue(
-        new SequentialCommandGroup(
-        drivetrain.applyRequest(() -> driveRobotCentric
-        .withVelocityX(0)  
-        .withVelocityY(1.5) 
-        .withRotationalRate(-LimelightHelpers.getTX("limelight-cg") / 14)).until(() -> Math.abs(-LimelightHelpers.getTX("limelight-cg")) < 1)));
-        
-        
 
+        Player2.y().whileTrue( 
+        drivetrain.applyRequest(() -> driveRobotCentric
+        .withVelocityX(0) 
+        .withVelocityY(.2 * (-LimelightHelpers.getTX("limelight-cg")/ Math.abs(LimelightHelpers.getTX("limelight-cg")))) 
+        .withRotationalRate(0)));//.until(() -> Math.abs(LimelightHelpers.getTX("limelight-cg")) < 0.3)));
+
+        Player2.x().whileTrue(
+        drivetrain.applyRequest(() -> driveRobotCentric
+        .withVelocityX(.5) 
+        .withVelocityY(0) 
+        .withRotationalRate(0)));//.until(() -> -LimelightHelpers.getTA("limelight-cg") == 0)));
+ 
         //start pos
         Player2.start().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.StartPivot), 
@@ -170,14 +175,17 @@ public class RobotContainer {
         //reef lvl 3
         Player1.b().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot,Constants.Positions.L3PivotPosition),
-            new WristCommand(Wrist, Constants.Positions.L3WristPosition),
-            new ExtensionCommand(extension, Constants.Positions.L3ExtensionPosition)
+            new WristCommand(Wrist, Constants.Positions.L3WristPosition).withTimeout(3),
+            new ParallelCommandGroup(
+                new WaitCommand(2),
+                new WristCommand(Wrist, 20))
+
             
         ));
         //reef lvl 2
         Player1.a().toggleOnTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
             new WristCommand(Wrist, Constants.Positions.L2WristPosition)
-            //new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
         ));
         //reef lvl 4
         Player1.y().toggleOnTrue(new SequentialCommandGroup(
@@ -185,7 +193,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
                 new SequentialCommandGroup(
-                    new WaitCommand(1),
+                    new WaitCommand(.5),
                     new WristCommand(Wrist, Constants.Positions.L4WristPosition)
                 )
             )
@@ -207,18 +215,8 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.WristClimb),
             new PivotCommand(pivot, Constants.Positions.PivotClimb)
         ));
-        
 
         //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
-        
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> 
-                drive.withVelocityX(-joystick.getLeftY() * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
 
         //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //joystick.b().whileTrue(drivetrain.applyRequest(() ->
