@@ -51,8 +51,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     NetworkTable poseTable = ntInstance.getTable("MyPose");
     @SuppressWarnings("unused")
     private final SwerveRequest.ApplyRobotSpeeds m_ApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private final PIDController m_pathXController = new PIDController(5, 0, 0);
-    private final PIDController m_pathYController = new PIDController(5, 0, 0);
+    private final PIDController m_pathXController = new PIDController(10, 0, 0);
+    private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
     private final SwerveRequest.ApplyFieldSpeeds m_pathApplyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
     private double m_lastSimTime;
