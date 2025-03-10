@@ -18,6 +18,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.StadiaController.Button;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
+import frc.robot.commands.DriveFoward;
 import frc.robot.commands.ExtensionCommand;
 import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
@@ -77,10 +79,10 @@ public class RobotContainer {
     private final armExtension extension = new armExtension();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    public SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+    public static SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
             .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Small deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I DON'T want field-centric
 
@@ -113,11 +115,14 @@ public class RobotContainer {
 
     private void configureBindings() {
 
+        SlewRateLimiter joystickLimiterX = new SlewRateLimiter(2);
+        SlewRateLimiter joystickLimiterY = new SlewRateLimiter(2);
+
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
-                drive.withVelocityX(-joystick.getLeftY() * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-joystickLimiterX.calculate(joystick.getLeftY()) * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystickLimiterY.calculate(joystick.getLeftX()) * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -156,7 +161,7 @@ public class RobotContainer {
         Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));*/
         
         //reef lvl 4
- 
+        Player3.a().whileTrue(new DriveFoward(drivetrain));
         RedTopLeft.onTrue(new WristCommand(Wrist, 205));
         //bring it back to front
         Select.onTrue(new WristCommand(Wrist,12));
