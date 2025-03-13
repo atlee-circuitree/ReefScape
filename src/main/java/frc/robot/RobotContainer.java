@@ -59,18 +59,18 @@ public class RobotContainer {
     public final CommandXboxController Player3 = new CommandXboxController(2);
     public final GenericHID Player2 = new GenericHID(1);
 
-    public int SelectArcade = 11;
-    public int HumanPlayerArcade = 4;
-    public int StartArcade = 3;
-    public int RedLeftTopArcade = 10;
-    public int RedLeftMiddleArcade = 9;
-    public int RedLeftBottomArcade = 8;
-    public int BlueTopArcade = 5;
-    public int BlueMiddleArcade = 6;
-    public int BlueBottomArcade = 7;
-    public int RedRightTopArcade = 2;
-    public int RedRightMiddleArcade = 1;
-    public int RedRightBottomArcade = 0;
+    public int SelectArcade = 12;
+    public int HumanPlayerArcade = 5;
+    public int StartArcade = 4;
+    public int RedLeftTopArcade = 11;
+    public int RedLeftMiddleArcade =10;
+    public int RedLeftBottomArcade = 9;
+    public int BlueTopArcade = 6;
+    public int BlueMiddleArcade = 7;
+    public int BlueBottomArcade = 8;
+    public int RedRightTopArcade = 3;
+    public int RedRightMiddleArcade = 2;
+    public int RedRightBottomArcade = 1;
 
     private final Intake intake = new Intake();
     private final wrist Wrist = new wrist();
@@ -110,6 +110,7 @@ public class RobotContainer {
         autoChooser.addRoutine("L1FromMiddle", this::L1Auto);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+        autoChooser.addRoutine("MiddleRedAuto", this::MiddleRedAuto);
     
     }
 
@@ -164,18 +165,14 @@ public class RobotContainer {
         Player3.a().whileTrue(new DriveFoward(drivetrain));
         RedTopLeft.onTrue(new WristCommand(Wrist, 205));
         //bring it back to front
-        Select.onTrue(new WristCommand(Wrist,12));
+        
         //Manual stuff
         Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
         Player3.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
 
-        //low ball
-        RedBottomLeft.onTrue(new WristCommand(Wrist, 28));
-        // Limelight command in works (related lines: 74)
-
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
-        .withVelocityX(0) 
+        .withVelocityX(4) 
         .withVelocityY(.2 * (-LimelightHelpers.getTX("limelight-cg")/ Math.abs(LimelightHelpers.getTX("limelight-cg")))) 
         .withRotationalRate(0)));//.until(() -> Math.abs(LimelightHelpers.getTX("limelight-cg")) < 0.3)));
 
@@ -190,6 +187,34 @@ public class RobotContainer {
             new PivotCommand(pivot, Constants.Positions.StartPivot), 
             new WristCommand(Wrist, Constants.Positions.StartWrist) 
         ));
+        //human player
+        HumanPlayer.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+        ));
+        //L3
+        RedMiddleLeft.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
+            new WristCommand(Wrist, Constants.Positions.L3WristPosition)
+        ));
+        //L4
+        RedTopLeft.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+                )
+            )
+        ));
+
+        //L2
+        RedBottomLeft.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
+            new WristCommand(Wrist, Constants.Positions.L2WristPosition)
+        ));
+
 
         //manual stuff
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
@@ -198,10 +223,12 @@ public class RobotContainer {
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         Player1.rightBumper().whileTrue(new ManualExtension(extension, -.5));
+        Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
+        Player1.y().whileTrue(new ManualWrist(Wrist, .8));
 
 
         //coral human player station
-        Player1.x().toggleOnTrue(new SequentialCommandGroup(
+        /*Player1.x().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
             new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
         
@@ -231,7 +258,7 @@ public class RobotContainer {
                     new WristCommand(Wrist, Constants.Positions.L4WristPosition)
                 )
             )
-        ));
+        ));*/
         /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, 35),
             new WristCommand(Wrist, 210),
@@ -427,6 +454,48 @@ public class RobotContainer {
 
         return routine;
 
+    }
+    private AutoRoutine MiddleRedAuto(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+        AutoRoutine routine = autoFactory.newRoutine("MiddleAuto");
+        AutoTrajectory MiddleRedAuto1 = routine.trajectory("MiddleRedAuto1");
+        AutoTrajectory MiddleRedAuto2 = routine.trajectory("MiddleRedAuto2");
+        AutoTrajectory MiddleRedAuto3 = routine.trajectory("MiddleRedAuto3");
+        AutoTrajectory MiddleRedAuto4 = routine.trajectory("MiddleRedAuto4");
+
+
+        routine.active().onTrue(
+            Commands.sequence(
+                MiddleRedAuto1.resetOdometry(),
+                MiddleRedAuto1.cmd()
+            )
+        );
+        MiddleRedAuto1.atTime("L4").onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+                )
+            )
+        ));
+        MiddleRedAuto1.atTime("Outtake").onTrue(new AutoOuttakeCommand(intake));
+
+        MiddleRedAuto1.done().onTrue(Commands.sequence(
+            Commands.waitSeconds(1.5),
+            MiddleRedAuto2.cmd()
+        ));
+        return routine;
     }
     
 

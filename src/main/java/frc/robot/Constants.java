@@ -108,7 +108,7 @@ public class Constants {
 
         public static final double wristP = .05;
         public static final double wristI = 0.0;
-        public static final double wristD = 0.001;
+        public static final double wristD = 0.0;
 
 
         public static final double ArmP = 0.50;
@@ -149,7 +149,7 @@ public class Constants {
 
         public static double L4WristPosition = 230;
         public static double L4PivotPosition = 85;
-        public static double L4ExtensionPosition = 1;
+        public static double L4ExtensionPosition = 3.4;
 
         public static double HumanPlayerWrist = 0;
         public static double HumanPlayerPivot = 80;
