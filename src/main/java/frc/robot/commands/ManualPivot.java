@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import javax.lang.model.util.ElementScanner14;
+
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
@@ -28,11 +32,9 @@ public class ManualPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_Pivot.getAngle() <= Constants.Arm.pivotThreshold && m_velocity > 0) {
-      return;
-    }
+    
     m_Pivot.runPivot(m_velocity);
-
+    
   }
 
   // Called once the command ends or is interrupted.

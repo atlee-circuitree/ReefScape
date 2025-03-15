@@ -41,8 +41,20 @@ public class Pivot extends SubsystemBase {
   }
 
   public void runPivot(double Velocity){
-    pivot_left.set(Velocity);
-    pivot_right.set(Velocity);
+  
+
+    if (getAngleEncoder() <= Constants.Arm.pivotThreshold && Velocity < 0) {
+      pivot_left.set(0);
+      pivot_right.set(0);
+    } else if (getAngleEncoder() >= Constants.Arm.upperPivotThreshold && Velocity > 0){
+      pivot_left.set(0);
+      pivot_right.set(0);
+    } else {
+      pivot_left.set(Velocity);
+      pivot_right.set(Velocity);
+    }
+
+   
   }
 
   public void clearPID()
@@ -77,9 +89,7 @@ public class Pivot extends SubsystemBase {
     runPivot(0);
   }
 
-  public double getAngle() {
-    return pivotPigeon.getAngle() + Constants.Arm.pivotEncoderOffset;
-  } 
+
   
   public double getAngleEncoder() {
     return (pivotEncoder.get() - Constants.Arm.pivotEncoderOffsetRev) * 360;

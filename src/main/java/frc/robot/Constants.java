@@ -97,8 +97,10 @@ public class Constants {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
         public static final double wristThreshold = 0;
+        public static final double upperWristThreshold = 265.0;
         public static final double armThreshold = 0.5;
-        public static final double pivotThreshold = 0.5;
+        public static final double pivotThreshold = 45.0;
+        public static final double upperPivotThreshold = 100.0;
         public static final double extensionThreshold = 3.5;
         
 
@@ -122,8 +124,7 @@ public class Constants {
 
 
         public static final double wristEncoderOffset = 0.396; // in rotations
-        public static final double pivotEncoderOffset = 45.43;
-        public static final double pivotEncoderOffsetRev = 0.50289;
+        public static final double pivotEncoderOffsetRev = 0.514000667;
         public static final double armEncoderOffset = 0.49; // in rotations
 
         public static final double outtakeVelocity = 1;
@@ -138,27 +139,29 @@ public class Constants {
     }
 
     public class Positions {
-        public static double L1WristPosition = 182;
-        public static double L1PivotPosition = 65;
+        public static double L1WristPosition = 182;//182
+        public static double L1PivotPosition = 65;//65
 
-        public static double L2WristPosition = 212;
-        public static double L2PivotPosition = 73;
+        public static double L2WristPosition = 212;//212//187
+        public static double L2PivotPosition = 70;//73//61
 
-        public static double L3WristPosition = 205;
-        public static double L3PivotPosition = 91;
+        public static double L3WristPosition = 178;//205
+        public static double L3PivotPosition = 81;//91
 
-        public static double L4WristPosition = 230;
-        public static double L4PivotPosition = 85;
-        public static double L4ExtensionPosition = 3.4;
+        public static double L4WristPosition = 230;//230
+        public static double L4PivotPosition = 85;//85
+        public static double L4ExtensionPosition = 3.4;//3.4
 
-        public static double HumanPlayerWrist = 0;
-        public static double HumanPlayerPivot = 80;
+        public static double bringExtensionDown = .25;//.25
+
+        public static double HumanPlayerWrist = 0;//0
+        public static double HumanPlayerPivot = 80;//80
 
         public static double PivotClimb = 0;
         public static double WristClimb = 0;
         
-        public static double StartPivot = 66;
-        public static double StartWrist = 0.5;
+        public static double StartPivot = 61;
+        public static double StartWrist = 0.25;
     }
 
 }

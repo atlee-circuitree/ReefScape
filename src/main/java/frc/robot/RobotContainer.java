@@ -214,6 +214,11 @@ public class RobotContainer {
             new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
             new WristCommand(Wrist, Constants.Positions.L2WristPosition)
         ));
+        //bring elevator back down from L4
+        Select.onTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, Constants.Positions.StartWrist),
+            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+        ));
 
 
         //manual stuff
