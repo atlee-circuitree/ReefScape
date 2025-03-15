@@ -114,6 +114,16 @@ public class RobotContainer {
     
     }
 
+    public double getTargetTx(boolean isRight)
+    {
+        double ta = LimelightHelpers.getTA("limelight-cg");
+        double targetTx = -1.81 * ta - 1.15;
+        if (!isRight)
+            targetTx *= -1;
+        double tx = LimelightHelpers.getTX("limelight-cg");
+        return (targetTx - tx) * Constants.Drive.AprilStrafeCoeff;
+    }
+
     private void configureBindings() {
 
         SlewRateLimiter joystickLimiterX = new SlewRateLimiter(2);
@@ -219,12 +229,21 @@ public class RobotContainer {
         //manual stuff
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outtake
-        Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
+        //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         Player1.rightBumper().whileTrue(new ManualExtension(extension, -.5));
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
+
+        Player1.povDown().whileTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(0.8) 
+                .withVelocityY(getTargetTx(true)) 
+                .withRotationalRate(0)
+            )//.until(() -> LimelightHelpers.getTV("limelight-cg") || TA > number)
+            // elevator, pivot, wrist, intake go here
+        ));
 
 
         //coral human player station

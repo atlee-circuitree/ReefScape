@@ -4,18 +4,11 @@
  "type":"Swerve",
  "variables":{
   "expressions":{
-   "Descend":{
+   "Extend":{
     "dimension":"Number",
     "var":{
      "exp":"0",
      "val":0.0
-    }
-   },
-   "Delay":{
-    "dimension":"Number",
-    "var":{
-     "exp":"1",
-     "val":1.0
     }
    },
    "Feed":{
@@ -32,7 +25,14 @@
      "val":0.0
     }
    },
-   "Extend":{
+   "Delay":{
+    "dimension":"Number",
+    "var":{
+     "exp":"1",
+     "val":1.0
+    }
+   },
+   "Descend":{
     "dimension":"Number",
     "var":{
      "exp":"0",
