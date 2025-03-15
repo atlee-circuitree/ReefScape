@@ -111,6 +111,7 @@ public class RobotContainer {
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
         autoChooser.addRoutine("MiddleRedAuto", this::MiddleRedAuto);
+        autoChooser.addRoutine("MidReverse", this::ReverseMiddleRedAuto);
     
     }
 
@@ -218,6 +219,15 @@ public class RobotContainer {
         Select.onTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, Constants.Positions.StartWrist),
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+        ));
+
+        BlueMiddle.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.LowBallPivot),
+            new WristCommand(Wrist, Constants.Positions.LowBallWrist)
+        ));
+        BlueTop.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.HighBallPivot),
+            new WristCommand(Wrist, Constants.Positions.HighBallWrist)
         ));
 
 
@@ -484,24 +494,60 @@ public class RobotContainer {
                 MiddleRedAuto1.cmd()
             )
         );
-        MiddleRedAuto1.atTime("L4").onTrue(new SequentialCommandGroup(
+        
+
+
+        MiddleRedAuto1.done().onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
             new ParallelCommandGroup(
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
                 new SequentialCommandGroup(
                     new WaitCommand(.5),
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                    Commands.waitSeconds(3),
+                    MiddleRedAuto2.cmd()
                 )
+               
             )
+            
         ));
-        MiddleRedAuto1.atTime("Outtake").onTrue(new AutoOuttakeCommand(intake));
 
-        MiddleRedAuto1.done().onTrue(Commands.sequence(
-            Commands.waitSeconds(1.5),
-            MiddleRedAuto2.cmd()
+        MiddleRedAuto2.done().onTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, Constants.Positions.StartWrist),
+            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
         ));
+        
         return routine;
     }
     
 
+
+    private AutoRoutine ReverseMiddleRedAuto(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+
+        AutoRoutine routine = autoFactory.newRoutine("reverse");
+        AutoTrajectory MidReverse = routine.trajectory("MidReverse");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                MidReverse.resetOdometry(),
+                MidReverse.cmd()
+            )
+        );
+        return routine;
+
+
+
+
+
+    }
 }

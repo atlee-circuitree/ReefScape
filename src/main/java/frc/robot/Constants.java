@@ -101,7 +101,7 @@ public class Constants {
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 45.0;
         public static final double upperPivotThreshold = 100.0;
-        public static final double extensionThreshold = 3.5;
+        public static final double extensionThreshold = 10;
         
 
         public static final double pivotP = 0.15;
@@ -154,14 +154,26 @@ public class Constants {
 
         public static double bringExtensionDown = .25;//.25
 
-        public static double HumanPlayerWrist = 0;//0
-        public static double HumanPlayerPivot = 80;//80
+        public static double HumanPlayerWrist = 2;//0
+        public static double HumanPlayerPivot = 77;//80
 
         public static double PivotClimb = 0;
         public static double WristClimb = 0;
         
         public static double StartPivot = 61;
         public static double StartWrist = 0.25;
+
+
+        public static double LowBallWrist = 210;
+        public static double LowBallPivot = 71;
+
+        public static double HighBallWrist = 170;
+        public static double HighBallPivot = 80;
+
+        public static double BargeWrist = 80;
+        public static double BargePivot = 69;
+
+    
     }
 
 }
