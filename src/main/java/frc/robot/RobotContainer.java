@@ -226,8 +226,8 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.L2WristPosition)
         ));
         //bring elevator back down from L4
-        Select.onTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.StartWrist),
+        Select.onTrue(new ParallelCommandGroup(
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
         ));
 
@@ -274,10 +274,9 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
                 new SequentialCommandGroup(
-                    new WaitCommand(.5),
+                    
                     new WristCommand(Wrist, Constants.Positions.L4WristPosition),
-                    new AutoOuttakeCommand(intake),
-                    new WaitCommand(.5)
+                    new AutoOuttakeCommand(intake)
                 )
             ),
             new SequentialCommandGroup(
@@ -289,7 +288,7 @@ public class RobotContainer {
         ));
 
 
-        Player1.povDown().whileTrue(new SequentialCommandGroup(
+        Player1.povDown().onTrue(new SequentialCommandGroup(
              drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0.8) 
                  .withVelocityY(getTargetTx(true)) 
@@ -313,17 +312,25 @@ public class RobotContainer {
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
                 new SequentialCommandGroup(
                     new WaitCommand(.5),
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
-                    new AutoOuttakeCommand(intake).withTimeout(5),
-                    new WaitCommand(.5)
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
                 )
-            ),
+            ).withTimeout(3),
             new SequentialCommandGroup(
-                new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
-                new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+                new AutoOuttakeCommand(intake).withTimeout(1),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                 .withVelocityX(-0.8)
+                 .withVelocityY(0)
+                 .withRotationalRate(0)).until(() ->LimelightHelpers.getTA("Limelight-cg") <9.5),
+                 drivetrain.applyRequest(() -> driveRobotCentric
+                 .withVelocityX(0) 
+                 .withVelocityY(0) 
+                 .withRotationalRate(0)).withTimeout(.5),
+                new ParallelCommandGroup(
+                    new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+                )
             )
         )
-             // elevator, pivot, wrist, intake go here
+            
         ));
 
         Player1.rightStick().whileTrue(new SequentialCommandGroup(
@@ -404,9 +411,7 @@ public class RobotContainer {
 
         //low ball
         //1.52 = 6 inches
-        Player1.leftBumper().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 70) // 1.37
-        ));
+    
         //climb
         /*Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, Constants.Positions.WristClimb),
