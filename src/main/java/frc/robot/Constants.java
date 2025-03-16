@@ -137,6 +137,7 @@ public class Constants {
         public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 1/2 of a rotation per second max angular velocity
         public static double AprilStrafeCoeff = 0.18;
+        public static double TagOffset = 6;
     }
 
     public class Positions {
@@ -163,7 +164,6 @@ public class Constants {
         
         public static double StartPivot = 61;
         public static double StartWrist = 0.25;
-
 
         public static double LowBallWrist = 210;
         public static double LowBallPivot = 71;

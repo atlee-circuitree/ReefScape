@@ -102,6 +102,10 @@ public class Pivot extends SubsystemBase {
     //SmartDashboard.putNumber("Pivot Degrees", getAngle());
     SmartDashboard.putNumber("Pivot Encoder get", pivotEncoder.get());
     SmartDashboard.putNumber("Pivot Encoder Degrees", getAngleEncoder());
+    SmartDashboard.putBoolean("Tv",LimelightHelpers.getTV("limelight-cg"));
+    SmartDashboard.putNumber("TX", LimelightHelpers.getTX("limelight-cg"));
+    SmartDashboard.putNumber("TA", LimelightHelpers.getTA("limelight-cg"));
+    
     //SmartDashboard.putNumber("Pivot Encoder Raw", CurrentTicks);
   }
 }

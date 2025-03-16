@@ -118,10 +118,10 @@ public class RobotContainer {
     public double getTargetTx(boolean isRight)
     {
         double ta = LimelightHelpers.getTA("limelight-cg");
-        double targetTx = -1.81 * ta - 1.15;
+        double targetTx = -1.61 - 3.76 * ta + 0.188 * Math.pow(ta,2);
         if (!isRight)
             targetTx *= -1;
-        double tx = LimelightHelpers.getTX("limelight-cg");
+        double tx = LimelightHelpers.getTX("limelight-cg") + Constants.Drive.TagOffset;
         return (targetTx - tx) * Constants.Drive.AprilStrafeCoeff;
     }
 
@@ -251,15 +251,118 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
 
+        Player1.leftBumper().whileTrue(new SequentialCommandGroup(
+             drivetrain.applyRequest(() -> driveRobotCentric
+                 .withVelocityX(0.8) 
+                 .withVelocityY(getTargetTx(false)) 
+                 .withRotationalRate(0)
+             ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+
+             drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(0.8)
+                .withVelocityY(0)
+                .withRotationalRate(0)
+             ).withTimeout(.3),
+             drivetrain.applyRequest(() -> driveRobotCentric
+                 .withVelocityX(0) 
+                 .withVelocityY(0) 
+                 .withRotationalRate(0)
+                 
+             ).until(() -> true),
+             new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                    new AutoOuttakeCommand(intake),
+                    new WaitCommand(.5)
+                )
+            ),
+            new SequentialCommandGroup(
+                new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+                new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+            )
+        )
+             // elevator, pivot, wrist, intake go here
+        ));
+
 
         Player1.povDown().whileTrue(new SequentialCommandGroup(
              drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0.8) 
                  .withVelocityY(getTargetTx(true)) 
                  .withRotationalRate(0)
-             )//.until(() -> LimelightHelpers.getTV("limelight-cg") || TA > number)
+             ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+
+             drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(0.8)
+                .withVelocityY(0)
+                .withRotationalRate(0)
+             ).withTimeout(.3),
+             drivetrain.applyRequest(() -> driveRobotCentric
+                 .withVelocityX(0) 
+                 .withVelocityY(0) 
+                 .withRotationalRate(0)
+
+             ).until(() -> true),
+             new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                    new AutoOuttakeCommand(intake).withTimeout(5),
+                    new WaitCommand(.5)
+                )
+            ),
+            new SequentialCommandGroup(
+                new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+                new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+            )
+        )
              // elevator, pivot, wrist, intake go here
         ));
+
+        Player1.rightStick().whileTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+            .withVelocityX(0.8) 
+            .withVelocityY(getTargetTx(true)) 
+            .withRotationalRate(0)
+            ).until(() -> LimelightHelpers.getTA("limelight-cg") == 0),
+            drivetrain.applyRequest(() -> driveRobotCentric
+            .withVelocityX(0.4) 
+            .withVelocityY(0) 
+            .withRotationalRate(0)
+            ).withTimeout(.5)
+        ));
+
+        Player1.b().whileTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(0.8) 
+                .withVelocityY(getTargetTx(true)) 
+                .withRotationalRate(0)
+            ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+
+            drivetrain.applyRequest(() -> driveRobotCentric
+               .withVelocityX(0.8)
+               .withVelocityY(0)
+               .withRotationalRate(0)
+            ).withTimeout(.3),
+            drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(0) 
+                .withVelocityY(0) 
+                .withRotationalRate(0)
+                
+            ).until(() -> true),
+            new SequentialCommandGroup(
+           new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
+           new WristCommand(Wrist, Constants.Positions.L3WristPosition),
+           new AutoOuttakeCommand(intake)
+               )));
+        
         //coral human player station
         /*Player1.x().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
@@ -305,10 +408,10 @@ public class RobotContainer {
             new PivotCommand(pivot, 70) // 1.37
         ));
         //climb
-        Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
+        /*Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
             new WristCommand(Wrist, Constants.Positions.WristClimb),
             new PivotCommand(pivot, Constants.Positions.PivotClimb)
-        ));
+        ));*/
 
         //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
 
