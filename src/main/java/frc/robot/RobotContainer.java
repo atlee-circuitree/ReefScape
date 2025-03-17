@@ -155,27 +155,12 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.seedFieldCentric();
-        Player1.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));//James changed from Leftbumper 2/24/2024
+        Player1.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         
-        /*player1.rightTrigger().whileTrue(new ManualIntake(intake,-.5));
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));
-        Player1.leftBumper().whileTrue(new ManualExtension(extension, -0.2)); //up
-        //Player1.rightBumper().whileTrue(new ManualExtension(extension, 0.2)); //down
-        Player1.rightBumper().whileTrue(new AprliDrive(drivetrain));
-        Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
-        Player1.x().whileTrue(new ManualWrist(Wrist,.8)); // goes fowards
-        Player1.a().whileTrue(new ManualPivot(pivot,1)); //backward
-        Player1.b().whileTrue(new ManualPivot(pivot, -1)); // goes foward
-        
-        Player1.povUp().toggleOnTrue(new ExtensionCommand(extension, 3.3));
-        Player1.povDown().toggleOnTrue(new ExtensionCommand(extension, .5));
-        Player1.povLeft().toggleOnTrue(new WristCommand(Wrist, 45));//87.3
-        Player1.povRight().toggleOnTrue(new WristCommand(Wrist, 90));*/
         
         //reef lvl 4
         Player3.a().whileTrue(new DriveFoward(drivetrain));
         RedTopLeft.onTrue(new WristCommand(Wrist, 205));
-        //bring it back to front
         
         //Manual stuff
         Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
@@ -251,7 +236,7 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
 
-        Player1.leftBumper().whileTrue(new SequentialCommandGroup(
+        Player1.leftBumper().onTrue(new SequentialCommandGroup(
              drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0.8) 
                  .withVelocityY(getTargetTx(false)) 
@@ -284,7 +269,7 @@ public class RobotContainer {
                 new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
             )
         )
-             // elevator, pivot, wrist, intake go here
+            
         ));
 
 
@@ -371,60 +356,7 @@ public class RobotContainer {
                )));
         
         //coral human player station
-        /*Player1.x().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
-            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
         
-        ));
-        //reef lvl 3
-        Player1.b().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot,Constants.Positions.L3PivotPosition),
-            new WristCommand(Wrist, Constants.Positions.L3WristPosition).withTimeout(3),
-            new ParallelCommandGroup(
-                new WaitCommand(2),
-                new WristCommand(Wrist, 20))
-
-            
-        ));
-        //reef lvl 2
-        Player1.a().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
-            new WristCommand(Wrist, Constants.Positions.L2WristPosition)
-        ));
-        //reef lvl 4
-        Player1.y().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-            new ParallelCommandGroup(
-                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
-                new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
-                )
-            )
-        ));*/
-        /*Player1.y().toggleOnTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, 35),
-            new WristCommand(Wrist, 210),
-            new ExtensionCommand(extension, 2.95),
-            new PivotCommand(pivot, 45)
-        ));*/
-
-        //low ball
-        //1.52 = 6 inches
-    
-        //climb
-        /*Player1.povUp().toggleOnTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.WristClimb),
-            new PivotCommand(pivot, Constants.Positions.PivotClimb)
-        ));*/
-
-        //Wrist.setDefaultCommand(new ApplyWristFeedforward(Wrist));
-
-        //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        //joystick.b().whileTrue(drivetrain.applyRequest(() ->
-          //  point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-
-        //));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -441,28 +373,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return null;
-        //autoFactory = this.drivetrain.createAutoFactory();
-
-        //return Commands.sequence(
-        //autoFactory.resetOdometry("TestRun"), // 
-        //autoFactory.trajectoryCmd("TestRun") 
-        //);
-        /*AutoRoutine routine = autoFactory.newRoutine("taxi");
-
-        // Load the routine's trajectories
-        AutoTrajectory driveToMiddle = routine.trajectory("far on score");
-
-        // When the routine begins, reset odometry and start the first trajectory (1)
-        routine.active().onTrue(
-            Commands.sequence(
-                driveToMiddle.resetOdometry(),
-                driveToMiddle.cmd()
-            )
-        );
-        //driveToMiddle.atTime("Marker").onTrue(new WristCommand(Wrist, 45));
-        return routine.cmd();
-
-        //return Commands.print("No autonomous command configured");*/ 
+  
     }
 
     private AutoRoutine RedTopScore2(){
