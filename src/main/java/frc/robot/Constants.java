@@ -114,7 +114,7 @@ public class Constants {
 
 
         public static final double ArmP = 0.50;
-        public static final double ArmI = 0.01;
+        public static final double ArmI = 0.0;
         public static final double ArmIZone = 0.0;
         public static final double ArmD = 0.0;
 
@@ -147,8 +147,8 @@ public class Constants {
         public static double L2WristPosition = 212;//212//187
         public static double L2PivotPosition = 70;//73//61
 
-        public static double L3WristPosition = 178;//205
-        public static double L3PivotPosition = 81;//91
+        public static double L3WristPosition = 177;//205
+        public static double L3PivotPosition = 78;//91
 
         public static double L4WristPosition = 230;//230
         public static double L4PivotPosition = 85;//85
@@ -162,7 +162,7 @@ public class Constants {
         public static double PivotClimb = 0;
         public static double WristClimb = 0;
         
-        public static double StartPivot = 61;
+        public static double StartPivot = 57;
         public static double StartWrist = 0.25;
 
         public static double LowBallWrist = 210;
