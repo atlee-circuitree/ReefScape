@@ -96,7 +96,7 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double wristThreshold = 0;
+        public static final double wristThreshold = -1;
         public static final double upperWristThreshold = 265.0;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 45.0;
@@ -113,7 +113,7 @@ public class Constants {
         public static final double wristD = 0.0;
 
 
-        public static final double ArmP = 0.50;
+        public static final double ArmP = 0.25;//.50
         public static final double ArmI = 0.0;
         public static final double ArmIZone = 0.0;
         public static final double ArmD = 0.0;
@@ -150,9 +150,9 @@ public class Constants {
         public static double L3WristPosition = 177;//205
         public static double L3PivotPosition = 78;//91
 
-        public static double L4WristPosition = 230;//230
-        public static double L4PivotPosition = 85;//85
-        public static double L4ExtensionPosition = 3.4;//3.4
+        public static double L4WristPosition = 225;//230
+        public static double L4PivotPosition = 83;//85
+        public static double L4ExtensionPosition = 3.6;//3.4
 
         public static double bringExtensionDown = .25;//.25
 
@@ -163,9 +163,9 @@ public class Constants {
         public static double WristClimb = 0;
         
         public static double StartPivot = 57;
-        public static double StartWrist = 0.25;
+        public static double StartWrist = 0.5;
 
-        public static double LowBallWrist = 210;
+        public static double LowBallWrist = 201;
         public static double LowBallPivot = 71;
 
         public static double HighBallWrist = 170;
@@ -173,6 +173,12 @@ public class Constants {
 
         public static double BargeWrist = 80;
         public static double BargePivot = 69;
+
+        public static double AutoL4Extenston = 0.1;
+        public static double AutoL4Pivot = 0;
+        public static double AutoL4Wrist = 0;
+
+        
 
     
     }

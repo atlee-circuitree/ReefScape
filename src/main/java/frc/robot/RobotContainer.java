@@ -113,6 +113,7 @@ public class RobotContainer {
         autoChooser.addRoutine("MiddleRedAuto", this::MiddleRedAuto);
         autoChooser.addRoutine("MidReverse", this::ReverseMiddleRedAuto);
         autoChooser.addRoutine("LimelightMiddle",this::LimelightMiddleAuto);
+        autoChooser.addRoutine("BottomLimelight",this::BottomLimelightAuto);
     
     }
 
@@ -233,9 +234,10 @@ public class RobotContainer {
         //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
-        Player1.rightBumper().whileTrue(new ManualExtension(extension, -.5));
+        Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
+        Player1.a().whileTrue(new ManualExtension(extension, .5));
 
         Player1.leftBumper().onTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
@@ -282,17 +284,17 @@ public class RobotContainer {
              ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
 
              drivetrain.applyRequest(() -> driveRobotCentric
-                .withVelocityX(0.8)
+                .withVelocityX(1)
                 .withVelocityY(0)
                 .withRotationalRate(0)
-             ).withTimeout(.3),
+             ).withTimeout(.5),
              drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0) 
                  .withVelocityY(0) 
                  .withRotationalRate(0)
 
-             ).until(() -> true),
-             new SequentialCommandGroup(
+             ).until(() -> true)
+             /*new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
             new ParallelCommandGroup(
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
@@ -315,7 +317,7 @@ public class RobotContainer {
                     new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
                 )
             )
-        )
+        )*/
             
         ));
 
@@ -606,16 +608,18 @@ public class RobotContainer {
                 LimelightMiddle1.cmd()
             )
         );
+
+    
             LimelightMiddle1.done().onTrue(new SequentialCommandGroup(
                 drivetrain.applyRequest(() -> driveRobotCentric
                     .withVelocityX(0.8) 
                     .withVelocityY(getTargetTx(true)) 
                     .withRotationalRate(0)
-                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 6),
    
                 drivetrain.applyRequest(() -> driveRobotCentric
-                   .withVelocityX(0.8)
-                   .withVelocityY(0)
+                   .withVelocityX(1.15)
+                   .withVelocityY(0.2)
                    .withRotationalRate(0)
                 ).withTimeout(.3),
                 drivetrain.applyRequest(() -> driveRobotCentric
@@ -625,23 +629,143 @@ public class RobotContainer {
    
                 ).until(() -> true),
                 new SequentialCommandGroup(
-               new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-               new ParallelCommandGroup(
-                   new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
-                   new SequentialCommandGroup(
-                       new WaitCommand(.5),
-                       new WristCommand(Wrist, Constants.Positions.L4WristPosition),
-                       LimelightMiddle2.cmd()
-
+                    new WaitCommand(2),
+                    new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+                  new ParallelCommandGroup(
+                        new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                        new ParallelCommandGroup(
+                            new WaitCommand(.5),
+                            new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                            new SequentialCommandGroup(
+                                new WaitCommand(3),
+                                new AutoOuttakeCommand(intake).withTimeout(2),
+                                LimelightMiddle2.cmd()
+                       )
                    )
                )
             )
         ));
-        LimelightMiddle1.done().onTrue(new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist));
+        LimelightMiddle2.done().onTrue(new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist
+        ));
 
             return routine;
 
-    
 
     }
+    private AutoRoutine BottomLimelightAuto(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+
+        AutoRoutine routine = autoFactory.newRoutine("BottomLimelight");
+        AutoTrajectory BottomLimelight = routine.trajectory("BottomLimelight");
+        AutoTrajectory BottomLimelight2 = routine.trajectory("BottomLimelight2");
+        AutoTrajectory BottomLimelight3 = routine.trajectory("BottomLimelight3");
+        AutoTrajectory BottomLimelight4 = routine.trajectory("BottomLimelight4");
+
+
+        routine.active().onTrue(
+            Commands.sequence(
+                BottomLimelight.resetOdometry(),
+                BottomLimelight.cmd()
+            )
+        );
+        BottomLimelight.done().onTrue(new SequentialCommandGroup(
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0.8) 
+                    .withVelocityY(getTargetTx(true)) 
+                    .withRotationalRate(0)
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 6),
+   
+                drivetrain.applyRequest(() -> driveRobotCentric
+                   .withVelocityX(1.15)
+                   .withVelocityY(0.22)
+                   .withRotationalRate(0)
+                ).withTimeout(.3),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+   
+                ).until(() -> true),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+                  new ParallelCommandGroup(
+                        new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                        new ParallelCommandGroup(
+                            new WaitCommand(.5),
+                            new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                            new SequentialCommandGroup(
+                                new WaitCommand(1.5),
+                                new AutoOuttakeCommand(intake).withTimeout(2),
+                                BottomLimelight2.cmd()
+                       )
+                   )
+               )
+            )
+        ));
+        BottomLimelight2.done().onTrue(new ParallelCommandGroup(
+           new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+           new ExtensionCommand(extension, Constants.Positions.AutoL4Extenston),
+            BottomLimelight3.cmd()
+        ));
+
+        BottomLimelight3.atTime("HumanPlayer").onTrue((new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
+        ));
+
+        BottomLimelight3.atTime("Intake").onTrue(Commands.sequence(
+            Commands.waitSeconds(3),
+            new AutoIntakeCommand(intake)
+        ));
+
+        BottomLimelight3.done().onTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0.8) 
+                    .withVelocityY(getTargetTx(true)) 
+                    .withRotationalRate(0)
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 6),
+   
+                drivetrain.applyRequest(() -> driveRobotCentric
+                   .withVelocityX(1.15)
+                   .withVelocityY(0.22)
+                   .withRotationalRate(0)
+                ).withTimeout(.3),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+   
+                ).until(() -> true),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+                  new ParallelCommandGroup(
+                        new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                        new ParallelCommandGroup(
+                            new WaitCommand(.5),
+                            new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                            new SequentialCommandGroup(
+                                new WaitCommand(1.5),
+                                new AutoOuttakeCommand(intake).withTimeout(2),
+                                BottomLimelight4.cmd()
+                       )
+                   )
+               )
+            )
+        ));
+
+        BottomLimelight4.done().onTrue(new WristCommand(Wrist, HumanPlayerArcade));
+            
+
+            return routine;
+    }
+
 }
