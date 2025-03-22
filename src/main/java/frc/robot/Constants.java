@@ -125,7 +125,7 @@ public class Constants {
 
         public static final double wristEncoderOffset = 0.396; // in rotations
         public static final double pivotEncoderOffsetRev = 0.514000667;
-        public static final double armEncoderOffset = 0.49; // in rotations
+        public static final double armEncoderOffset = .2; // in rotations
 
         public static final double outtakeVelocity = 1;
         public static final double intakeVelocity = -1;
@@ -147,12 +147,12 @@ public class Constants {
         public static double L2WristPosition = 212;//212//187
         public static double L2PivotPosition = 70;//73//61
 
-        public static double L3WristPosition = 177;//205
+        public static double L3WristPosition = 180;//205
         public static double L3PivotPosition = 78;//91
 
         public static double L4WristPosition = 210;//230
         public static double L4PivotPosition = 81.5;//85
-        public static double L4ExtensionPosition = 3.6;//3.4
+        public static double L4ExtensionPosition = 3.8;//3.4
 
         public static double bringExtensionDown = .25;//.25
 

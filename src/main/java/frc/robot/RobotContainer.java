@@ -292,7 +292,7 @@ public class RobotContainer {
 
              drivetrain.applyRequest(() -> driveRobotCentric
                 .withVelocityX(1)
-                .withVelocityY(0)
+                .withVelocityY(-.3)
                 .withRotationalRate(0)
              ).withTimeout(.5),
              drivetrain.applyRequest(() -> driveRobotCentric
