@@ -256,23 +256,7 @@ public class RobotContainer {
                 .withVelocityY(0) 
                 .withRotationalRate(0)
 
-            ).until(() -> true)
-             /*new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-            new ParallelCommandGroup(
-                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
-                new SequentialCommandGroup(
-                    
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
-                    new AutoOuttakeCommand(intake)
-                )
-            ),
-            new SequentialCommandGroup(
-                new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
-                new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
-            )
-        )*/
-            
+            ).until(() -> true)     
         ));
 
 
@@ -293,32 +277,7 @@ public class RobotContainer {
                  .withVelocityY(0) 
                  .withRotationalRate(0)
 
-             ).until(() -> true)
-             /*new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-            new ParallelCommandGroup(
-                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
-                new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
-                )
-            ).withTimeout(3),
-            new SequentialCommandGroup(
-                new AutoOuttakeCommand(intake).withTimeout(1),
-                drivetrain.applyRequest(() -> driveRobotCentric
-                 .withVelocityX(-0.8)
-                 .withVelocityY(0)
-                 .withRotationalRate(0)).until(() ->LimelightHelpers.getTA("Limelight-cg") <9.5),
-                 drivetrain.applyRequest(() -> driveRobotCentric
-                 .withVelocityX(0) 
-                 .withVelocityY(0) 
-                 .withRotationalRate(0)).withTimeout(.5),
-                new ParallelCommandGroup(
-                    new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
-                )
-            )
-        )*/
-            
+             ).until(() -> true)      
         ));
 
         Player1.rightStick().whileTrue(new SequentialCommandGroup(
@@ -669,6 +628,7 @@ public class RobotContainer {
         AutoTrajectory BottomLimelight2 = routine.trajectory("BottomLimelight2");
         AutoTrajectory BottomLimelight3 = routine.trajectory("BottomLimelight3");
         AutoTrajectory BottomLimelight4 = routine.trajectory("BottomLimelight4");
+        AutoTrajectory BottomLimelight5 = routine.trajectory("BottomLimelight5");
 
 
         routine.active().onTrue(
@@ -726,7 +686,14 @@ public class RobotContainer {
             new AutoIntakeCommand(intake)
         ));
 
-        BottomLimelight3.done().onTrue(new SequentialCommandGroup(
+
+        BottomLimelight3.done().onTrue(Commands.sequence(
+            new AutoIntakeCommand(intake),
+            new WaitCommand(.5),
+            BottomLimelight4.cmd()
+        ));
+
+        BottomLimelight4.done().onTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
                     .withVelocityX(0.8) 
                     .withVelocityY(getTargetTx(true)) 
@@ -755,14 +722,14 @@ public class RobotContainer {
                             new SequentialCommandGroup(
                                 new WaitCommand(1.5),
                                 new AutoOuttakeCommand(intake).withTimeout(2),
-                                BottomLimelight4.cmd()
+                                BottomLimelight5.cmd()
                        )
                    )
                )
             )
         ));
 
-        BottomLimelight4.done().onTrue(new WristCommand(Wrist, HumanPlayerArcade));
+        BottomLimelight5.done().onTrue(new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist));
             
 
             return routine;
