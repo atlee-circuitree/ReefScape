@@ -620,7 +620,7 @@ public class RobotContainer {
                             new WaitCommand(.5),
                             new WristCommand(Wrist, Constants.Positions.L4WristPosition),
                             new SequentialCommandGroup(
-                                new WaitCommand(1.5),
+                                new WaitCommand(3.5),
                                 new AutoOuttakeCommand(intake).withTimeout(1),
                                 LimelightMiddle2.cmd()
                        )

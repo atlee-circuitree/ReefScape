@@ -147,12 +147,12 @@ public class Constants {
         public static double L2WristPosition = 212;//212//187
         public static double L2PivotPosition = 70;//73//61
 
-        public static double L3WristPosition = 180;//205
+        public static double L3WristPosition = 175;//205
         public static double L3PivotPosition = 78;//91
 
-        public static double L4WristPosition = 210;//230
-        public static double L4PivotPosition = 81.5;//85
-        public static double L4ExtensionPosition = 3.8;//3.4
+        public static double L4WristPosition = 205;//230
+        public static double L4PivotPosition = 80;//85
+        public static double L4ExtensionPosition = 3.85;//3.4
 
         public static double bringExtensionDown = .25;//.25
 
