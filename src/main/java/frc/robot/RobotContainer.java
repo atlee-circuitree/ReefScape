@@ -141,6 +141,7 @@ public class RobotContainer {
             )
         );
 
+
         JoystickButton Select = new JoystickButton(Player2, SelectArcade);
         JoystickButton HumanPlayer = new JoystickButton(Player2, HumanPlayerArcade);
         JoystickButton Start = new JoystickButton(Player2, StartArcade);
@@ -149,7 +150,7 @@ public class RobotContainer {
         JoystickButton RedBottomLeft = new JoystickButton(Player2, RedLeftBottomArcade);
         JoystickButton BlueTop = new JoystickButton(Player2, BlueTopArcade);
         JoystickButton BlueMiddle = new JoystickButton(Player2, BlueMiddleArcade);
-        JoystickButton BlueBottom = new JoystickButton(Player2, BlueBottomArcade);
+        JoystickButton RedBottom = new JoystickButton(Player2, BlueBottomArcade);
         JoystickButton RedTopRight = new JoystickButton(Player2, RedRightTopArcade);
         JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade);
         JoystickButton RedBottomRight = new JoystickButton(Player2, RedRightBottomArcade);
@@ -196,8 +197,8 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.L3WristPosition)
         ));
         //L4
-        RedTopLeft.onTrue(new SequentialCommandGroup(
-             /*drivetrain.applyRequest(() -> driveRobotCentric
+        RedBottomRight.onTrue(new SequentialCommandGroup(
+             drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0.8) 
                  .withVelocityY(getTargetTx(true)) 
                  .withRotationalRate(0)
@@ -213,7 +214,7 @@ public class RobotContainer {
                  .withVelocityY(0) 
                  .withRotationalRate(0)
 
-             ).until(() -> true), */   
+             ).until(() -> true),  
             new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
             new ParallelCommandGroup(
                 new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
@@ -235,16 +236,17 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
         ));
-
+        //low ball
         BlueMiddle.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.LowBallPivot),
             new WristCommand(Wrist, Constants.Positions.LowBallWrist)
         ));
+        //high ball
         BlueTop.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.HighBallPivot),
             new WristCommand(Wrist, Constants.Positions.HighBallWrist)
         ));
-
+        //climb
         RedTopRight.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.PivotClimb),
             new WristCommand(Wrist, Constants.Positions.WristClimb)
@@ -252,8 +254,8 @@ public class RobotContainer {
 
 
         //manual stuff
-        Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.8));//intake
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,0.8));//outtake
+        Player1.rightTrigger().whileTrue(new ManualIntake(intake,-1));//intake
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake,1));//outtake
         //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
@@ -261,6 +263,8 @@ public class RobotContainer {
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
         Player1.a().whileTrue(new ManualExtension(extension, .5));
+        Player1.start().onTrue(new WristCommand(Wrist, 35));
+        
 
         Player1.leftBumper().onTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
@@ -340,7 +344,6 @@ public class RobotContainer {
            new AutoOuttakeCommand(intake)
                )));
         
-        //coral human player station
         
 
         // Run SysId routines when holding back/start and X/Y.

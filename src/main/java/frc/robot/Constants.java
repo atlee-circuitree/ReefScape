@@ -138,6 +138,8 @@ public class Constants {
         public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 1/2 of a rotation per second max angular velocity
         public static double AprilStrafeCoeff = 0.18;
         public static double TagOffset = 6;
+        public static double SlowSpeed = TunerConstants.HalfVelocity.in(MetersPerSecond);
+        
     }
 
     public class Positions {
