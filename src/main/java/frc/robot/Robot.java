@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.armExtension;
-import frc.robot.subsystems.LimelightHelpers.Results;
-
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
  
@@ -28,7 +26,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
-    Results lastResult;
+
 
     SmartDashboard.putNumber("LimeLight", LimelightHelpers.getTX("limelight-cg"));
 

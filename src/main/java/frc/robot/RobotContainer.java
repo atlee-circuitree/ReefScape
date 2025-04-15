@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 
 import java.util.function.BooleanSupplier;
 
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -48,13 +50,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Pivot;
+//import frc.robot.subsystems.ReefCentering;
 import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
 
 
 
 public class RobotContainer {
-  
+    //private ReefCentering reefCentering = new ReefCentering(drive);
     public final CommandXboxController Player1 = new CommandXboxController(0);
     public final CommandXboxController Player3 = new CommandXboxController(2);
     public final GenericHID Player2 = new GenericHID(1);
@@ -80,10 +83,10 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(Constants.Drive.MaxSpeed * 0.025).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.04) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     public static SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
-            .withDeadband(Constants.Drive.MaxSpeed * 0.1).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.1) // Small deadband
+            .withDeadband(Constants.Drive.MaxSpeed * 0.025).withRotationalDeadband(Constants.Drive.MaxAngularRate * 0.04) // Small deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I DON'T want field-centric
 
     private final Telemetry logger = new Telemetry(Constants.Drive.MaxSpeed);
@@ -103,19 +106,30 @@ public class RobotContainer {
         autoFactory = null;
         //autoFactory = drivetrain.createAutoFactory();
         autoChooser = new AutoChooser();
-        autoChooser.addRoutine("RedTopScore2Part1", this::RedTopScore2);
         autoChooser.addRoutine("DO NOT USE PIT TEST", this::pitTestAuto);
         autoChooser.addRoutine("DoNothingAuto", this::DoNothingAuto);
         autoChooser.addRoutine("MoveFowardAuto", this::MoveFowardAuto);
         autoChooser.addRoutine("L1FromMiddle", this::L1Auto);
         SmartDashboard.putData("auto", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
-        autoChooser.addRoutine("MiddleRedAuto", this::MiddleRedAuto);
-        autoChooser.addRoutine("MidReverse", this::ReverseMiddleRedAuto);
         autoChooser.addRoutine("LimelightMiddle",this::LimelightMiddleAuto);
         autoChooser.addRoutine("BottomLimelight",this::BottomLimelightAuto);
+        autoChooser.addRoutine("LowBallAuto", this::LowBallAuto);
     
     }
+//Didnt finish 
+    /*public Command centerWithAprilTag() {
+    return new InstantCommand(() -> {
+        double tx = LimelightHelpers.getTX("limelight-cg") + Constants.Drive.TagOffset;
+        double  strafePower = -tx * Constants.Drive.AprilStrafeCoeff;
+        strafePower = Math.max(-0.5, Math.min(0.5, strafePower));
+        drivetrain.applyRequest(() -> driveRobotCentric
+            .withVelocityX(0.8)
+            .withVelocityY(strafePower)
+            .withRotationalRate(0.0)
+            ).until -> true;
+    }
+}*/
 
     public double getTargetTx(boolean isRight)
     {
@@ -127,6 +141,18 @@ public class RobotContainer {
         return (targetTx - tx) * Constants.Drive.AprilStrafeCoeff;
     }
 
+    public double centerWithAprilTag()
+    {
+        double tx = LimelightHelpers.getTX("limelight-cg");
+            
+        double alignmentOffset = -tx; 
+            
+        return alignmentOffset * Constants.Drive.AprilStrafeCoeff;
+        
+
+    }
+
+
     private void configureBindings() {
 
         SlewRateLimiter joystickLimiterX = new SlewRateLimiter(2);
@@ -135,8 +161,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> 
-                drive.withVelocityX(-joystickLimiterX.calculate(joystick.getLeftY()) * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystickLimiterY.calculate(joystick.getLeftX()) * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-(joystick.getLeftY()) * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-(joystick.getLeftX()) * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -163,7 +189,18 @@ public class RobotContainer {
         
         //reef lvl 4
         Player3.a().whileTrue(new DriveFoward(drivetrain));
-        RedTopLeft.onTrue(new WristCommand(Wrist, 205));
+
+
+        RedTopLeft.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+                )
+            )
+        ));
         
         //Manual stuff
         Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
@@ -197,7 +234,7 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.L3WristPosition)
         ));
         //L4
-        RedBottomRight.onTrue(new SequentialCommandGroup(
+        /*RedBottomRight.onTrue(new SequentialCommandGroup(
              drivetrain.applyRequest(() -> driveRobotCentric
                  .withVelocityX(0.8) 
                  .withVelocityY(getTargetTx(true)) 
@@ -223,8 +260,7 @@ public class RobotContainer {
                     new WristCommand(Wrist, Constants.Positions.L4WristPosition)
                 )
             )
-        ));
-        
+        ));*/
 
         //L2
         RedBottomLeft.onTrue(new SequentialCommandGroup(
@@ -247,9 +283,14 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.HighBallWrist)
         ));
         //climb
-        RedTopRight.onTrue(new SequentialCommandGroup(
+        RedBottomRight.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.PivotClimb),
             new WristCommand(Wrist, Constants.Positions.WristClimb)
+        ));
+        //barge
+        RedTopRight.onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.BargePivot),
+            new ExtensionCommand(extension, Constants.Positions.BargeExtenstion)
         ));
 
 
@@ -259,25 +300,22 @@ public class RobotContainer {
         //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
-        Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
+        //Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
         Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.y().whileTrue(new ManualWrist(Wrist, .8));
-        Player1.a().whileTrue(new ManualExtension(extension, .5));
-        Player1.start().onTrue(new WristCommand(Wrist, 35));
+        //Player1.a().whileTrue(new ManualExtension(extension, .5));
+        //Player1.start().onTrue(new WristCommand(Wrist, 35));
+        
         
 
-        Player1.leftBumper().onTrue(new SequentialCommandGroup(
+
+        Player1.leftBumper().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
                 .withVelocityX(0.8) 
-                .withVelocityY(getTargetTx(false)) 
+                .withVelocityY(centerWithAprilTag()) 
                 .withRotationalRate(0)
             ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
 
-            drivetrain.applyRequest(() -> driveRobotCentric
-               .withVelocityY(0.50)
-    
-               .withRotationalRate(0)
-            ).withTimeout(.3),
             drivetrain.applyRequest(() -> driveRobotCentric
                 .withVelocityX(0) 
                 .withVelocityY(0) 
@@ -295,8 +333,8 @@ public class RobotContainer {
              ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
 
              drivetrain.applyRequest(() -> driveRobotCentric
-                .withVelocityX(1)
-                .withVelocityY(-.3)
+                .withVelocityX(.35)
+                .withVelocityY(.2)
                 .withRotationalRate(0)
              ).withTimeout(.5),
              drivetrain.applyRequest(() -> driveRobotCentric
@@ -364,67 +402,7 @@ public class RobotContainer {
   
     }
 
-    private AutoRoutine RedTopScore2(){
-        try {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
-                autoFactory = drivetrain.createAutoFactoryBlue();
-            else    
-                autoFactory = drivetrain.createAutoFactory();
-        } catch (Exception e) {
-            autoFactory = drivetrain.createAutoFactory();
-            AutoRoutine routine = autoFactory.newRoutine("blank");
-            return routine;
-        }
-
-        AutoRoutine routine = autoFactory.newRoutine("RedTopScore2");
-        AutoTrajectory RedTopScore2Part1 = routine.trajectory("RedTopScore2Part1");
-        AutoTrajectory RedTopScore2Part2 = routine.trajectory("RedTopScore2Part2");
-        AutoTrajectory RedTopScore2Part3 = routine.trajectory("RedTopScore2Part3");
-
-        routine.active().onTrue(
-            Commands.sequence(
-                RedTopScore2Part1.resetOdometry(),
-                RedTopScore2Part1.cmd()
-            )
-        );
-
-        RedTopScore2Part1.atTime("L2").onTrue(new SequentialCommandGroup(
-        new WristCommand(Wrist, Constants.Positions.L2WristPosition),
-        new PivotCommand(pivot, Constants.Positions.L2PivotPosition)
-        ));
-        RedTopScore2Part1.atTime("Outake").onTrue(new AutoOuttakeCommand(intake));
-
-        RedTopScore2Part1.done().onTrue(Commands.sequence(
-            Commands.waitSeconds(1.5),
-            RedTopScore2Part2.cmd()
-        ));
-
-        RedTopScore2Part2.atTime("CoralPos").onTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
-            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot)
-        ));
-        RedTopScore2Part2.atTime("Intake").onTrue(Commands.sequence(
-            Commands.waitSeconds(2),
-            new AutoIntakeCommand(intake)
-            
-        ));
-
-        RedTopScore2Part2.done().onTrue(Commands.sequence(
-
-            new AutoIntakeCommand(intake),
-            Commands.waitSeconds(.5),
-            RedTopScore2Part3.cmd()
-            ));
-
-
-        RedTopScore2Part3.atTime("L1-2").onTrue(Commands.sequence(
-            new WristCommand(Wrist, Constants.Positions.L1WristPosition),
-            new PivotCommand(pivot, Constants.Positions.L1PivotPosition)
-        ));
-        RedTopScore2Part3.atTime("Outake-2").onTrue(new AutoOuttakeCommand(intake));
-
-        return routine;
-    }
+    
 
     private AutoRoutine pitTestAuto() {
         autoFactory = drivetrain.createAutoFactory();
@@ -495,81 +473,6 @@ public class RobotContainer {
         return routine;
 
     }
-    private AutoRoutine MiddleRedAuto(){
-        try {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
-                autoFactory = drivetrain.createAutoFactoryBlue();
-            else    
-                autoFactory = drivetrain.createAutoFactory();
-        } catch (Exception e) {
-            autoFactory = drivetrain.createAutoFactory();
-            AutoRoutine routine = autoFactory.newRoutine("blank");
-            return routine;
-        }
-        AutoRoutine routine = autoFactory.newRoutine("MiddleAuto");
-        AutoTrajectory MiddleRedAuto1 = routine.trajectory("MiddleRedAuto1");
-        AutoTrajectory MiddleRedAuto2 = routine.trajectory("MiddleRedAuto2");
-        AutoTrajectory MiddleRedAuto3 = routine.trajectory("MiddleRedAuto3");
-        AutoTrajectory MiddleRedAuto4 = routine.trajectory("MiddleRedAuto4");
-
-
-        routine.active().onTrue(
-            Commands.sequence(
-                MiddleRedAuto1.resetOdometry(),
-                MiddleRedAuto1.cmd()
-            )
-        );
-        
-
-
-        MiddleRedAuto1.done().onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-            new ParallelCommandGroup(
-                new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
-                new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new WristCommand(Wrist, Constants.Positions.L4WristPosition),
-                    Commands.waitSeconds(3),
-                    MiddleRedAuto2.cmd()
-                )
-               
-            )
-            
-        ));
-
-        MiddleRedAuto2.done().onTrue(new SequentialCommandGroup(
-            new WristCommand(Wrist, Constants.Positions.StartWrist),
-            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
-        ));
-        
-        return routine;
-    }
-    
-
-
-    private AutoRoutine ReverseMiddleRedAuto(){
-        try {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
-                autoFactory = drivetrain.createAutoFactoryBlue();
-            else    
-                autoFactory = drivetrain.createAutoFactory();
-        } catch (Exception e) {
-            autoFactory = drivetrain.createAutoFactory();
-            AutoRoutine routine = autoFactory.newRoutine("blank");
-            return routine;
-        }
-
-        AutoRoutine routine = autoFactory.newRoutine("reverse");
-        AutoTrajectory MidReverse = routine.trajectory("MidReverse");
-
-        routine.active().onTrue(
-            Commands.sequence(
-                MidReverse.resetOdometry(),
-                MidReverse.cmd()
-            )
-        );
-        return routine;
-    }
 
         private AutoRoutine LimelightMiddleAuto(){
             try {
@@ -587,6 +490,7 @@ public class RobotContainer {
             AutoTrajectory LimelightMiddle1 = routine.trajectory("LimelightMiddle1");
             AutoTrajectory LimelightMiddle2 = routine.trajectory("LimelightMiddle2");
             AutoTrajectory LimelightMiddle3 = routine.trajectory("LimelightMiddle3");
+            AutoTrajectory LowBallTest2 = routine.trajectory("LowBallTest2");
 
             routine.active().onTrue(
             Commands.sequence(
@@ -599,15 +503,15 @@ public class RobotContainer {
             LimelightMiddle1.done().onTrue(new SequentialCommandGroup(
                 drivetrain.applyRequest(() -> driveRobotCentric
                     .withVelocityX(0.8) 
-                    .withVelocityY(getTargetTx(true)) 
+                    .withVelocityY(0) 
                     .withRotationalRate(0)
-                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 6),
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
    
                 drivetrain.applyRequest(() -> driveRobotCentric
-                   .withVelocityX(1.15)
-                   .withVelocityY(0.25)
-                   .withRotationalRate(0)
-                ).withTimeout(.3),
+                .withVelocityX(.35)
+                .withVelocityY(.15)
+                .withRotationalRate(0)
+                ).withTimeout(.5),
                 drivetrain.applyRequest(() -> driveRobotCentric
                     .withVelocityX(0) 
                     .withVelocityY(0) 
@@ -623,7 +527,7 @@ public class RobotContainer {
                             new WaitCommand(.5),
                             new WristCommand(Wrist, Constants.Positions.L4WristPosition),
                             new SequentialCommandGroup(
-                                new WaitCommand(3.5),
+                                new WaitCommand(1),
                                 new AutoOuttakeCommand(intake).withTimeout(1),
                                 LimelightMiddle2.cmd()
                        )
@@ -634,12 +538,49 @@ public class RobotContainer {
         LimelightMiddle2.done().onTrue(
             LimelightMiddle3.cmd()
         );
+        LimelightMiddle3.atTime("Reset").onTrue(new SequentialCommandGroup(
+            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown),
+            new WaitCommand(1)
+        ));
+        LimelightMiddle3.atTime("LowBall").onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.LowBallPivot),
+            new WristCommand(Wrist, Constants.Positions.LowBallWrist),
+            new WaitCommand(1)
+        ));
+
 
         LimelightMiddle3.done().onTrue(new SequentialCommandGroup(
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric()),
-            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
-            
+            drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0.8) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 5),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+   
+                ).until(() -> true),
+            new ManualIntake(intake, 1 ).withTimeout(.5),
+            new WaitCommand(.5),
+            LowBallTest2.cmd()
         ));
+            LowBallTest2.atTime("Barge").onTrue(new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new PivotCommand(pivot, Constants.Positions.BargePivot),
+                  new ParallelCommandGroup(
+                        new ExtensionCommand(extension, Constants.Positions.BargeExtenstion),
+                        new ParallelCommandGroup(
+                            new WaitCommand(.5),
+                            new WristCommand(Wrist, Constants.Positions.AutoBargeWrist)
+                            
+            ))));
+
+            LowBallTest2.done().onTrue(new SequentialCommandGroup(
+                new WaitCommand(1),
+                new ManualIntake(intake, -1).withTimeout(1.5)
+            ));
+    
         
         
 
@@ -771,5 +712,56 @@ public class RobotContainer {
 
             return routine;
     }
+    private AutoRoutine LowBallAuto(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
 
+        AutoRoutine routine = autoFactory.newRoutine("LowBallTest");
+        AutoTrajectory LowBallTest = routine.trajectory("LowBallTest");
+        AutoTrajectory LowBallTest2 = routine.trajectory("LowBallTest2");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                LowBallTest.resetOdometry(),
+                LowBallTest.cmd()
+            )
+        );
+
+        LowBallTest.atTime("LowBall").onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.LowBallPivot),
+            new WristCommand(Wrist, Constants.Positions.LowBallWrist)
+        ));
+
+        LowBallTest.done().onTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0.8) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 5),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+   
+                ).until(() -> true),
+            new ManualIntake(intake, 1 ).withTimeout(.5),
+            new WaitCommand(1),
+            LowBallTest2.cmd()
+        ));
+
+        LowBallTest2.done().onTrue(new SequentialCommandGroup(
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+        ));
+
+        return routine;
+    }
 }
