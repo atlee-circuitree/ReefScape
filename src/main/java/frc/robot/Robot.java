@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.ArrayList;
 
 import choreo.auto.AutoFactory;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,8 +46,16 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {}
 
+  DutyCycleEncoder encoder0 = new DutyCycleEncoder(0);
+  DutyCycleEncoder encoder1 = new DutyCycleEncoder(1);
+  DutyCycleEncoder encoder2 = new DutyCycleEncoder(2);
+
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    SmartDashboard.putNumber("encoder 0", encoder0.get());
+    SmartDashboard.putNumber("encoder 1", encoder1.get());
+    SmartDashboard.putNumber("encoder 2", encoder2.get());
+  }
 
   @Override
   public void disabledExit() {}
