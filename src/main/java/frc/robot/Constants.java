@@ -152,34 +152,34 @@ public class Constants {
 
     public class Positions {
         public static double L1WristPosition = .5;//182
-        public static double L1PivotPosition = 49;//65
+        public static double L1PivotPosition = 45;//65
 
         public static double L2WristPosition = 212;//212//187
-        public static double L2PivotPosition = 70;//73//61
+        public static double L2PivotPosition = 30;//73//61
 
         public static double L3WristPosition = 180;//205
         public static double L3PivotPosition = 36;//91
 
         public static double L4WristPosition = 180;//230
-        public static double L4PivotPosition = 40;//85
-        public static double L4ExtensionPosition = 2.525;//2.6
+        public static double L4PivotPosition = 36;//85
+        public static double L4ExtensionPosition = 2.65;//2.6
 
         public static double bringExtensionDown = .25;//.25
 
         public static double HumanPlayerWrist = 9;//0
         public static double HumanPlayerPivot = 39;//80
 
-        public static double PivotClimb = 60;
+        public static double PivotClimb = 55;
         public static double WristClimb = 260;
         
-        public static double StartPivot = 58;
+        public static double StartPivot = 13;
         public static double StartWrist = 0.5;
 
-        public static double LowBallWrist = 185;//195
-        public static double LowBallPivot = 24;//24
+        public static double LowBallWrist = 190;//195
+        public static double LowBallPivot = 23;//24
 
-        public static double HighBallWrist = 170;
-        public static double HighBallPivot = 75;
+        public static double HighBallWrist = 160;
+        public static double HighBallPivot = 30;
 
         public static double BargePivot = 38;
         public static double BargeExtenstion = 4.0;
