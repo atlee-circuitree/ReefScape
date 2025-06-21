@@ -816,7 +816,7 @@ public class RobotContainer {
         AutoTrajectory NewLimelight2 = routine.trajectory("NewLimelight2");
         AutoTrajectory NewLimelight3 = routine.trajectory("NewLimelight3");
         AutoTrajectory NewLimelight4 = routine.trajectory("NewLimelight4");
-        AutoTrajectory NewLimelight5 = routine.trajectory("NewLimelight5");
+        AutoTrajectory NewLimelight5 = routine.trajectory("NewLimelight5"); 
 
         routine.active().onTrue(
             Commands.sequence(
@@ -917,26 +917,7 @@ public class RobotContainer {
             )
         );*/
 
-        NewLimelight4.atTime("Barge").onTrue(new SequentialCommandGroup(
-            new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new PivotCommand(pivot, Constants.Positions.BargePivot),
-                  new ParallelCommandGroup(
-                        new ExtensionCommand(extension, Constants.Positions.BargeExtenstion),
-                        new ParallelCommandGroup(
-                            new WaitCommand(.5),
-                            new WristCommand(Wrist, Constants.Positions.AutoBargeWrist)
-                        )
-                  )
-            )
-        )
-        );
-
-        NewLimelight4.done().onTrue(new SequentialCommandGroup(
-            new WaitCommand(3),
-            new ManualIntake(intake, -1).withTimeout(1.5)
-        )
-        );
+        
         
 
         return routine;
