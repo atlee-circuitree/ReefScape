@@ -107,7 +107,7 @@ public class Constants {
         public static final double wristThreshold = -1;
         public static final double upperWristThreshold = 280;
         public static final double armThreshold = 0.5;
-        public static final double pivotThreshold = 6;
+        public static final double pivotThreshold = .5;
         public static final double upperPivotThreshold = 60;
         public static final double extensionThreshold = 10;
         

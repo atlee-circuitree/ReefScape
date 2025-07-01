@@ -827,14 +827,14 @@ public class RobotContainer {
 
         NewLimelight1.done().onTrue(new SequentialCommandGroup(
                 drivetrain.applyRequest(() -> driveRobotCentric
-                    .withVelocityX(1.3) 
+                    .withVelocityX(1) 
                     .withVelocityY(centerWithAprilTag()) 
                     .withRotationalRate(0)
                 ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
    
                 drivetrain.applyRequest(() -> driveRobotCentric
                    .withVelocityX(0)
-                   .withVelocityY(-.5)
+                   .withVelocityY(-.6)
                    .withRotationalRate(0)
                 ).withTimeout(.65),
                 drivetrain.applyRequest(() -> driveRobotCentric
