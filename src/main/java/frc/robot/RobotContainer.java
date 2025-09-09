@@ -268,8 +268,8 @@ public class RobotContainer {
 
         //L2
         RedBottomLeft.onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
-            new WristCommand(Wrist, Constants.Positions.L2WristPosition)
+            new PivotCommand(pivot, Constants.Positions.L2PivotPosition)//,
+            //new WristCommand(Wrist, Constants.Positions.L2WristPosition)
         ));
         //bring elevator back down from L4
         Select.onTrue(new ParallelCommandGroup(
@@ -305,8 +305,8 @@ public class RobotContainer {
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
-        Player1.x().whileTrue(new ManualWrist(Wrist, -.8));
-        Player1.y().whileTrue(new ManualWrist(Wrist, .8));
+        Player1.x().whileTrue(new PivotCommand(pivot, Constants.Positions.L4PivotPosition));
+        Player1.y().whileTrue(new ExtensionCommand(extension, 2.65));
         //Player1.a().whileTrue(new ManualExtension(extension, .5));
         //Player1.start().onTrue(new WristCommand(Wrist, 35));
         

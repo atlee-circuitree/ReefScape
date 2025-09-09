@@ -142,7 +142,7 @@ public class Constants {
     }
 
     public class Drive {
-        public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public static double MaxSpeed = (TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)) / 1; // kSpeedAt12Volts desired top speed 6 wads slow
         public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 1/2 of a rotation per second max angular velocity
         public static double AprilStrafeCoeff = 0.18;
         public static double TagOffset = 6;
