@@ -5,28 +5,18 @@
 package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 
-import java.util.function.BooleanSupplier;
-
-import javax.sound.sampled.SourceDataLine;
-
-import com.ctre.phoenix.ButtonMonitor;
-import com.ctre.phoenix.ButtonMonitor.IButtonPressEventHandler;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -38,7 +28,6 @@ import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.AutoOuttakeCommand;
 import frc.robot.commands.DriveFoward;
 import frc.robot.commands.ExtensionCommand;
-import frc.robot.commands.ManualExtension;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
@@ -47,7 +36,6 @@ import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Pivot;
 //import frc.robot.subsystems.ReefCentering;
@@ -77,7 +65,7 @@ public class RobotContainer {
 
     private final Intake intake = new Intake();
     private final wrist Wrist = new wrist();
-    private final Lights lights = new Lights();
+    //private final Lights lights = new Lights(); not used
     private final Pivot pivot = new Pivot();
     private final armExtension extension = new armExtension();
 
@@ -170,8 +158,8 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        SlewRateLimiter joystickLimiterX = new SlewRateLimiter(2);
-        SlewRateLimiter joystickLimiterY = new SlewRateLimiter(2);
+        //SlewRateLimiter joystickLimiterX = new SlewRateLimiter(2); both not used
+        //SlewRateLimiter joystickLimiterY = new SlewRateLimiter(2);
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
@@ -192,9 +180,9 @@ public class RobotContainer {
         JoystickButton RedBottomLeft = new JoystickButton(Player2, RedLeftBottomArcade);
         JoystickButton BlueTop = new JoystickButton(Player2, BlueTopArcade);
         JoystickButton BlueMiddle = new JoystickButton(Player2, BlueMiddleArcade);
-        JoystickButton RedBottom = new JoystickButton(Player2, BlueBottomArcade);
+        //JoystickButton RedBottom = new JoystickButton(Player2, BlueBottomArcade); not used
         JoystickButton RedTopRight = new JoystickButton(Player2, RedRightTopArcade);
-        JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade);
+        //JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade); not used
         JoystickButton RedBottomRight = new JoystickButton(Player2, RedRightBottomArcade);
 
         // Note that X is defined as forward according to WPILib convention,
@@ -813,10 +801,10 @@ public class RobotContainer {
 
         AutoRoutine routine = autoFactory.newRoutine("NewLimelightAUTOMID");
         AutoTrajectory NewLimelight1 = routine.trajectory("NewLimelight1");
-        AutoTrajectory NewLimelight2 = routine.trajectory("NewLimelight2");
+        //unused AutoTrajectory NewLimelight2 = routine.trajectory("NewLimelight2");
         AutoTrajectory NewLimelight3 = routine.trajectory("NewLimelight3");
-        AutoTrajectory NewLimelight4 = routine.trajectory("NewLimelight4");
-        AutoTrajectory NewLimelight5 = routine.trajectory("NewLimelight5"); 
+        //unused AutoTrajectory NewLimelight4 = routine.trajectory("NewLimelight4");
+        //unused AutoTrajectory NewLimelight5 = routine.trajectory("NewLimelight5"); 
 
         routine.active().onTrue(
             Commands.sequence(

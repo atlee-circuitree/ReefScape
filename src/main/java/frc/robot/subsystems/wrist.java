@@ -38,7 +38,7 @@ public class wrist extends SubsystemBase {
 
   public double calcFeed()
   {
-    double ang = getAngle();
+    //double ang = getAngle();
     // do math
     double out = 0;
     return out;
