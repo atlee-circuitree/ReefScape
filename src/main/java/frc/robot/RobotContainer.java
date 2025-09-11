@@ -278,13 +278,13 @@ public class RobotContainer {
         ));
         //low ball
         BlueMiddle.onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.LowBallPivot),
-            new WristCommand(Wrist, Constants.Positions.LowBallWrist)
+            new PivotCommand(pivot, Constants.Positions.LowBallPivot)
+            //new WristCommand(Wrist, Constants.Positions.LowBallWrist)
         ));
         //high ball
         BlueTop.onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.HighBallPivot),
-            new WristCommand(Wrist, Constants.Positions.HighBallWrist)
+            new PivotCommand(pivot, Constants.Positions.HighBallPivot)
+            //new WristCommand(Wrist, Constants.Positions.HighBallWrist)
         ));
         //climb
         RedBottomRight.onTrue(new SequentialCommandGroup(
@@ -292,10 +292,10 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.WristClimb)
         ));
         //barge
-        RedTopRight.onTrue(new SequentialCommandGroup(
+        /*RedTopRight.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.BargePivot),
             new ExtensionCommand(extension, Constants.Positions.BargeExtenstion)
-        ));
+        ));*/
 
 
         //manual stuff
@@ -305,13 +305,34 @@ public class RobotContainer {
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
-        Player1.x().whileTrue(new PivotCommand(pivot, Constants.Positions.L4PivotPosition));
-        Player1.y().whileTrue(new ExtensionCommand(extension, 2.65));
+        //Player1.x().whileTrue(new PivotCommand(pivot, Constants.Positions.L4PivotPosition));
+        //Player1.y().whileTrue(new ExtensionCommand(extension, 2.65));
         //Player1.a().whileTrue(new ManualExtension(extension, .5));
         //Player1.start().onTrue(new WristCommand(Wrist, 35));
         
         
+        Player1.rightBumper().whileTrue(new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> driveRobotCentric
+                .withVelocityX(1.3) 
+                .withVelocityY(centerWithAprilTag()) 
+                .withRotationalRate(0)
+            ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
 
+            drivetrain.applyRequest(() -> driveRobotCentric
+
+                .withVelocityX(0) 
+                .withVelocityY(-.51) 
+                .withRotationalRate(0)
+
+            ).withTimeout(.6),
+            drivetrain.applyRequest(() -> driveRobotCentric
+
+                .withVelocityX(0) 
+                .withVelocityY(0) 
+                .withRotationalRate(0)
+
+            ).until(() -> true)
+        ));
 
         Player1.leftBumper().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
@@ -381,7 +402,7 @@ public class RobotContainer {
             ).withTimeout(.5)
         ));
 
-        Player1.b().whileTrue(new SequentialCommandGroup(
+        /*Player1.b().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
                 .withVelocityX(0.8) 
                 .withVelocityY(getTargetTx(true)) 
@@ -403,7 +424,7 @@ public class RobotContainer {
            new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
            new WristCommand(Wrist, Constants.Positions.L3WristPosition),
            new AutoOuttakeCommand(intake)
-               )));
+               )));*/
         
         
 
