@@ -32,6 +32,7 @@ import frc.robot.commands.ManualIntake;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
 import frc.robot.commands.PivotCommand;
+import frc.robot.commands.SpeedToggleCommand;
 import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -163,10 +164,9 @@ public class RobotContainer {
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            // bailey
             drivetrain.applyRequest(() -> 
-                drive.withVelocityX(-(joystick.getLeftY()) * Constants.Drive.MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-(joystick.getLeftX()) * Constants.Drive.MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-(joystick.getLeftY()) * ((Constants.Drive.MaxSpeed) / Constants.Drive.Speed)) // Drive forward with negative Y (forward)
+                    .withVelocityY(-(joystick.getLeftX()) * ((Constants.Drive.MaxSpeed) / Constants.Drive.Speed)) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * Constants.Drive.MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -192,6 +192,7 @@ public class RobotContainer {
          
         
         //reef lvl 4
+        
         Player3.a().whileTrue(new DriveFoward(drivetrain));
 
 
@@ -301,6 +302,7 @@ public class RobotContainer {
         //manual stuff
         Player1.rightTrigger().whileTrue(new ManualIntake(intake,-1));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake,1));//outtake
+        Player1.x().onTrue(new SpeedToggleCommand());
         //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
