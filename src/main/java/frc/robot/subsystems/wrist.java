@@ -51,7 +51,7 @@ public class wrist extends SubsystemBase {
 
   public void RunWrist(double Velocity){
   
-    if (getAngle() <= Constants.Arm.wristThreshold && Velocity < 0) {
+    if (getAngle() <= Constants.Arm.wristThreshold + 2.5 && Velocity < 0) {
       wrist.set(0);
     } else if (getAngle() >= Constants.Arm.upperWristThreshold && Velocity > 0){
       wrist.set(0);

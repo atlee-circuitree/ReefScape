@@ -208,8 +208,8 @@ public class RobotContainer {
         ));
         
         //Manual stuff
-        Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
-        Player3.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
+        Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -1));
+        Player3.rightTrigger().whileTrue(new ManualWrist(Wrist, 1)); //foward
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
@@ -346,7 +346,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> driveRobotCentric
 
                 .withVelocityX(0) 
-                .withVelocityY(.5) 
+                .withVelocityY(.6) 
                 .withRotationalRate(0)
 
             ).withTimeout(.6),
