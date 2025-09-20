@@ -11,6 +11,11 @@ public class CanCoder {
 
     }
 
+    public double get() {
+        
+        return m_CanCoder.getAbsolutePosition().getValueAsDouble();
+    }
+
     public double getDistance() {
         
         return m_CanCoder.getPosition().getValueAsDouble();

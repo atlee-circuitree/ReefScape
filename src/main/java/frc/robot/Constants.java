@@ -41,7 +41,7 @@ public class Constants {
         public static final int BRTurn = 20;
 
         public static final int IntakeMotorID = 30;
-        public static final int wrist = 31;
+        public static final int wrist = 31    ;
         public static final int pivotLeft = 32;
         public static final int pivotRight = 33;
         public static final int extensionLeft = 35;
@@ -49,6 +49,7 @@ public class Constants {
         public static final int CoralCANRange = 40;
         public static final int PivotPigeon = 41;
         public static final int ExtensionCANCoder = 42;
+        public static final int WristCANCoder = 43;
 
 
         public final String CANBUS_Name = "1599-B";
@@ -104,8 +105,8 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 900;
         public static final double minExtend = 0;
-        public static final double wristThreshold = -1;
-        public static final double upperWristThreshold = 280;
+        public static final double wristThreshold = 3;
+        public static final double upperWristThreshold = 265;
         public static final double armThreshold = 0.5;
         public static final double pivotThreshold = 6;
         public static final double upperPivotThreshold = 60;
@@ -131,7 +132,7 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = 0.418; // in rotations
+        public static final double wristEncoderOffset = -.5 + .25; // in rotations
         public static final double pivotEncoderOffsetRev = 0.635;
         public static final double armEncoderOffset = .2; // in rotations
 
@@ -156,10 +157,10 @@ public class Constants {
     }
 
     public class Positions {
-        public static double L1WristPosition = .5;//182
+        public static double L1WristPosition = 2;//182
         public static double L1PivotPosition = 45;//65
 
-        public static double L2WristPosition = 212;//212//187
+        public static double L2WristPosition = 212;//187
         public static double L2PivotPosition = 30;//73//61
 
         public static double L3WristPosition = 180;//205
@@ -176,7 +177,6 @@ public class Constants {
 
         public static double PivotClimb = 55;
         public static double WristClimb = 260;
-        
         public static double StartPivot = 13;
         public static double StartWrist = 0.5;
 

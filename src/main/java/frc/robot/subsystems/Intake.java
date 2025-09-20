@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void RunIntake(double Velocity){
-    IntakeMotor.set(Velocity);
+    IntakeMotor.set(-Velocity);
   }
 
   public void stop()

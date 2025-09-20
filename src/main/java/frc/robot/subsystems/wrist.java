@@ -11,12 +11,13 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.CanCoder;
 import edu.wpi.first.math.controller.PIDController;
 
 public class wrist extends SubsystemBase {
   
   private TalonFX wrist;
-  private DutyCycleEncoder wristEncoder;
+  private CanCoder wristEncoder;
   private PIDController pid;
 
   //public double CurrentWristAngle;
@@ -31,7 +32,7 @@ public class wrist extends SubsystemBase {
 
 
 
-    wristEncoder = new DutyCycleEncoder(Constants.Channels.EncoderChannel);
+    wristEncoder = new CanCoder(Constants.CAN_IDs.WristCANCoder);
 
     pid = new PIDController(Constants.Arm.wristP, Constants.Arm.wristI, Constants.Arm.wristD);
   }
@@ -48,7 +49,7 @@ public class wrist extends SubsystemBase {
   {
     RunWrist(calcFeed());
   }
-
+//left trigger approaches 0 (negative)
   public void RunWrist(double Velocity){
   
     if (getAngle() <= Constants.Arm.wristThreshold && Velocity < 0) {
@@ -83,14 +84,16 @@ public class wrist extends SubsystemBase {
 
   public double getAngle() {
     double CurrentTicks = wristEncoder.get();
-    if (wristEncoder.get() <= Constants.Arm.wristEncoderOffset) {
+    CurrentTicks = (CurrentTicks - Constants.Arm.wristEncoderOffset);
+    CurrentTicks = (CurrentTicks * 360);
+  /* if (wristEncoder.get() <= Constants.Arm.wristEncoderOffset) {
       CurrentTicks +=1;
   }
     CurrentTicks = -(CurrentTicks - Constants.Arm.wristEncoderOffset);
     CurrentTicks = 360 - ((CurrentTicks / Constants.Arm.wristRatio) * -360);
     if (CurrentTicks > 330) {
       return 0;      
-    }
+    }*/
     return CurrentTicks;
   }
 

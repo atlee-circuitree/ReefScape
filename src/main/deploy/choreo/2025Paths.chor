@@ -4,20 +4,6 @@
  "type":"Swerve",
  "variables":{
   "expressions":{
-   "FeedPosition":{
-    "dimension":"Number",
-    "var":{
-     "exp":"0",
-     "val":0.0
-    }
-   },
-   "Delay":{
-    "dimension":"Number",
-    "var":{
-     "exp":"1",
-     "val":1.0
-    }
-   },
    "L4Position":{
     "dimension":"Number",
     "var":{
@@ -32,14 +18,28 @@
      "val":0.0
     }
    },
-   "Descend":{
+   "FeedPosition":{
     "dimension":"Number",
     "var":{
      "exp":"0",
      "val":0.0
     }
    },
+   "Delay":{
+    "dimension":"Number",
+    "var":{
+     "exp":"1",
+     "val":1.0
+    }
+   },
    "Extend":{
+    "dimension":"Number",
+    "var":{
+     "exp":"0",
+     "val":0.0
+    }
+   },
+   "Descend":{
     "dimension":"Number",
     "var":{
      "exp":"0",
