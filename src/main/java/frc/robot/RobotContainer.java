@@ -208,8 +208,8 @@ public class RobotContainer {
         ));
         
         //Manual stuff
-        Player3.leftTrigger().whileTrue(new ManualWrist(Wrist, -.8));
-        Player3.rightTrigger().whileTrue(new ManualWrist(Wrist, .8));
+        Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
+        Player1.b().whileTrue(new ManualWrist(Wrist, .8));
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
@@ -272,8 +272,9 @@ public class RobotContainer {
             new PivotCommand(pivot, Constants.Positions.L2PivotPosition),
             new WristCommand(Wrist, Constants.Positions.L2WristPosition)
         ));
-        //bring elevator back down from L4
+        //bring elevator back down from L4 liftreset
         Select.onTrue(new ParallelCommandGroup(
+
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
         ));
@@ -300,16 +301,16 @@ public class RobotContainer {
 
 
         //manual stuff
-        Player1.rightTrigger().whileTrue(new ManualIntake(intake,-.15));//intake
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake,.15));//outtake
+        Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake, .3));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
-        //Player1.povDown().whileTrue(new ExtensionCommand(extension, 0.5));
+        Player1.povDown().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
         //Player1.x().whileTrue(new PivotCommand(pivot, Constants.Positions.L4PivotPosition));
-        //Player1.y().whileTrue(new ExtensionCommand(extension, 2.65));
-        //Player1.a().whileTrue(new ManualExtension(extension, .5));
+        //Player1.y().whileTrue(new ManualWrist(wrist, .3));
+        //Player1.b().whileTrue(new ManualExtension(extension, .5));
         //Player1.start().onTrue(new WristCommand(Wrist, 35));
         
         
@@ -383,13 +384,13 @@ public class RobotContainer {
             ).until(() -> true)
         ));*/
 
-        Player1.povDown().onTrue(
+        /*Player1.povDown().onTrue(
             drivetrain.applyRequest(()-> driveRobotCentric
                 .withVelocityX(-2.5)
                 .withVelocityY(0)
                 .withRotationalRate(0)
             ).withTimeout(0.45)
-        );
+        );*/
 
         Player1.rightStick().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric

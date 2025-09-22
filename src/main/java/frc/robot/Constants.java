@@ -103,7 +103,7 @@ public class Constants {
     }
 
     public class Arm {
-        public static final double maxExtend = 900;
+        public static final double maxExtend = 3;
         public static final double minExtend = 0;
         public static final double wristThreshold = 3;
         public static final double upperWristThreshold = 265;
@@ -134,10 +134,10 @@ public class Constants {
 
         public static final double wristEncoderOffset = -.5 + .25; // in rotations
         public static final double pivotEncoderOffsetRev = 0.635;
-        public static final double armEncoderOffset = .2; // in rotations
+        public static final double armEncoderOffset = .35; // in rotations
 
-        public static final double outtakeVelocity = 1;
-        public static final double intakeVelocity = -1;
+        public static final double outtakeVelocity = .3;
+        public static final double intakeVelocity = -.3;
 
         public static final double outtakeTime = 1;
     }
@@ -155,7 +155,12 @@ public class Constants {
         //public static double SlowSpeed = TunerConstants.HalfVelocity.in(MetersPerSecond);
         
     }
-
+/* notes
+ * 
+ * make l4 wrist higher, it was going over, 
+ * add limelight repositioning
+ * 
+ */
     public class Positions {
         public static double L1WristPosition = 2;//182
         public static double L1PivotPosition = 45;//65
@@ -163,17 +168,17 @@ public class Constants {
         public static double L2WristPosition = 212;//187
         public static double L2PivotPosition = 30;//73//61
 
-        public static double L3WristPosition = 180;//205
-        public static double L3PivotPosition = 36;//91
+        public static double L3WristPosition = 148;//205
+        public static double L3PivotPosition = 26;//91
 
-        public static double L4WristPosition = 180;//230
+        public static double L4WristPosition = 176;//230
         public static double L4PivotPosition = 36;//85
-        public static double L4ExtensionPosition = 2.65;//2.6
+        public static double L4ExtensionPosition = 2.94;//2.6
 
-        public static double bringExtensionDown = .25;//.25
+        public static double bringExtensionDown = .18;//.25
 
-        public static double HumanPlayerWrist = 9;//0
-        public static double HumanPlayerPivot = 39;//80
+        public static double HumanPlayerWrist = 6;//0
+        public static double HumanPlayerPivot = 40;//80
 
         public static double PivotClimb = 55;
         public static double WristClimb = 260;

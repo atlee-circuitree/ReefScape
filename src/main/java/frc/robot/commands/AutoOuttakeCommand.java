@@ -45,6 +45,6 @@ public class AutoOuttakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//m_outtake.getCoralDistance() >= SmartDashboard.getNumber("Coral threshold autointake", 2);
+    return m_outtake.getCoralDistance() >= 4.5;
   }
 }
