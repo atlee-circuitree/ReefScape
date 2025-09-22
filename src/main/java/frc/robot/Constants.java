@@ -136,8 +136,8 @@ public class Constants {
         public static final double pivotEncoderOffsetRev = 0.635;
         public static final double armEncoderOffset = .35; // in rotations
 
-        public static final double outtakeVelocity = .3;
-        public static final double intakeVelocity = -.3;
+        public static final double outtakeVelocity = .2; //.3
+        public static final double intakeVelocity = -.2;
 
         public static final double outtakeTime = 1;
     }
@@ -188,7 +188,7 @@ public class Constants {
         public static double LowBallWrist = 190;//195
         public static double LowBallPivot = 23;//24
 
-        public static double HighBallWrist = 160;
+        public static double HighBallWrist = 157.5;
         public static double HighBallPivot = 30;
 
         public static double BargePivot = 38;

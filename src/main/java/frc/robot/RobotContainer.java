@@ -280,13 +280,13 @@ public class RobotContainer {
         ));
         //low ball
         BlueMiddle.onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.LowBallPivot)
-            //new WristCommand(Wrist, Constants.Positions.LowBallWrist)
+            new PivotCommand(pivot, Constants.Positions.LowBallPivot),
+            new WristCommand(Wrist, Constants.Positions.LowBallWrist)
         ));
         //high ball
         BlueTop.onTrue(new SequentialCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.HighBallPivot)
-            //new WristCommand(Wrist, Constants.Positions.HighBallWrist)
+            new PivotCommand(pivot, Constants.Positions.HighBallPivot),
+            new WristCommand(Wrist, Constants.Positions.HighBallWrist)
         ));
         //climb
         RedBottomRight.onTrue(new SequentialCommandGroup(
