@@ -304,6 +304,7 @@ public class RobotContainer {
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake, .3));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
+        Player1.a().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povDown().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
@@ -536,8 +537,8 @@ public class RobotContainer {
             AutoRoutine routine = autoFactory.newRoutine("LimelightMid");
             AutoTrajectory LimelightMiddle1 = routine.trajectory("LimelightMiddle1");
             AutoTrajectory LimelightMiddle2 = routine.trajectory("LimelightMiddle2");
-            AutoTrajectory LimelightMiddle3 = routine.trajectory("LimelightMiddle3");
-            AutoTrajectory LowBallTest2 = routine.trajectory("LowBallTest2");
+            //AutoTrajectory LimelightMiddle3 = routine.trajectory("LimelightMiddle3");
+            //AutoTrajectory LowBallTest2 = routine.trajectory("LowBallTest2");
 
             routine.active().onTrue(
             Commands.sequence(
@@ -549,40 +550,44 @@ public class RobotContainer {
     
             LimelightMiddle1.done().onTrue(new SequentialCommandGroup(
                 drivetrain.applyRequest(() -> driveRobotCentric
-                    .withVelocityX(0.8) 
-                    .withVelocityY(0) 
-                    .withRotationalRate(0)
-                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 8),
-   
-                drivetrain.applyRequest(() -> driveRobotCentric
-                .withVelocityX(.45)
-                .withVelocityY(.2)
+                .withVelocityX(1.3) 
+                .withVelocityY(centerWithAprilTag()) 
                 .withRotationalRate(0)
-                ).withTimeout(.5),
-                drivetrain.applyRequest(() -> driveRobotCentric
-                    .withVelocityX(0) 
-                    .withVelocityY(0) 
-                    .withRotationalRate(0)
-   
-                ).until(() -> true),
+            ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+
+            drivetrain.applyRequest(() -> driveRobotCentric
+
+                .withVelocityX(0) 
+                .withVelocityY(-.51) 
+                .withRotationalRate(0)
+
+            ).withTimeout(.6),
+            drivetrain.applyRequest(() -> driveRobotCentric
+
+                .withVelocityX(0) 
+                .withVelocityY(0) 
+                .withRotationalRate(0)
+
+            ).until(() -> true),
                 new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
-                  new ParallelCommandGroup(
-                        new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                    new SequentialCommandGroup(
+                        new WaitCommand(.5),
+                        new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
                         new ParallelCommandGroup(
-                            new WaitCommand(.5),
-                            new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                            new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
                             new SequentialCommandGroup(
+                                new WristCommand(Wrist, Constants.Positions.L4WristPosition),
                                 new WaitCommand(1),
-                                new AutoOuttakeCommand(intake).withTimeout(2),
-                                LimelightMiddle2.cmd()
-                       )
-                   )
-               )
-            )
+                                new AutoOuttakeCommand(intake).withTimeout(3),
+                                new SequentialCommandGroup(
+                                    new WaitCommand(1),
+                                    new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+                        )
+                    )
+                )
+                ))
         ));
-        LimelightMiddle2.done().onTrue(
+        /*LimelightMiddle2.done().onTrue(
             LimelightMiddle3.cmd()
         );
         LimelightMiddle3.atTime("Reset").onTrue(new SequentialCommandGroup(
@@ -626,7 +631,7 @@ public class RobotContainer {
             LowBallTest2.done().onTrue(new SequentialCommandGroup(
                 new WaitCommand(3),
                 new ManualIntake(intake, -1).withTimeout(1.5)
-            ));
+            ));*/
     
         
         
