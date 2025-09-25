@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
+import java.security.cert.Extension;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import choreo.auto.AutoChooser;
@@ -651,6 +653,24 @@ public class RobotContainer {
             return routine;
         }
 
+        /*AutoRoutine routine = autoFactory.newRoutine("ExtensionTest");
+        AutoTrajectory ExtensionTest = routine.trajectory("ExtensionTest");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                ExtensionTest.resetOdometry(),
+                ExtensionTest.cmd()
+            )
+        );
+        ExtensionTest.done().onTrue(new SequentialCommandGroup(
+            new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+            new WristCommand(Wrist, Constants.Positions.L4WristPosition)
+        ));
+        return routine;
+    }*/
+
+        
+    
         AutoRoutine routine = autoFactory.newRoutine("BottomLimelight");
         AutoTrajectory BottomLimelight = routine.trajectory("BottomLimelight");
         AutoTrajectory BottomLimelight2 = routine.trajectory("BottomLimelight2");
@@ -872,6 +892,8 @@ public class RobotContainer {
                                 new AutoOuttakeCommand(intake).withTimeout(2),
 
                                 new SequentialCommandGroup(
+                                    new ExtensionCommand(extension, Constants.Positions.bringExtensionDown).withTimeout(1),
+                                    new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
                                 drivetrain.applyRequest(()-> driveRobotCentric
                                     .withVelocityX(-2)
                                     .withVelocityY(0)
@@ -898,9 +920,9 @@ public class RobotContainer {
         ));
 
         NewLimelight3.done().onTrue(new SequentialCommandGroup(
-            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown).withTimeout(0.6),
+            //new ExtensionCommand(extension, Constants.Positions.bringExtensionDown).withTimeout(1),
             new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
-            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+            //new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
             /*new SequentialCommandGroup(
                 new WaitCommand(2),
                 drivetrain.applyRequest(() -> driveRobotCentric
