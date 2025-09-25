@@ -580,8 +580,7 @@ public class RobotContainer {
                                 new WaitCommand(1),
                                 new AutoOuttakeCommand(intake).withTimeout(3),
                                 new SequentialCommandGroup(
-                                    new WaitCommand(1),
-                                    new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+                                    new WaitCommand(1)
                         )
                     )
                 )
@@ -871,6 +870,7 @@ public class RobotContainer {
                             new SequentialCommandGroup(
                                 new WaitCommand(2),
                                 new AutoOuttakeCommand(intake).withTimeout(2),
+
                                 new SequentialCommandGroup(
                                 drivetrain.applyRequest(()-> driveRobotCentric
                                     .withVelocityX(-2)
