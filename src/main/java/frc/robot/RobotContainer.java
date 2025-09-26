@@ -212,7 +212,7 @@ public class RobotContainer {
         //Manual stuff
         Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.b().whileTrue(new ManualWrist(Wrist, .8));
-        Player1.x().whileTrue(new ExtensionCommand(extension, 2.94));
+        Player1.povUp().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
