@@ -310,7 +310,6 @@ public class RobotContainer {
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake, .3));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
-        Player1.povDown().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
         //Player1.rightBumper().whileTrue(new ManualExtension(extension, -.3));
@@ -874,7 +873,8 @@ public class RobotContainer {
                             new WristCommand(Wrist, Constants.Positions.L4WristPosition),
                             new SequentialCommandGroup(
                                 new WaitCommand(2),
-                                new AutoOuttakeCommand(intake).withTimeout(3),
+                                new ManualIntake(intake, .3).withTimeout(2),
+                                new WaitCommand(2),
 
                                 new SequentialCommandGroup(
                                 drivetrain.applyRequest(()-> driveRobotCentric
