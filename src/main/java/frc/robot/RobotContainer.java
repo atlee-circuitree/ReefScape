@@ -279,6 +279,7 @@ public class RobotContainer {
         Select.onTrue(new ParallelCommandGroup(
 
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
         ));
         //low ball
