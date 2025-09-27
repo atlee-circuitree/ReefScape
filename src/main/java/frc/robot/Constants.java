@@ -132,7 +132,7 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = -.5 + .2497; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
+        public static final double wristEncoderOffset = -.5 + .246; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
         public static final double pivotEncoderOffsetRev = 0.8245;
         public static final double armEncoderOffset = .35; // in rotations
 

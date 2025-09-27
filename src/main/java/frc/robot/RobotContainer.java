@@ -874,7 +874,7 @@ public class RobotContainer {
                             new SequentialCommandGroup(
                                 new WaitCommand(2),
                                 new ManualIntake(intake, .3).withTimeout(2),
-                                new WaitCommand(2),
+                                new WaitCommand(1),
 
                                 new SequentialCommandGroup(
                                 drivetrain.applyRequest(()-> driveRobotCentric
@@ -906,42 +906,7 @@ public class RobotContainer {
             new ExtensionCommand(extension, Constants.Positions.bringExtensionDown).withTimeout(0.6),
             new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
-            /*new SequentialCommandGroup(
-                new WaitCommand(2),
-                drivetrain.applyRequest(() -> driveRobotCentric
-                        .withVelocityX(.1) 
-                        .withVelocityY(centerWithAprilTag()) 
-                        .withRotationalRate(0)
-                    ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10) 
-            )*/
-            //NewLimelight5.cmd()   
         ));
-
-        /*NewLimelight5.done().onTrue(new SequentialCommandGroup(
-            new WaitCommand(1),
-            
-        ));*/
-        /*NewLimelight3.done().onTrue(new SequentialCommandGroup(
-            drivetrain.applyRequest(() -> driveRobotCentric
-                    .withVelocityX(0.8) 
-                    .withVelocityY(centerWithAprilTag()) 
-                    .withRotationalRate(0)
-            ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
-                drivetrain.applyRequest(() -> driveRobotCentric
-                    .withVelocityX(0) 
-                    .withVelocityY(0) 
-                    .withRotationalRate(0)
-            
-                ).until(()->true),
-                new ManualIntake(intake, 1 ).withTimeout(1),
-                new WaitCommand(.5),
-                NewLimelight4.cmd()
-            )
-        );*/
-
-        
-        
-
         return routine;
         
     }
@@ -958,8 +923,8 @@ public class RobotContainer {
             return routine;
         }
 
-        AutoRoutine routine = autoFactory.newRoutine("LimelightLeft");
-        AutoTrajectory LimelightLeft = routine.trajectory("LimelightLeft");
+        AutoRoutine routine = autoFactory.newRoutine("LimelightLeftAUTO");
+        AutoTrajectory NewLimelight1 = routine.trajectory("LimelightLeft1");
         //unused AutoTrajectory NewLimelight2 = routine.trajectory("NewLimelight2");
         AutoTrajectory NewLimelight3 = routine.trajectory("NewLimelight3");
         //unused AutoTrajectory NewLimelight4 = routine.trajectory("NewLimelight4");
@@ -967,12 +932,12 @@ public class RobotContainer {
 
         routine.active().onTrue(
             Commands.sequence(
-                LimelightLeft.resetOdometry(),
-                LimelightLeft.cmd()
+                NewLimelight1.resetOdometry(),
+                NewLimelight1.cmd()
             )
         );
 
-        LimelightLeft.done().onTrue(new SequentialCommandGroup(
+        NewLimelight1.done().onTrue(new SequentialCommandGroup(
                 drivetrain.applyRequest(() -> driveRobotCentric
                     .withVelocityX(1) 
                     .withVelocityY(centerWithAprilTag()) 
@@ -1000,7 +965,8 @@ public class RobotContainer {
                             new WristCommand(Wrist, Constants.Positions.L4WristPosition),
                             new SequentialCommandGroup(
                                 new WaitCommand(2),
-                                new AutoOuttakeCommand(intake).withTimeout(3),
+                                new ManualIntake(intake, .3).withTimeout(2),
+                                new WaitCommand(1),
 
                                 new SequentialCommandGroup(
                                 drivetrain.applyRequest(()-> driveRobotCentric
@@ -1033,7 +999,6 @@ public class RobotContainer {
             new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
         ));
-
         return routine;
         
     }
