@@ -107,6 +107,7 @@ public class RobotContainer {
         autoChooser.addRoutine("BottomLimelight",this::BottomLimelightAuto);
         autoChooser.addRoutine("LowBallAuto", this::LowBallAuto);
         autoChooser.addRoutine("NewLimelightAUTOMID", this::NewLimelightAUTO);
+        autoChooser.addRoutine("LimelightLeftAUTO", this::LimelightLeftAUTO);
     
     }
 //Didnt finish 
@@ -212,7 +213,7 @@ public class RobotContainer {
         //Manual stuff
         Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.b().whileTrue(new ManualWrist(Wrist, .8));
-        Player1.povUp().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
+        Player1.a().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
@@ -308,7 +309,6 @@ public class RobotContainer {
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
         Player1.leftTrigger().whileTrue(new ManualIntake(intake, .3));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
-        Player1.a().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povDown().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
@@ -940,6 +940,98 @@ public class RobotContainer {
 
         
         
+
+        return routine;
+        
+    }
+
+    private AutoRoutine LimelightLeftAUTO(){
+        try {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue)
+                autoFactory = drivetrain.createAutoFactoryBlue();
+            else    
+                autoFactory = drivetrain.createAutoFactory();
+        } catch (Exception e) {
+            autoFactory = drivetrain.createAutoFactory();
+            AutoRoutine routine = autoFactory.newRoutine("blank");
+            return routine;
+        }
+
+        AutoRoutine routine = autoFactory.newRoutine("LimelightLeft");
+        AutoTrajectory LimelightLeft = routine.trajectory("LimelightLeft");
+        //unused AutoTrajectory NewLimelight2 = routine.trajectory("NewLimelight2");
+        AutoTrajectory NewLimelight3 = routine.trajectory("NewLimelight3");
+        //unused AutoTrajectory NewLimelight4 = routine.trajectory("NewLimelight4");
+        //unused AutoTrajectory NewLimelight5 = routine.trajectory("NewLimelight5"); 
+
+        routine.active().onTrue(
+            Commands.sequence(
+                LimelightLeft.resetOdometry(),
+                LimelightLeft.cmd()
+            )
+        );
+
+        LimelightLeft.done().onTrue(new SequentialCommandGroup(
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(1) 
+                    .withVelocityY(centerWithAprilTag()) 
+                    .withRotationalRate(0)
+                ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
+   
+                drivetrain.applyRequest(() -> driveRobotCentric
+                   .withVelocityX(0)
+                   .withVelocityY(-.4)//-.6, -.5
+                   .withRotationalRate(0)
+                ).withTimeout(.65),
+                drivetrain.applyRequest(() -> driveRobotCentric
+                    .withVelocityX(0) 
+                    .withVelocityY(0) 
+                    .withRotationalRate(0)
+   
+                ).until(() -> true),
+                new SequentialCommandGroup(
+                    new WaitCommand(.5),
+                    new PivotCommand(pivot, Constants.Positions.L4PivotPosition),
+                  new ParallelCommandGroup(
+                        new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition),
+                        new ParallelCommandGroup(
+                            new WaitCommand(.5),
+                            new WristCommand(Wrist, Constants.Positions.L4WristPosition),
+                            new SequentialCommandGroup(
+                                new WaitCommand(2),
+                                new AutoOuttakeCommand(intake).withTimeout(3),
+
+                                new SequentialCommandGroup(
+                                drivetrain.applyRequest(()-> driveRobotCentric
+                                    .withVelocityX(-2)
+                                    .withVelocityY(0)
+                                    .withRotationalRate(0)
+                                ).withTimeout(0.7),
+                                drivetrain.applyRequest(() -> driveRobotCentric
+                                .withVelocityX(0)
+                                .withVelocityY(.5)
+                                .withRotationalRate(0)
+                                ).withTimeout(.65),
+                                drivetrain.applyRequest(() -> driveRobotCentric
+                                .withVelocityX(0)
+                                .withVelocityY(0)
+                                .withRotationalRate(0)
+                                ).withTimeout(.1),
+                                new WaitCommand(2),
+                                NewLimelight3.cmd()
+                                )
+                            )
+                        )
+                    )
+            
+            )
+        ));
+
+        NewLimelight3.done().onTrue(new SequentialCommandGroup(
+            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown).withTimeout(0.6),
+            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
+            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
+        ));
 
         return routine;
         
