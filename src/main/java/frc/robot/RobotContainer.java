@@ -101,13 +101,14 @@ public class RobotContainer {
         autoChooser.addRoutine("DoNothingAuto", this::DoNothingAuto);
         autoChooser.addRoutine("MoveFowardAuto", this::MoveFowardAuto);
         autoChooser.addRoutine("L1FromMiddle", this::L1Auto);
-        SmartDashboard.putData("auto", autoChooser);
-        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
         autoChooser.addRoutine("LimelightMiddle",this::LimelightMiddleAuto);
         autoChooser.addRoutine("BottomLimelight",this::BottomLimelightAuto);
         autoChooser.addRoutine("LowBallAuto", this::LowBallAuto);
         autoChooser.addRoutine("NewLimelightAUTOMID", this::NewLimelightAUTO);
         autoChooser.addRoutine("LimelightLeftAUTO", this::LimelightLeftAUTO);
+        
+        SmartDashboard.putData("auto", autoChooser);
+        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     
     }
 //Didnt finish 
