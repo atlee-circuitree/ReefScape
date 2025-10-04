@@ -105,7 +105,7 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 3;
         public static final double minExtend = 0;
-        public static final double wristThreshold = 4;//5.8
+        public static final double wristThreshold = -400;//5.8//4
         public static final double upperWristThreshold = 265;
         public static final double armThreshold = 1;
         public static final double pivotThreshold = 5.6;
@@ -132,7 +132,7 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = -.5 + .246; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
+        public static final double wristEncoderOffset = -.5 + .809; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
         public static final double pivotEncoderOffsetRev = 0.8245;
         public static final double armEncoderOffset = .35; // in rotations
 

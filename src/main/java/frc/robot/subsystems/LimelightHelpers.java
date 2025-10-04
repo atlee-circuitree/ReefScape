@@ -290,7 +290,7 @@ public class LimelightHelpers {
      * Represents a Neural Classifier Pipeline Result extracted from JSON Output
      */
     public static class LimelightTarget_Classifier {
-
+        
         @JsonProperty("class")
         public String className;
 
