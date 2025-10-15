@@ -92,7 +92,7 @@ public class Pivot extends SubsystemBase {
 
   
   public double getAngleEncoder() {
-    return (pivotEncoder.get() - Constants.Arm.pivotEncoderOffsetRev) * 360;
+    return (pivotEncoder.get() - Constants.Arm.pivotEncoderOffsetRev) * -360;
   }
 
   @Override

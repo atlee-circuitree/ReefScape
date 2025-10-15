@@ -85,7 +85,7 @@ public class wrist extends SubsystemBase {
   public double getAngle() {
     double CurrentTicks = wristEncoder.get();
     CurrentTicks = (CurrentTicks - Constants.Arm.wristEncoderOffset);
-    CurrentTicks = (CurrentTicks * 360);
+    CurrentTicks = (CurrentTicks * -360);
   /* if (wristEncoder.get() <= Constants.Arm.wristEncoderOffset) {
       CurrentTicks +=1;
   }

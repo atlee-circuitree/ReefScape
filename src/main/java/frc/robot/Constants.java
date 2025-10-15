@@ -41,7 +41,7 @@ public class Constants {
         public static final int BRTurn = 20;
 
         public static final int IntakeMotorID = 30;
-        public static final int wrist = 31    ;
+        public static final int wrist = 31;
         public static final int pivotLeft = 32;
         public static final int pivotRight = 33;
         public static final int extensionLeft = 35;
@@ -105,8 +105,8 @@ public class Constants {
     public class Arm {
         public static final double maxExtend = 3;
         public static final double minExtend = 0;
-        public static final double wristThreshold = -400;//5.8//4
-        public static final double upperWristThreshold = 265;
+        public static final double wristThreshold = 4;//5.8//4
+        public static final double upperWristThreshold = 236; //195 for low
         public static final double armThreshold = 1;
         public static final double pivotThreshold = 5.6;
         public static final double upperPivotThreshold = 60;
@@ -132,8 +132,8 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = -.5 + .809; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
-        public static final double pivotEncoderOffsetRev = 0.8245;
+        public static final double wristEncoderOffset = -.5 + .945; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
+        public static final double pivotEncoderOffsetRev = 0.224;
         public static final double armEncoderOffset = .35; // in rotations
 
         public static final double outtakeVelocity = .2; //.3
