@@ -22,7 +22,7 @@ public class Constants {
 
     public static PIDController AutoDrivePID = new PIDController(4, 0.01, 0);
     public static PIDController AutoTurnPID = new PIDController(5, 0, 0);
-    public static PIDController ExtensionPID = new PIDController(.01, 0, 0);
+    public static PIDController ExtensionPID = new PIDController(.0075, 0, 0);
 
     public class CAN_IDs{
 
@@ -134,7 +134,7 @@ public class Constants {
 
         public static final double wristEncoderOffset = -.5 + .945; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
         public static final double pivotEncoderOffsetRev = 0.9541;
-        public static final double armEncoderOffset = .298; // in rotations
+        public static final double armEncoderOffset = -.458; // in rotations
 
         public static final double outtakeVelocity = .2; //.3
         public static final double intakeVelocity = -.2;
@@ -176,13 +176,13 @@ public class Constants {
         public static double L4PivotPosition = 45.3;//85
         public static double L4ExtensionPosition = 4.14;//2.6
 
-        public static double bringExtensionDown = .18;//.25
+        public static double bringExtensionDown = .1;//.25
 
         public static double HumanPlayerWrist = 9.5;//0
         public static double HumanPlayerPivot = 37;//80
 
         public static double PivotClimb = 53;
-        public static double WristClimb = 260;
+        public static double WristClimb = 183;
         public static double StartPivot = 20;
         public static double StartWrist = 5;
 
