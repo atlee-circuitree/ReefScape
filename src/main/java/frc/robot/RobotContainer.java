@@ -229,7 +229,7 @@ public class RobotContainer {
         .withRotationalRate(0)));//.until(() -> -LimelightHelpers.getTA("limelight-cg") == 0)));
  
         //start pos
-        Start.onTrue(new SequentialCommandGroup(
+        Start.onTrue(new ParallelCommandGroup(
             new PivotCommand(pivot, Constants.Positions.StartPivot), 
             new WristCommand(Wrist, Constants.Positions.StartWrist) 
         ));
@@ -239,8 +239,9 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist)
         ));
         //L3
-        RedMiddleLeft.onTrue(new SequentialCommandGroup(
+        RedMiddleLeft.onTrue(new ParallelCommandGroup(
             new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
+            new ExtensionCommand(extension, Constants.Positions.L3ExtensionPosition),
             new WristCommand(Wrist, Constants.Positions.L3WristPosition)
         ));
         //L4

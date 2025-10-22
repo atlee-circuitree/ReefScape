@@ -133,8 +133,8 @@ public class Constants {
 
 
         public static final double wristEncoderOffset = -.5 + .945; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
-        public static final double pivotEncoderOffsetRev = 0.224;
-        public static final double armEncoderOffset = .35; // in rotations
+        public static final double pivotEncoderOffsetRev = 0.9541;
+        public static final double armEncoderOffset = .298; // in rotations
 
         public static final double outtakeVelocity = .2; //.3
         public static final double intakeVelocity = -.2;
@@ -168,12 +168,13 @@ public class Constants {
         public static double L2WristPosition = 216;//187
         public static double L2PivotPosition = 30;//73//61
 
-        public static double L3WristPosition = 177.5;//205
-        public static double L3PivotPosition = 39;//91
+        public static double L3WristPosition = 245;//205
+        public static double L3PivotPosition = 45.3;//91
+        public static double L3ExtensionPosition = 2;
 
-        public static double L4WristPosition = 193;//230
-        public static double L4PivotPosition = 43.5;//85
-        public static double L4ExtensionPosition = 2.94;//2.6
+        public static double L4WristPosition = 245;//230
+        public static double L4PivotPosition = 45.3;//85
+        public static double L4ExtensionPosition = 4.14;//2.6
 
         public static double bringExtensionDown = .18;//.25
 
@@ -183,7 +184,7 @@ public class Constants {
         public static double PivotClimb = 53;
         public static double WristClimb = 260;
         public static double StartPivot = 20;
-        public static double StartWrist = 12;
+        public static double StartWrist = 5;
 
         public static double LowBallWrist = 190;//195
         public static double LowBallPivot = 23;//24
