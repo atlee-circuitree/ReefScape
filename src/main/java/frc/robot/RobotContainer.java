@@ -14,6 +14,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,7 @@ import frc.robot.commands.ManualPivot;
 import frc.robot.commands.ManualWrist;
 import frc.robot.commands.PivotCommand;
 import frc.robot.commands.SpeedToggleCommand;
+import frc.robot.commands.TestCommand;
 import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -44,6 +46,7 @@ import frc.robot.subsystems.Pivot;
 //import frc.robot.subsystems.ReefCentering;
 import frc.robot.subsystems.armExtension;
 import frc.robot.subsystems.wrist;
+import frc.robot.util.Limelight;
 
 
 
@@ -188,6 +191,8 @@ public class RobotContainer {
         JoystickButton RedTopRight = new JoystickButton(Player2, RedRightTopArcade);
         //JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade); not used
         JoystickButton RedBottomRight = new JoystickButton(Player2, RedRightBottomArcade);
+        Limelight limelight_right = new Limelight("limelight-right");
+        Limelight limelight_left = new Limelight("limelight-left");
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -214,7 +219,7 @@ public class RobotContainer {
         //Manual stuff
         Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.b().whileTrue(new ManualWrist(Wrist, .8));
-        Player1.a().whileTrue(new ExtensionCommand(extension, Constants.Positions.L4ExtensionPosition));
+        Player1.a().onTrue(new TestCommand());
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
@@ -309,7 +314,7 @@ public class RobotContainer {
 
         //manual stuff
         Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake, .3));//outtake
+        Player1.leftTrigger().whileTrue(new ManualIntake(intake, .65));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
@@ -320,7 +325,7 @@ public class RobotContainer {
         //Player1.start().onTrue(new WristCommand(Wrist, 35));
         
         
-        Player1.rightBumper().whileTrue(new SequentialCommandGroup(
+        /*Player1.rightBumper().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric
                 .withVelocityX(1.3) 
                 .withVelocityY(centerWithAprilTag()) 
@@ -341,7 +346,19 @@ public class RobotContainer {
                 .withRotationalRate(0)
 
             ).until(() -> true)
-        ));
+        ));*/
+
+        Player1.rightBumper().whileTrue(
+
+            drivetrain.applyRequest(() -> driveRobotCentric
+            
+            .withVelocityX(limelight_left.getFowardRate())
+            .withVelocityY(limelight_left.getVerticalRate())
+            .withRotationalRate(0)
+            
+            )
+
+        );
 
         Player1.leftBumper().whileTrue(new SequentialCommandGroup(
             drivetrain.applyRequest(() -> driveRobotCentric

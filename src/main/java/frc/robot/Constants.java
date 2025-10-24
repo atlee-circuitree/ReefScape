@@ -133,11 +133,11 @@ public class Constants {
 
 
         public static final double wristEncoderOffset = -.5 + .945; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
-        public static final double pivotEncoderOffsetRev = 0.9541;
+        public static final double pivotEncoderOffsetRev = 0.9684;
         public static final double armEncoderOffset = -.458; // in rotations
 
-        public static final double outtakeVelocity = .2; //.3
-        public static final double intakeVelocity = -.2;
+        public static final double outtakeVelocity = .5; //.3
+        public static final double intakeVelocity = -.5;
 
         public static final double outtakeTime = 1;
     }

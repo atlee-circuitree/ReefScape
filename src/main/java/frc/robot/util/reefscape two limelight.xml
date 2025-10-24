@@ -1,0 +1,155 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="left TA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="967" y="154"/>
+	</widget>
+	<widget field="right TA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1151" y="154"/>
+	</widget>
+	<widget field="left TX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="971" y="178"/>
+	</widget>
+	<widget field="right TX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1152" y="178"/>
+	</widget>
+	<widget field="left Tv" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="959" y="132"/>
+	</widget>
+	<widget field="right Tv" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1148" y="131"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="248" y="324"/>
+		<width>647</width>
+		<height>365</height>
+		<property name="Camera Choice" value="limelight-left"/>
+	</static-widget>
+	<widget field="limelight-right_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="599"/>
+	</widget>
+	<widget field="limelight-right_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="579"/>
+	</widget>
+	<widget field="limelight-right_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="559"/>
+	</widget>
+	<widget field="limelight-left_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="539"/>
+	</widget>
+	<widget field="limelight-left_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="460"/>
+	</widget>
+	<widget field="limelight-left_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="440"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="909" y="317"/>
+		<width>591</width>
+		<height>380</height>
+		<property name="Camera Choice" value="limelight-right"/>
+	</static-widget>
+	<widget field="WristAngleSetPoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="400"/>
+	</widget>
+	<widget field="WristAngleInput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="360"/>
+	</widget>
+	<widget field="Algee threshold autointake" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="300"/>
+	</widget>
+	<widget field="Coral threshold autointake" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="60"/>
+	</widget>
+	<widget field="Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="360" y="135"/>
+	</widget>
+	<widget field="Speed Boolean" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="319" y="155"/>
+	</widget>
+	<widget field="WristAngleOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="220"/>
+	</widget>
+	<widget field="PivotAngleSetPoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="80"/>
+	</widget>
+	<widget field="PivotAngleOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="20"/>
+	</widget>
+	<widget field="PivotAngleInput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+	<widget field="auto" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="528" y="31"/>
+	</widget>
+	<widget field="Extension Encoder With Offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="257" y="112"/>
+	</widget>
+	<widget field="Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="420"/>
+	</widget>
+	<widget field="Wrist Encoder Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="497"/>
+	</widget>
+	<widget field="All" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="380"/>
+	</widget>
+	<widget field="extension Encoder Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="519"/>
+	</widget>
+	<widget field="Postiton Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="340"/>
+	</widget>
+	<widget field="Postiton X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="320"/>
+	</widget>
+	<widget field="Pivot Encoder get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="316" y="88"/>
+	</widget>
+	<widget field="encoder 2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="280"/>
+	</widget>
+	<widget field="encoder 1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="260"/>
+	</widget>
+	<widget field="encoder 0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="240"/>
+	</widget>
+	<widget field="LimeLight" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="200"/>
+	</widget>
+	<widget field="limelight-cg_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="180"/>
+	</widget>
+	<widget field="Coral CanRange" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="160"/>
+	</widget>
+	<widget field="Tv" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="140"/>
+	</widget>
+	<widget field="TX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="120"/>
+	</widget>
+	<widget field="TA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="100"/>
+	</widget>
+	<widget field="Wrist Encoder Get w off" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="283" y="61"/>
+	</widget>
+	<widget field="Wrist Degrees" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="324" y="176"/>
+	</widget>
+	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="40"/>
+	</widget>
+	<widget field="Pivot Encoder Degrees" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="293" y="40"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Module 2"/>
+	<hidden field="Module 3"/>
+	<hidden field="Module 0"/>
+	<hidden field="Module 1"/>
+	<hidden field="Choreo Alerts"/>
+</xml>
