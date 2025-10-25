@@ -43,7 +43,7 @@ public class WristCommand extends Command {
   @Override
   public boolean isFinished() {
     double err = Math.abs(m_wrist.getAngle() - m_position);
-    if ((m_position < 6 && m_position > -.02) || err <= Constants.Arm.wristThreshold) {
+    if ((m_position < 1 && m_position > -.02) || err <= Constants.Arm.wristThreshold) {
       return true;
     }else{
       return false;

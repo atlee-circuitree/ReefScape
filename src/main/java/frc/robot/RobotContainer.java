@@ -38,6 +38,7 @@ import frc.robot.commands.PivotCommand;
 import frc.robot.commands.SpeedToggleCommand;
 import frc.robot.commands.TestCommand;
 import frc.robot.commands.WristCommand;
+import frc.robot.commands.resetExtensionCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -189,7 +190,7 @@ public class RobotContainer {
         JoystickButton BlueMiddle = new JoystickButton(Player2, BlueMiddleArcade);
         //JoystickButton RedBottom = new JoystickButton(Player2, BlueBottomArcade); not used
         JoystickButton RedTopRight = new JoystickButton(Player2, RedRightTopArcade);
-        //JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade); not used
+        JoystickButton RedMiddleRight = new JoystickButton(Player2, RedRightMiddleArcade);
         JoystickButton RedBottomRight = new JoystickButton(Player2, RedRightBottomArcade);
         Limelight limelight_right = new Limelight("limelight-right");
         Limelight limelight_left = new Limelight("limelight-left");
@@ -219,7 +220,7 @@ public class RobotContainer {
         //Manual stuff
         Player1.y().whileTrue(new ManualWrist(Wrist, -.8));
         Player1.b().whileTrue(new ManualWrist(Wrist, .8));
-        Player1.a().onTrue(new TestCommand());
+        Player1.a().whileTrue(new ExtensionCommand(extension, 1.25));
 
         Player3.y().whileTrue( 
         drivetrain.applyRequest(() -> driveRobotCentric
@@ -233,6 +234,9 @@ public class RobotContainer {
         .withVelocityY(0) 
         .withRotationalRate(0)));//.until(() -> -LimelightHelpers.getTA("limelight-cg") == 0)));
  
+        //extension reset
+        RedMiddleRight.onTrue(new resetExtensionCommand());
+
         //start pos
         Start.onTrue(new ParallelCommandGroup(
             new PivotCommand(pivot, Constants.Positions.StartPivot), 
@@ -245,8 +249,8 @@ public class RobotContainer {
         ));
         //L3
         RedMiddleLeft.onTrue(new ParallelCommandGroup(
-            new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
-            new ExtensionCommand(extension, Constants.Positions.L3ExtensionPosition),
+            new ParallelCommandGroup(new PivotCommand(pivot, Constants.Positions.L3PivotPosition),
+            new ExtensionCommand(extension, Constants.Positions.L3ExtensionPosition)),
             new WristCommand(Wrist, Constants.Positions.L3WristPosition)
         ));
         //L4
@@ -284,11 +288,11 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.L2WristPosition)
         ));
         //bring elevator back down from L4 liftreset
-        Select.onTrue(new ParallelCommandGroup(
-
-            new WristCommand(Wrist, Constants.Positions.HumanPlayerWrist),
-            new PivotCommand(pivot, Constants.Positions.HumanPlayerPivot),
-            new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+        Select.onTrue(new SequentialCommandGroup(
+            new WristCommand(Wrist, Constants.Positions.StartWrist),
+            new ParallelCommandGroup(
+                new ExtensionCommand(extension, Constants.Positions.bringExtensionDown)
+            )            
         ));
         //low ball
         BlueMiddle.onTrue(new SequentialCommandGroup(
@@ -306,15 +310,15 @@ public class RobotContainer {
             new WristCommand(Wrist, Constants.Positions.WristClimb)
         ));
         //barge
-        /*RedTopRight.onTrue(new SequentialCommandGroup(
+        RedTopRight.onTrue(new SequentialCommandGroup(
             new PivotCommand(pivot, Constants.Positions.BargePivot),
             new ExtensionCommand(extension, Constants.Positions.BargeExtenstion)
-        ));*/
+        ));
 
 
         //manual stuff
-        Player1.rightTrigger().whileTrue(new AutoIntakeCommand(intake));//intake
-        Player1.leftTrigger().whileTrue(new ManualIntake(intake, .65));//outtake
+        Player1.rightTrigger().whileTrue(new ManualIntake(intake, -.65));//intake
+        Player1.leftTrigger().whileTrue(new AutoIntakeCommand(intake));//outtake
         Player1.x().onTrue(new SpeedToggleCommand());
         Player1.povRight().whileTrue(new ManualPivot(pivot, 1)); // backward
         Player1.povLeft().whileTrue(new ManualPivot(pivot, -1)); // foward
@@ -348,6 +352,18 @@ public class RobotContainer {
             ).until(() -> true)
         ));*/
 
+        Player1.leftBumper().whileTrue(
+
+            drivetrain.applyRequest(() -> driveRobotCentric
+            
+            .withVelocityX(limelight_right.getFowardRate())
+            .withVelocityY(limelight_right.getVerticalRate())
+            .withRotationalRate(0)
+            
+            )
+
+        );
+
         Player1.rightBumper().whileTrue(
 
             drivetrain.applyRequest(() -> driveRobotCentric
@@ -359,29 +375,6 @@ public class RobotContainer {
             )
 
         );
-
-        Player1.leftBumper().whileTrue(new SequentialCommandGroup(
-            drivetrain.applyRequest(() -> driveRobotCentric
-                .withVelocityX(1.3) 
-                .withVelocityY(centerWithAprilTag()) 
-                .withRotationalRate(0)
-            ).until(() -> !LimelightHelpers.getTV("limelight-cg") || LimelightHelpers.getTA("limelight-cg") > 10),
-
-            drivetrain.applyRequest(() -> driveRobotCentric
-
-                .withVelocityX(0) 
-                .withVelocityY(.5) 
-                .withRotationalRate(0)
-
-            ).withTimeout(.6),
-            drivetrain.applyRequest(() -> driveRobotCentric
-
-                .withVelocityX(0) 
-                .withVelocityY(0) 
-                .withRotationalRate(0)
-
-            ).until(() -> true)
-        ));
 
 
         /*Player1.povDown().whileTrue(new SequentialCommandGroup(

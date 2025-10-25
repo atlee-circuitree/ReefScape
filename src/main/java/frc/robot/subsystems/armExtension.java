@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.generated.CanCoder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Current;
 
 public class armExtension extends SubsystemBase {
   
@@ -67,6 +68,15 @@ public class armExtension extends SubsystemBase {
 
     CurrentTicks = ExtensionCanCoder.getDistance() - Constants.Arm.armEncoderOffset;
     return CurrentTicks;
+  }
+
+  public static double getExtension(CanCoder ExtensionCanCoder) {
+    double CurrentTicks;
+    CurrentTicks = ExtensionCanCoder.getDistance() - Constants.Arm.armEncoderOffset;
+    if (CurrentTicks < 0) {
+      return 0;
+    }
+    return CurrentTicks + .15;
   }
 
   @Override

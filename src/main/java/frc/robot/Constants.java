@@ -22,7 +22,7 @@ public class Constants {
 
     public static PIDController AutoDrivePID = new PIDController(4, 0.01, 0);
     public static PIDController AutoTurnPID = new PIDController(5, 0, 0);
-    public static PIDController ExtensionPID = new PIDController(.0075, 0, 0);
+    public static PIDController ExtensionPID = new PIDController(.0065, 0, 0);
 
     public class CAN_IDs{
 
@@ -107,6 +107,7 @@ public class Constants {
         public static final double minExtend = 0;
         public static final double wristThreshold = 4;//5.8//4
         public static final double upperWristThreshold = 236; //195 for low
+        public static final double[] wristThresholds = new double[] {186, 236};
         public static final double armThreshold = 1;
         public static final double pivotThreshold = 5.6;
         public static final double upperPivotThreshold = 60;
@@ -132,12 +133,12 @@ public class Constants {
         public static final double extensionRatio = 1;
 
 
-        public static final double wristEncoderOffset = -.5 + .945; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
+        public static final double wristEncoderOffset = -.5 + .941; // in rotations | make 2nd value lower if 0 is negative // is ~9.7 at green thing. make wrist lower
         public static final double pivotEncoderOffsetRev = 0.9684;
-        public static final double armEncoderOffset = -.458; // in rotations
+        public static double armEncoderOffset = .489023; // increases once you increase //extensionoffset
 
         public static final double outtakeVelocity = .5; //.3
-        public static final double intakeVelocity = -.5;
+        public static final double intakeVelocity = .5;
 
         public static final double outtakeTime = 1;
     }
@@ -168,9 +169,9 @@ public class Constants {
         public static double L2WristPosition = 216;//187
         public static double L2PivotPosition = 30;//73//61
 
-        public static double L3WristPosition = 245;//205
-        public static double L3PivotPosition = 45.3;//91
-        public static double L3ExtensionPosition = 2;
+        public static double L3WristPosition = 231;//205
+        public static double L3PivotPosition = 31.9;//91
+        public static double L3ExtensionPosition = 1.15;
 
         public static double L4WristPosition = 245;//230
         public static double L4PivotPosition = 45.3;//85
@@ -178,22 +179,24 @@ public class Constants {
 
         public static double bringExtensionDown = .1;//.25
 
-        public static double HumanPlayerWrist = 9.5;//0
-        public static double HumanPlayerPivot = 37;//80
+        public static double HumanPlayerWrist = 150.4;//0
+        public static double HumanPlayerPivot = 6.7;//80
 
         public static double PivotClimb = 53;
         public static double WristClimb = 183;
-        public static double StartPivot = 20;
+        public static double StartPivot = 15;
         public static double StartWrist = 5;
 
-        public static double LowBallWrist = 190;//195
-        public static double LowBallPivot = 23;//24
+        public static double LowBallWrist = 192;//195
+        public static double LowBallPivot = 8
+        ;//24
 
         public static double HighBallWrist = 157.5;
         public static double HighBallPivot = 30;
+        public static double HighBallExtension = 1.25;
 
         public static double BargePivot = 38;
-        public static double BargeExtenstion = 4.0;
+        public static double BargeExtenstion = 3.4;
         public static double AutoBargeWrist = 120;
 
         public static double AutoL4Extenston = 0.1;

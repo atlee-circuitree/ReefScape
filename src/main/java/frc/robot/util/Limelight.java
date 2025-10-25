@@ -98,14 +98,6 @@ public class Limelight {
         return 0;
     }
 
-    public double getLeftFowardRate() {
-
-        if (getTV() == 0) {return 0;}
-        
-        return pidTA.calculate(getTA()/10, 2.1);
-
-    }
-
     public double getRotationalRate() {
         
         if (getTV() == 0) {return 0;}
@@ -142,6 +134,38 @@ public class Limelight {
         return name;
     }
 
+    public double getHorizontalRate(int right, int left) {
+        if (getTV() == 0) {return 0;}
 
+        if (getName().equals("limelight-right")) {
+            if (getTA() < 2) {
+                return 2;
+            }
+            
+            return pidTA.calculate(getTA()/10, right/10);
+        } else if (getName().equals("limelight-left")) {
+            if (getTA() < 1) {
+                return 2;
+            }
+            
+            return pidTA.calculate(getTA()/10, left/10);
+        }
+        
+
+        return 0;
+
+    }
+
+    public double getVerticalRate(int right, int left) {
+        
+        if (getTV() == 0) {return 0;}
+        if (getName().equals("limelight-right")) {
+            return pidTX.calculate(getTX(), right);
+        } else if (getName().equals("limelight-left")) {
+            return pidTX.calculate(getTX(), left);
+        }
+
+        return 0;
+    }
 
 }

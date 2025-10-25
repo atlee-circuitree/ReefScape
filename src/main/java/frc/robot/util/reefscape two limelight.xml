@@ -1,5 +1,8 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Optimal Limelight" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1033" y="79"/>
+	</widget>
 	<widget field="left TA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="967" y="154"/>
 	</widget>
@@ -61,10 +64,10 @@
 		<location x="0" y="60"/>
 	</widget>
 	<widget field="Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="360" y="135"/>
+		<location x="360" y="114"/>
 	</widget>
 	<widget field="Speed Boolean" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="319" y="155"/>
+		<location x="321" y="139"/>
 	</widget>
 	<widget field="WristAngleOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="220"/>
@@ -82,7 +85,7 @@
 		<location x="528" y="31"/>
 	</widget>
 	<widget field="Extension Encoder With Offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="257" y="112"/>
+		<location x="247" y="211"/>
 	</widget>
 	<widget field="Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="420"/>
@@ -94,7 +97,7 @@
 		<location x="0" y="380"/>
 	</widget>
 	<widget field="extension Encoder Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="7" y="519"/>
+		<location x="283" y="186"/>
 	</widget>
 	<widget field="Postiton Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="340"/>
@@ -136,7 +139,7 @@
 		<location x="283" y="61"/>
 	</widget>
 	<widget field="Wrist Degrees" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="324" y="176"/>
+		<location x="322" y="164"/>
 	</widget>
 	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="40"/>

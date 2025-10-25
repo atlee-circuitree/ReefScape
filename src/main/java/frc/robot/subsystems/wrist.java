@@ -19,6 +19,8 @@ public class wrist extends SubsystemBase {
   private TalonFX wrist;
   private CanCoder wristEncoder;
   private PIDController pid;
+  private CanCoder ExtensionCanCoder = new CanCoder(Constants.CAN_IDs.ExtensionCANCoder);
+  private double wristLimit = Constants.Arm.wristThresholds[0];
 
   //public double CurrentWristAngle;
   //double CurrentTicks;
@@ -51,12 +53,19 @@ public class wrist extends SubsystemBase {
   }
 //left trigger approaches 0 (negative)
   public void RunWrist(double Velocity){
+    
+    try {
+      wristLimit = Constants.Arm.wristThresholds[(int) armExtension.getExtension(ExtensionCanCoder)];
+    } catch (Exception e) {
+      wristLimit = Constants.Arm.upperWristThreshold;
+    }
   
     if (getAngle() <= Constants.Arm.wristThreshold && Velocity < 0) {
       wrist.set(0);
-    } else if (getAngle() >= Constants.Arm.upperWristThreshold && Velocity > 0){
+    } else if (getAngle() >= wristLimit && Velocity > 0){
       wrist.set(0);
     } else {
+
       wrist.set(Velocity);
     }
   }
